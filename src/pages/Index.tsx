@@ -257,7 +257,6 @@ const Index = () => {
                             <Checkbox
                               checked={selectedPorts.includes(port.id)}
                               onCheckedChange={() => togglePort(port.id)}
-                              className="rounded-sm"
                             />
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                               <span className="font-semibold text-sm w-20">Порт {port.number}</span>
