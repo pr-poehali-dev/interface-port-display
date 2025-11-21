@@ -250,7 +250,7 @@ const Index = () => {
                         {switchItem.ports.map((port) => (
                           <div
                             key={port.id}
-                            className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${getStatusColor(
+                            className={`flex items-center gap-3 px-3 py-2 rounded-lg border transition-all ${getStatusColor(
                               port.status
                             )}`}
                           >
