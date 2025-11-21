@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import Icon from '@/components/ui/icon';
 
 interface Port {
   id: number;
   number: number;
-  status: 'active' | 'inactive' | 'error';
+  status: 'active' | 'inactive' | 'blocked' | 'unknown';
   speed: string;
   device?: string;
 }
@@ -32,8 +33,8 @@ const mockData: Switch[] = [
       { id: 2, number: 2, status: 'active', speed: '1 Gbps', device: 'Server-02' },
       { id: 3, number: 3, status: 'inactive', speed: '1 Gbps' },
       { id: 4, number: 4, status: 'active', speed: '10 Gbps', device: 'Storage-01' },
-      { id: 5, number: 5, status: 'error', speed: '1 Gbps', device: 'Router-01' },
-      { id: 6, number: 6, status: 'inactive', speed: '1 Gbps' },
+      { id: 5, number: 5, status: 'blocked', speed: '1 Gbps', device: 'Router-01' },
+      { id: 6, number: 6, status: 'unknown', speed: '1 Gbps' },
     ],
   },
   {
@@ -44,7 +45,7 @@ const mockData: Switch[] = [
     ports: [
       { id: 7, number: 1, status: 'active', speed: '1 Gbps', device: 'PC-201' },
       { id: 8, number: 2, status: 'active', speed: '1 Gbps', device: 'PC-202' },
-      { id: 9, number: 3, status: 'active', speed: '1 Gbps', device: 'PC-203' },
+      { id: 9, number: 3, status: 'blocked', speed: '1 Gbps', device: 'PC-203' },
       { id: 10, number: 4, status: 'inactive', speed: '1 Gbps' },
     ],
   },
@@ -55,7 +56,7 @@ const mockData: Switch[] = [
     model: 'Juniper EX2300',
     ports: [
       { id: 11, number: 1, status: 'active', speed: '1 Gbps', device: 'PC-301' },
-      { id: 12, number: 2, status: 'inactive', speed: '1 Gbps' },
+      { id: 12, number: 2, status: 'unknown', speed: '1 Gbps' },
       { id: 13, number: 3, status: 'active', speed: '1 Gbps', device: 'Printer-03' },
     ],
   },
@@ -64,6 +65,7 @@ const mockData: Switch[] = [
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openSwitches, setOpenSwitches] = useState<number[]>([1]);
+  const [selectedPorts, setSelectedPorts] = useState<number[]>([]);
 
   const filteredSwitches = mockData.filter(
     (sw) =>
@@ -75,22 +77,39 @@ const Index = () => {
   const getStatusColor = (status: Port['status']) => {
     switch (status) {
       case 'active':
-        return 'bg-green-500/20 text-green-400 border-green-500/30';
+        return 'bg-green-50 border-l-4 border-l-green-500';
       case 'inactive':
-        return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
-      case 'error':
-        return 'bg-red-500/20 text-red-400 border-red-500/30';
+        return 'bg-red-50 border-l-4 border-l-red-500';
+      case 'blocked':
+        return 'bg-red-950/10 border-l-4 border-l-red-950';
+      case 'unknown':
+        return 'bg-gray-50 border-l-4 border-l-gray-400';
     }
   };
 
-  const getStatusIcon = (status: Port['status']) => {
+  const getStatusBadgeColor = (status: Port['status']) => {
     switch (status) {
       case 'active':
-        return 'CheckCircle2';
+        return 'bg-green-500 text-white';
       case 'inactive':
-        return 'Circle';
-      case 'error':
-        return 'XCircle';
+        return 'bg-red-500 text-white';
+      case 'blocked':
+        return 'bg-red-950 text-white';
+      case 'unknown':
+        return 'bg-gray-400 text-white';
+    }
+  };
+
+  const getStatusText = (status: Port['status']) => {
+    switch (status) {
+      case 'active':
+        return 'Активен';
+      case 'inactive':
+        return 'Неактивен';
+      case 'blocked':
+        return 'Заблокирован';
+      case 'unknown':
+        return 'Неизвестно';
     }
   };
 
@@ -98,6 +117,33 @@ const Index = () => {
     setOpenSwitches((prev) =>
       prev.includes(switchId) ? prev.filter((id) => id !== switchId) : [...prev, switchId]
     );
+  };
+
+  const togglePort = (portId: number) => {
+    setSelectedPorts((prev) =>
+      prev.includes(portId) ? prev.filter((id) => id !== portId) : [...prev, portId]
+    );
+  };
+
+  const toggleAllPorts = (switchItem: Switch) => {
+    const portIds = switchItem.ports.map((p) => p.id);
+    const allSelected = portIds.every((id) => selectedPorts.includes(id));
+
+    if (allSelected) {
+      setSelectedPorts((prev) => prev.filter((id) => !portIds.includes(id)));
+    } else {
+      setSelectedPorts((prev) => [...new Set([...prev, ...portIds])]);
+    }
+  };
+
+  const isAllPortsSelected = (switchItem: Switch) => {
+    const portIds = switchItem.ports.map((p) => p.id);
+    return portIds.length > 0 && portIds.every((id) => selectedPorts.includes(id));
+  };
+
+  const isSomePortsSelected = (switchItem: Switch) => {
+    const portIds = switchItem.ports.map((p) => p.id);
+    return portIds.some((id) => selectedPorts.includes(id)) && !isAllPortsSelected(switchItem);
   };
 
   return (
@@ -191,30 +237,43 @@ const Index = () => {
 
                   <CollapsibleContent>
                     <CardContent className="pt-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+                      <div className="flex items-center gap-2 mb-3 p-2 bg-secondary/30 rounded-lg">
+                        <Checkbox
+                          checked={isAllPortsSelected(switchItem)}
+                          onCheckedChange={() => toggleAllPorts(switchItem)}
+                          className={isSomePortsSelected(switchItem) ? 'data-[state=checked]:bg-primary/50' : ''}
+                        />
+                        <span className="text-sm font-medium">Выбрать все порты</span>
+                      </div>
+
+                      <div className="space-y-2">
                         {switchItem.ports.map((port) => (
                           <div
                             key={port.id}
-                            className={`p-4 rounded-lg border transition-all hover:scale-105 ${getStatusColor(
+                            className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${getStatusColor(
                               port.status
                             )}`}
                           >
-                            <div className="flex items-start justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <Icon name={getStatusIcon(port.status)} size={18} />
-                                <span className="font-semibold">Порт {port.number}</span>
-                              </div>
+                            <Checkbox
+                              checked={selectedPorts.includes(port.id)}
+                              onCheckedChange={() => togglePort(port.id)}
+                            />
+                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                              <span className="font-semibold text-sm w-16">Порт {port.number}</span>
+                              <Badge className={`text-xs ${getStatusBadgeColor(port.status)}`}>
+                                {getStatusText(port.status)}
+                              </Badge>
                               <Badge variant="outline" className="text-xs">
                                 {port.speed}
                               </Badge>
+                              {port.device && (
+                                <div className="flex items-center gap-1 text-sm truncate">
+                                  <Icon name="Cable" size={14} />
+                                  <span className="truncate">{port.device}</span>
+                                </div>
+                              )}
+                              {!port.device && <span className="text-xs text-muted-foreground">Не подключено</span>}
                             </div>
-                            {port.device && (
-                              <div className="flex items-center gap-2 text-sm mt-2">
-                                <Icon name="Cable" size={14} />
-                                <span className="truncate">{port.device}</span>
-                              </div>
-                            )}
-                            {!port.device && <p className="text-xs opacity-60 mt-2">Не подключено</p>}
                           </div>
                         ))}
                       </div>
