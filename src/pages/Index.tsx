@@ -77,26 +77,26 @@ const Index = () => {
   const getStatusColor = (status: Port['status']) => {
     switch (status) {
       case 'active':
-        return 'bg-green-50 border-l-4 border-l-green-500';
+        return 'bg-green-50 border-l-2 border-l-green-400';
       case 'inactive':
-        return 'bg-red-50 border-l-4 border-l-red-500';
+        return 'bg-red-50 border-l-2 border-l-red-400';
       case 'blocked':
-        return 'bg-red-950/10 border-l-4 border-l-red-950';
+        return 'bg-red-950/5 border-l-2 border-l-red-900';
       case 'unknown':
-        return 'bg-gray-50 border-l-4 border-l-gray-400';
+        return 'bg-gray-50 border-l-2 border-l-gray-300';
     }
   };
 
   const getStatusBadgeColor = (status: Port['status']) => {
     switch (status) {
       case 'active':
-        return 'bg-green-500 text-white';
+        return 'bg-green-100 text-green-700 border-green-200';
       case 'inactive':
-        return 'bg-red-500 text-white';
+        return 'bg-red-100 text-red-700 border-red-200';
       case 'blocked':
-        return 'bg-red-950 text-white';
+        return 'bg-red-950/10 text-red-950 border-red-950/20';
       case 'unknown':
-        return 'bg-gray-400 text-white';
+        return 'bg-gray-100 text-gray-600 border-gray-200';
     }
   };
 
@@ -257,13 +257,14 @@ const Index = () => {
                             <Checkbox
                               checked={selectedPorts.includes(port.id)}
                               onCheckedChange={() => togglePort(port.id)}
+                              className="rounded-sm"
                             />
                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <span className="font-semibold text-sm w-16">Порт {port.number}</span>
-                              <Badge className={`text-xs ${getStatusBadgeColor(port.status)}`}>
+                              <span className="font-semibold text-sm w-20">Порт {port.number}</span>
+                              <Badge variant="outline" className={`text-xs w-28 justify-center ${getStatusBadgeColor(port.status)}`}>
                                 {getStatusText(port.status)}
                               </Badge>
-                              <Badge variant="outline" className="text-xs">
+                              <Badge variant="outline" className="text-xs w-20 justify-center">
                                 {port.speed}
                               </Badge>
                               {port.device && (
