@@ -188,8 +188,10 @@ const Index = () => {
           />
         </div>
 
-        <div className="space-y-4">
-          {filteredSwitches.map((switchItem) => {
+        <Card className="p-6">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Физические порты подключения (Level-2 OSI)</h2>
+          <div className="space-y-4">
+            {filteredSwitches.map((switchItem) => {
             const activePorts = switchItem.ports.filter((p) => p.status === 'active').length;
             const totalPorts = switchItem.ports.length;
             const isOpen = openSwitches.includes(switchItem.id);
@@ -283,15 +285,16 @@ const Index = () => {
               </Card>
             );
           })}
-        </div>
+          </div>
 
-        {filteredSwitches.length === 0 && (
-          <Card className="p-12 text-center">
-            <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
-            <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
-            <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
-          </Card>
-        )}
+          {filteredSwitches.length === 0 && (
+            <div className="p-12 text-center">
+              <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
+              <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
+              <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
+            </div>
+          )}
+        </Card>
       </div>
     </div>
   );
