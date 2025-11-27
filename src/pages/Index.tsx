@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
 interface Port {
@@ -66,6 +67,21 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openSwitches, setOpenSwitches] = useState<number[]>([1]);
   const [selectedPorts, setSelectedPorts] = useState<number[]>([]);
+  const [showAddPortDialog, setShowAddPortDialog] = useState(false);
+
+  const handleDeletePorts = () => {
+    console.log('Удаление портов:', selectedPorts);
+    setSelectedPorts([]);
+  };
+
+  const handleReconfigurePorts = () => {
+    console.log('Перенастройка портов:', selectedPorts);
+  };
+
+  const handleAddPort = () => {
+    console.log('Добавление порта');
+    setShowAddPortDialog(true);
+  };
 
   const filteredSwitches = mockData.filter(
     (sw) =>
@@ -189,7 +205,13 @@ const Index = () => {
         </div>
 
         <Card className="p-6">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Физические порты подключения (Level-2 OSI)</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-foreground">Физические порты подключения (Level-2 OSI)</h2>
+            <Button onClick={handleAddPort} className="gap-2">
+              <Icon name="Plus" size={16} />
+              Добавить порт
+            </Button>
+          </div>
           <div className="space-y-4">
             {filteredSwitches.map((switchItem) => {
             const activePorts = switchItem.ports.filter((p) => p.status === 'active').length;
@@ -295,6 +317,34 @@ const Index = () => {
             </div>
           )}
         </Card>
+
+        {selectedPorts.length > 0 && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+            <Card className="shadow-2xl border-2">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Icon name="CheckSquare" size={20} className="text-primary" />
+                    <span className="font-medium">
+                      Выбрано портов: <span className="text-primary">{selectedPorts.length}</span>
+                    </span>
+                  </div>
+                  <div className="h-6 w-px bg-border" />
+                  <div className="flex gap-2">
+                    <Button onClick={handleReconfigurePorts} variant="outline" className="gap-2">
+                      <Icon name="Settings" size={16} />
+                      Перенастроить
+                    </Button>
+                    <Button onClick={handleDeletePorts} variant="destructive" className="gap-2">
+                      <Icon name="Trash2" size={16} />
+                      Удалить
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
