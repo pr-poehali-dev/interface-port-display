@@ -67,7 +67,6 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openSwitches, setOpenSwitches] = useState<number[]>([1]);
   const [selectedPorts, setSelectedPorts] = useState<number[]>([]);
-  const [showAddPortDialog, setShowAddPortDialog] = useState(false);
 
   const handleDeletePorts = () => {
     console.log('Удаление портов:', selectedPorts);
@@ -78,9 +77,12 @@ const Index = () => {
     console.log('Перенастройка портов:', selectedPorts);
   };
 
-  const handleAddPort = () => {
-    console.log('Добавление порта');
-    setShowAddPortDialog(true);
+  const handleAddSwitch = () => {
+    console.log('Добавление коммутатора');
+  };
+
+  const handleAddPort = (switchId: number) => {
+    console.log('Добавление порта к коммутатору:', switchId);
   };
 
   const filteredSwitches = mockData.filter(
@@ -207,9 +209,9 @@ const Index = () => {
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold text-foreground">Физические порты подключения (Level-2 OSI)</h2>
-            <Button onClick={handleAddPort} className="gap-2">
+            <Button onClick={handleAddSwitch} className="gap-2">
               <Icon name="Plus" size={16} />
-              Добавить порт
+              Добавить коммутатор
             </Button>
           </div>
           <div className="space-y-4">
@@ -300,6 +302,17 @@ const Index = () => {
                             </div>
                           </div>
                         ))}
+                        
+                        <button
+                          onClick={() => handleAddPort(switchItem.id)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 hover:border-primary hover:bg-primary/5 transition-all w-full group"
+                        >
+                          <div className="w-5 h-5 rounded border-2 border-dashed border-muted-foreground/30 group-hover:border-primary transition-colors" />
+                          <div className="flex items-center gap-2 text-muted-foreground group-hover:text-primary transition-colors">
+                            <Icon name="Plus" size={16} />
+                            <span className="text-sm font-medium">Добавить порт</span>
+                          </div>
+                        </button>
                       </div>
                     </CardContent>
                   </CollapsibleContent>
