@@ -281,18 +281,18 @@ const Index = () => {
                         <span className="text-sm font-medium flex-1">Выбрать все порты</span>
                         {getSelectedPortsCountForSwitch(switchItem) > 0 && (
                           <>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded">
-                              <Icon name="CheckSquare" size={16} className="text-primary" />
-                              <span className="text-sm font-medium text-primary">
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 rounded">
+                              <Icon name="CheckSquare" size={14} className="text-primary" />
+                              <span className="text-xs font-medium text-primary">
                                 {getSelectedPortsCountForSwitch(switchItem)}
                               </span>
                             </div>
-                            <Button onClick={() => handleReconfigurePorts(switchItem.id)} variant="outline" size="sm" className="gap-2">
-                              <Icon name="Settings" size={14} />
+                            <Button onClick={() => handleReconfigurePorts(switchItem.id)} variant="outline" size="sm" className="gap-1.5 h-7 px-2 text-xs">
+                              <Icon name="Settings" size={12} />
                               Перенастроить
                             </Button>
-                            <Button onClick={() => handleDeletePorts(switchItem.id)} variant="destructive" size="sm" className="gap-2">
-                              <Icon name="Trash2" size={14} />
+                            <Button onClick={() => handleDeletePorts(switchItem.id)} variant="destructive" size="sm" className="gap-1.5 h-7 px-2 text-xs">
+                              <Icon name="Trash2" size={12} />
                               Удалить
                             </Button>
                           </>
