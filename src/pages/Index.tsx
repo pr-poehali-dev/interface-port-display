@@ -68,13 +68,17 @@ const Index = () => {
   const [openSwitches, setOpenSwitches] = useState<number[]>([1]);
   const [selectedPorts, setSelectedPorts] = useState<number[]>([]);
 
-  const handleDeletePorts = () => {
-    console.log('Удаление портов:', selectedPorts);
-    setSelectedPorts([]);
+  const handleDeletePorts = (switchId: number) => {
+    const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
+    const portsToDelete = selectedPorts.filter(id => switchPortIds.includes(id));
+    console.log('Удаление портов:', portsToDelete);
+    setSelectedPorts(prev => prev.filter(id => !switchPortIds.includes(id)));
   };
 
-  const handleReconfigurePorts = () => {
-    console.log('Перенастройка портов:', selectedPorts);
+  const handleReconfigurePorts = (switchId: number) => {
+    const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
+    const portsToReconfigure = selectedPorts.filter(id => switchPortIds.includes(id));
+    console.log('Перенастройка портов:', portsToReconfigure);
   };
 
   const handleAddSwitch = () => {
@@ -162,6 +166,11 @@ const Index = () => {
   const isSomePortsSelected = (switchItem: Switch) => {
     const portIds = switchItem.ports.map((p) => p.id);
     return portIds.some((id) => selectedPorts.includes(id)) && !isAllPortsSelected(switchItem);
+  };
+
+  const getSelectedPortsCountForSwitch = (switchItem: Switch) => {
+    const portIds = switchItem.ports.map((p) => p.id);
+    return selectedPorts.filter(id => portIds.includes(id)).length;
   };
 
   return (
@@ -273,6 +282,23 @@ const Index = () => {
                       </div>
 
                       <div className="space-y-2">
+                        {getSelectedPortsCountForSwitch(switchItem) > 0 && (
+                          <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                            <Icon name="CheckSquare" size={18} className="text-primary" />
+                            <span className="text-sm font-medium flex-1">
+                              Выбрано портов: <span className="text-primary">{getSelectedPortsCountForSwitch(switchItem)}</span>
+                            </span>
+                            <Button onClick={() => handleReconfigurePorts(switchItem.id)} variant="outline" size="sm" className="gap-2">
+                              <Icon name="Settings" size={14} />
+                              Перенастроить
+                            </Button>
+                            <Button onClick={() => handleDeletePorts(switchItem.id)} variant="destructive" size="sm" className="gap-2">
+                              <Icon name="Trash2" size={14} />
+                              Удалить
+                            </Button>
+                          </div>
+                        )}
+                        
                         {switchItem.ports.map((port) => (
                           <div
                             key={port.id}
@@ -330,34 +356,6 @@ const Index = () => {
             </div>
           )}
         </Card>
-
-        {selectedPorts.length > 0 && (
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
-            <Card className="shadow-2xl border-2">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Icon name="CheckSquare" size={20} className="text-primary" />
-                    <span className="font-medium">
-                      Выбрано портов: <span className="text-primary">{selectedPorts.length}</span>
-                    </span>
-                  </div>
-                  <div className="h-6 w-px bg-border" />
-                  <div className="flex gap-2">
-                    <Button onClick={handleReconfigurePorts} variant="outline" className="gap-2">
-                      <Icon name="Settings" size={16} />
-                      Перенастроить
-                    </Button>
-                    <Button onClick={handleDeletePorts} variant="destructive" className="gap-2">
-                      <Icon name="Trash2" size={16} />
-                      Удалить
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
     </div>
   );
