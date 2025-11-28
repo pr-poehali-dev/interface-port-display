@@ -278,16 +278,15 @@ const Index = () => {
                           onCheckedChange={() => toggleAllPorts(switchItem)}
                           className={isSomePortsSelected(switchItem) ? 'data-[state=checked]:bg-primary/50' : ''}
                         />
-                        <span className="text-sm font-medium">Выбрать все порты</span>
-                      </div>
-
-                      <div className="space-y-2">
+                        <span className="text-sm font-medium flex-1">Выбрать все порты</span>
                         {getSelectedPortsCountForSwitch(switchItem) > 0 && (
-                          <div className="flex items-center gap-2 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                            <Icon name="CheckSquare" size={18} className="text-primary" />
-                            <span className="text-sm font-medium flex-1">
-                              Выбрано портов: <span className="text-primary">{getSelectedPortsCountForSwitch(switchItem)}</span>
-                            </span>
+                          <>
+                            <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded">
+                              <Icon name="CheckSquare" size={16} className="text-primary" />
+                              <span className="text-sm font-medium text-primary">
+                                {getSelectedPortsCountForSwitch(switchItem)}
+                              </span>
+                            </div>
                             <Button onClick={() => handleReconfigurePorts(switchItem.id)} variant="outline" size="sm" className="gap-2">
                               <Icon name="Settings" size={14} />
                               Перенастроить
@@ -296,8 +295,11 @@ const Index = () => {
                               <Icon name="Trash2" size={14} />
                               Удалить
                             </Button>
-                          </div>
+                          </>
                         )}
+                      </div>
+
+                      <div className="space-y-2">
                         
                         {switchItem.ports.map((port) => (
                           <div
