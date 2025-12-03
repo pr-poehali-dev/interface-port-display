@@ -12,6 +12,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Port {
   id: number;
@@ -73,6 +87,11 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [openSwitches, setOpenSwitches] = useState<number[]>([1]);
   const [selectedPorts, setSelectedPorts] = useState<number[]>([]);
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
+  const [diagnosticsSwitch, setDiagnosticsSwitch] = useState<string>('');
+  const [diagnosticsPort, setDiagnosticsPort] = useState<string>('');
+  const [diagnosticsTab, setDiagnosticsTab] = useState<string>('graph');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDeletePorts = (switchId: number) => {
     const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
@@ -93,6 +112,58 @@ const Index = () => {
 
   const handleAddPort = (switchId: number) => {
     console.log('Добавление порта к коммутатору:', switchId);
+  };
+
+  const openDiagnostics = (switchId: number, portId: number) => {
+    setDiagnosticsSwitch(switchId.toString());
+    setDiagnosticsPort(portId.toString());
+    setDiagnosticsOpen(true);
+    setDiagnosticsTab('graph');
+  };
+
+  const loadDiagnosticsData = async (tab: string) => {
+    setIsLoading(true);
+    // Симуляция запроса на сервер
+    await new Promise(resolve => setTimeout(resolve, 800));
+    console.log('Загружены данные для вкладки:', tab);
+    setIsLoading(false);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setDiagnosticsTab(tab);
+    loadDiagnosticsData(tab);
+  };
+
+  const getAvailablePorts = () => {
+    if (!diagnosticsSwitch) return [];
+    const switchData = mockData.find(s => s.id.toString() === diagnosticsSwitch);
+    return switchData?.ports || [];
+  };
+
+  const openDiagnostics = (switchId: number, portId: number) => {
+    setDiagnosticsSwitch(switchId.toString());
+    setDiagnosticsPort(portId.toString());
+    setDiagnosticsOpen(true);
+    setDiagnosticsTab('graph');
+  };
+
+  const loadDiagnosticsData = async (tab: string) => {
+    setIsLoading(true);
+    // Симуляция запроса на сервер
+    await new Promise(resolve => setTimeout(resolve, 800));
+    console.log('Загружены данные для вкладки:', tab);
+    setIsLoading(false);
+  };
+
+  const handleTabChange = (tab: string) => {
+    setDiagnosticsTab(tab);
+    loadDiagnosticsData(tab);
+  };
+
+  const getAvailablePorts = () => {
+    if (!diagnosticsSwitch) return [];
+    const switchData = mockData.find(s => s.id.toString() === diagnosticsSwitch);
+    return switchData?.ports || [];
   };
 
   const filteredSwitches = mockData.filter(
@@ -349,7 +420,7 @@ const Index = () => {
                                   <Icon name="Pencil" size={14} className="mr-2" />
                                   Изменить описание
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => console.log('Диагностика', port.id)}>
+                                <DropdownMenuItem onClick={() => openDiagnostics(switchItem.id, port.id)}>
                                   <Icon name="Activity" size={14} className="mr-2" />
                                   Диагностика
                                 </DropdownMenuItem>
@@ -386,6 +457,169 @@ const Index = () => {
           )}
         </Card>
       </div>
+
+      {/* Модальное окно диагностики */}
+      <Dialog open={diagnosticsOpen} onOpenChange={setDiagnosticsOpen}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Диагностика порта</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Панель управления вверху */}
+            <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg border">
+              <div className="flex-1">
+                <label className="text-sm font-medium mb-2 block">Коммутатор</label>
+                <Select value={diagnosticsSwitch} onValueChange={setDiagnosticsSwitch}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите коммутатор" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mockData.map((sw) => (
+                      <SelectItem key={sw.id} value={sw.id.toString()}>
+                        {sw.name} — {sw.location}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1">
+                <label className="text-sm font-medium mb-2 block">Порт</label>
+                <Select 
+                  value={diagnosticsPort} 
+                  onValueChange={setDiagnosticsPort}
+                  disabled={!diagnosticsSwitch}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите порт" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getAvailablePorts().map((port) => (
+                      <SelectItem key={port.id} value={port.id.toString()}>
+                        Порт {port.number} {port.device ? `— ${port.device}` : ''}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => setDiagnosticsOpen(false)}
+                className="mt-6"
+              >
+                <Icon name="X" size={20} />
+              </Button>
+            </div>
+
+            {/* Вкладки */}
+            <Tabs value={diagnosticsTab} onValueChange={handleTabChange}>
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="graph" className="gap-2">
+                  <Icon name="LineChart" size={16} />
+                  График
+                </TabsTrigger>
+                <TabsTrigger value="diagnostics" className="gap-2">
+                  <Icon name="Activity" size={16} />
+                  Диагностика
+                </TabsTrigger>
+                <TabsTrigger value="mode" className="gap-2">
+                  <Icon name="Settings" size={16} />
+                  Режим порта
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Контент вкладок */}
+              <div className="min-h-[400px] relative">
+                {isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10">
+                    <div className="flex flex-col items-center gap-3">
+                      <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">Загрузка данных...</p>
+                    </div>
+                  </div>
+                )}
+
+                <TabsContent value="graph" className="space-y-4 mt-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">График трафика</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-64 flex items-center justify-center border-2 border-dashed rounded-lg">
+                        <div className="text-center">
+                          <Icon name="LineChart" size={48} className="mx-auto text-muted-foreground mb-2" />
+                          <p className="text-muted-foreground">График трафика будет здесь</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="diagnostics" className="space-y-4 mt-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Диагностическая информация</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between py-2 border-b">
+                          <span className="text-sm font-medium">Статус порта:</span>
+                          <Badge>Активен</Badge>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                          <span className="text-sm font-medium">Скорость:</span>
+                          <span className="text-sm">1 Gbps</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                          <span className="text-sm font-medium">Дуплекс:</span>
+                          <span className="text-sm">Full</span>
+                        </div>
+                        <div className="flex justify-between py-2 border-b">
+                          <span className="text-sm font-medium">Ошибки:</span>
+                          <span className="text-sm">0</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="mode" className="space-y-4 mt-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Настройки режима порта</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">Режим работы</label>
+                          <Select defaultValue="access">
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="access">Access</SelectItem>
+                              <SelectItem value="trunk">Trunk</SelectItem>
+                              <SelectItem value="hybrid">Hybrid</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-2 block">VLAN</label>
+                          <Input type="number" placeholder="1" defaultValue="1" />
+                        </div>
+                        <Button className="w-full">Применить настройки</Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </div>
+            </Tabs>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
