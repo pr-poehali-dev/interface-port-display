@@ -140,32 +140,6 @@ const Index = () => {
     return switchData?.ports || [];
   };
 
-  const openDiagnostics = (switchId: number, portId: number) => {
-    setDiagnosticsSwitch(switchId.toString());
-    setDiagnosticsPort(portId.toString());
-    setDiagnosticsOpen(true);
-    setDiagnosticsTab('graph');
-  };
-
-  const loadDiagnosticsData = async (tab: string) => {
-    setIsLoading(true);
-    // Симуляция запроса на сервер
-    await new Promise(resolve => setTimeout(resolve, 800));
-    console.log('Загружены данные для вкладки:', tab);
-    setIsLoading(false);
-  };
-
-  const handleTabChange = (tab: string) => {
-    setDiagnosticsTab(tab);
-    loadDiagnosticsData(tab);
-  };
-
-  const getAvailablePorts = () => {
-    if (!diagnosticsSwitch) return [];
-    const switchData = mockData.find(s => s.id.toString() === diagnosticsSwitch);
-    return switchData?.ports || [];
-  };
-
   const filteredSwitches = mockData.filter(
     (sw) =>
       sw.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
