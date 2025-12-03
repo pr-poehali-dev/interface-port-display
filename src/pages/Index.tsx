@@ -92,6 +92,10 @@ const Index = () => {
   const [diagnosticsPort, setDiagnosticsPort] = useState<string>('');
   const [diagnosticsTab, setDiagnosticsTab] = useState<string>('graph');
   const [isLoading, setIsLoading] = useState(false);
+  const [portStatus, setPortStatus] = useState<'up' | 'down'>('up');
+  const [portSpeed, setPortSpeed] = useState<string>('100');
+  const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
+  const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
 
   const handleDeletePorts = (switchId: number) => {
     const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
@@ -132,6 +136,34 @@ const Index = () => {
   const handleTabChange = (tab: string) => {
     setDiagnosticsTab(tab);
     loadDiagnosticsData(tab);
+  };
+
+  const handlePortStatusChange = async (status: 'up' | 'down') => {
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setPortStatus(status);
+    console.log('Статус порта изменен на:', status);
+    setIsLoading(false);
+  };
+
+  const handlePortSpeedChange = async (speed: string) => {
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setPortSpeed(speed);
+    console.log('Скорость порта изменена на:', speed);
+    setIsLoading(false);
+  };
+
+  const handleCableDiagnostics = async () => {
+    setIsDiagnostingCable(true);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const mockResults = [
+      'FastEthernet; п-1: [OK] 11 м; п-2: [OK] 11 м; п-3: [Other]; п-4: [Other];',
+      'FastEthernet; п-1: [Open] 11 м; п-2: [Open] 11 м; п-3: [Other]; п-4: [Other];',
+      'GigabitEthernet; п-1: [OK] 45 м; п-2: [OK] 45 м; п-3: [OK] 45 м; п-4: [OK] 45 м;'
+    ];
+    setCableDiagnostics(mockResults[Math.floor(Math.random() * mockResults.length)]);
+    setIsDiagnostingCable(false);
   };
 
   const getAvailablePorts = () => {
@@ -490,7 +522,7 @@ const Index = () => {
 
             {/* Вкладки */}
             <Tabs value={diagnosticsTab} onValueChange={handleTabChange}>
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="graph" className="gap-2">
                   <Icon name="LineChart" size={16} />
                   График
@@ -498,10 +530,6 @@ const Index = () => {
                 <TabsTrigger value="diagnostics" className="gap-2">
                   <Icon name="Activity" size={16} />
                   Диагностика
-                </TabsTrigger>
-                <TabsTrigger value="mode" className="gap-2">
-                  <Icon name="Settings" size={16} />
-                  Режим порта
                 </TabsTrigger>
               </TabsList>
 
@@ -533,61 +561,158 @@ const Index = () => {
                 </TabsContent>
 
                 <TabsContent value="diagnostics" className="space-y-4 mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Диагностическая информация</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex justify-between py-2 border-b">
-                          <span className="text-sm font-medium">Статус порта:</span>
-                          <Badge>Активен</Badge>
+                  <div className="space-y-6">
+                    {/* Статус порта */}
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h3 className="text-lg font-semibold mb-1">Статус порта</h3>
+                            <div className="flex items-center gap-3">
+                              <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-sm">
+                                {portStatus === 'up' ? 'Активен' : 'Неактивен'}
+                              </Badge>
+                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex justify-between py-2 border-b">
-                          <span className="text-sm font-medium">Скорость:</span>
-                          <span className="text-sm">1 Gbps</span>
-                        </div>
-                        <div className="flex justify-between py-2 border-b">
-                          <span className="text-sm font-medium">Дуплекс:</span>
-                          <span className="text-sm">Full</span>
-                        </div>
-                        <div className="flex justify-between py-2 border-b">
-                          <span className="text-sm font-medium">Ошибки:</span>
-                          <span className="text-sm">0</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
 
-                <TabsContent value="mode" className="space-y-4 mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Настройки режима порта</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">Режим работы</label>
-                          <Select defaultValue="access">
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="access">Access</SelectItem>
-                              <SelectItem value="trunk">Trunk</SelectItem>
-                              <SelectItem value="hybrid">Hybrid</SelectItem>
-                            </SelectContent>
-                          </Select>
+                        {/* Панель управления портом */}
+                        <div className="space-y-4">
+                          <div>
+                            <label className="text-sm font-medium mb-3 block">Управление портом</label>
+                            <div className="flex gap-2">
+                              <Button
+                                variant={portStatus === 'down' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => handlePortStatusChange('down')}
+                                className="min-w-[70px]"
+                              >
+                                Down
+                              </Button>
+                              <Button
+                                variant={portStatus === 'up' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => handlePortStatusChange('up')}
+                                className="min-w-[70px]"
+                              >
+                                Up
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-sm font-medium mb-3 block">Скорость порта</label>
+                            <div className="flex gap-2 flex-wrap">
+                              {['10', '100', '1000', 'auto'].map((speed) => (
+                                <Button
+                                  key={speed}
+                                  variant={portSpeed === speed ? 'default' : 'outline'}
+                                  size="sm"
+                                  onClick={() => handlePortSpeedChange(speed)}
+                                  className="min-w-[70px]"
+                                >
+                                  {speed === 'auto' ? 'Auto' : speed}
+                                </Button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                            <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
+                            <p className="text-xs text-amber-800 dark:text-amber-200">
+                              После любого изменения линк обычно отключается на несколько секунд, 
+                              поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <label className="text-sm font-medium mb-2 block">VLAN</label>
-                          <Input type="number" placeholder="1" defaultValue="1" />
+                      </CardContent>
+                    </Card>
+
+                    {/* Диагностика кабеля */}
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
+                            <Button 
+                              onClick={handleCableDiagnostics}
+                              disabled={isDiagnostingCable}
+                              size="sm"
+                            >
+                              {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
+                              {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
+                            </Button>
+                          </div>
+                          
+                          {cableDiagnostics && (
+                            <div className="p-4 bg-muted/50 rounded-lg border">
+                              <p className="text-sm font-mono">{cableDiagnostics}</p>
+                            </div>
+                          )}
                         </div>
-                        <Button className="w-full">Применить настройки</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+
+                    {/* Таблица подключений */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Подключенные устройства</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="border rounded-lg overflow-hidden">
+                          <table className="w-full">
+                            <thead className="bg-muted/50">
+                              <tr>
+                                <th className="text-left p-3 text-sm font-medium">VLAN</th>
+                                <th className="text-left p-3 text-sm font-medium">MAC / Интерфейс</th>
+                                <th className="text-left p-3 text-sm font-medium">IP</th>
+                                <th className="text-left p-3 text-sm font-medium">DHCP</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y">
+                              <tr className="hover:bg-muted/30 transition-colors">
+                                <td className="p-3 text-sm">1</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">74:56:3c:4c:1c:c7</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">GIGA-BYTE TECHNOLOGY CO.,LTD.</div>
+                                </td>
+                                <td className="p-3 text-sm font-mono">10.190.1.205</td>
+                                <td className="p-3">
+                                  <div className="text-sm">23 мин</div>
+                                  <div className="text-xs text-muted-foreground">onix</div>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/30 transition-colors">
+                                <td className="p-3 text-sm">1</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">a8:5e:45:2b:8f:3d</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">Apple, Inc.</div>
+                                </td>
+                                <td className="p-3 text-sm font-mono">10.190.1.156</td>
+                                <td className="p-3">
+                                  <div className="text-sm">1 ч 12 мин</div>
+                                  <div className="text-xs text-muted-foreground">MacBook-Pro</div>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/30 transition-colors">
+                                <td className="p-3 text-sm">100</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">00:1a:2b:3c:4d:5e</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">Cisco Systems</div>
+                                </td>
+                                <td className="p-3 text-sm font-mono">192.168.100.45</td>
+                                <td className="p-3">
+                                  <div className="text-sm">5 мин</div>
+                                  <div className="text-xs text-muted-foreground">server-01</div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </TabsContent>
               </div>
             </Tabs>
