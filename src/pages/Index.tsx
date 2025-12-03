@@ -466,7 +466,7 @@ const Index = () => {
 
       {/* Модальное окно диагностики */}
       <Dialog open={diagnosticsOpen} onOpenChange={setDiagnosticsOpen}>
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-lg">Диагностика порта</DialogTitle>
           </DialogHeader>
