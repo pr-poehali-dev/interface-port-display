@@ -466,18 +466,18 @@ const Index = () => {
 
       {/* Модальное окно диагностики */}
       <Dialog open={diagnosticsOpen} onOpenChange={setDiagnosticsOpen}>
-        <DialogContent className="max-w-5xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-lg">Диагностика порта</DialogTitle>
+            <DialogTitle className="text-2xl">Диагностика порта</DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Панель управления вверху */}
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg border">
+            <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg border">
               <div className="flex-1">
-                <label className="text-xs font-medium mb-1.5 block">Коммутатор</label>
+                <label className="text-sm font-medium mb-2 block">Коммутатор</label>
                 <Select value={diagnosticsSwitch} onValueChange={setDiagnosticsSwitch}>
-                  <SelectTrigger className="h-9">
+                  <SelectTrigger>
                     <SelectValue placeholder="Выберите коммутатор" />
                   </SelectTrigger>
                   <SelectContent>
@@ -491,13 +491,13 @@ const Index = () => {
               </div>
 
               <div className="flex-1">
-                <label className="text-xs font-medium mb-1.5 block">Порт</label>
+                <label className="text-sm font-medium mb-2 block">Порт</label>
                 <Select 
                   value={diagnosticsPort} 
                   onValueChange={setDiagnosticsPort}
                   disabled={!diagnosticsSwitch}
                 >
-                  <SelectTrigger className="h-9">
+                  <SelectTrigger>
                     <SelectValue placeholder="Выберите порт" />
                   </SelectTrigger>
                   <SelectContent>
@@ -514,9 +514,9 @@ const Index = () => {
                 variant="ghost" 
                 size="icon"
                 onClick={() => setDiagnosticsOpen(false)}
-                className="mt-4 h-9 w-9"
+                className="mt-6"
               >
-                <Icon name="X" size={16} />
+                <Icon name="X" size={20} />
               </Button>
             </div>
 
@@ -534,59 +534,59 @@ const Index = () => {
               </TabsList>
 
               {/* Контент вкладок */}
-              <div className="min-h-[300px] relative">
+              <div className="min-h-[400px] relative">
                 {isLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-10">
-                    <div className="flex flex-col items-center gap-2">
-                      <Icon name="Loader2" size={24} className="animate-spin text-primary" />
-                      <p className="text-xs text-muted-foreground">Загрузка данных...</p>
+                    <div className="flex flex-col items-center gap-3">
+                      <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">Загрузка данных...</p>
                     </div>
                   </div>
                 )}
 
-                <TabsContent value="graph" className="space-y-3 mt-3">
+                <TabsContent value="graph" className="space-y-4 mt-4">
                   <Card>
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base">График трафика</CardTitle>
+                    <CardHeader>
+                      <CardTitle className="text-lg">График трафика</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="h-48 flex items-center justify-center border-2 border-dashed rounded-lg">
+                      <div className="h-64 flex items-center justify-center border-2 border-dashed rounded-lg">
                         <div className="text-center">
-                          <Icon name="LineChart" size={36} className="mx-auto text-muted-foreground mb-2" />
-                          <p className="text-sm text-muted-foreground">График трафика будет здесь</p>
+                          <Icon name="LineChart" size={48} className="mx-auto text-muted-foreground mb-2" />
+                          <p className="text-muted-foreground">График трафика будет здесь</p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="diagnostics" className="space-y-3 mt-3">
-                  <div className="space-y-3">
+                <TabsContent value="diagnostics" className="space-y-4 mt-4">
+                  <div className="space-y-6">
                     {/* Статус порта */}
                     <Card>
-                      <CardContent className="pt-4 pb-4">
-                        <div className="flex items-center justify-between mb-4">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between mb-6">
                           <div>
-                            <h3 className="text-base font-semibold mb-1">Статус порта</h3>
-                            <div className="flex items-center gap-2">
-                              <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-xs">
+                            <h3 className="text-lg font-semibold mb-1">Статус порта</h3>
+                            <div className="flex items-center gap-3">
+                              <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-sm">
                                 {portStatus === 'up' ? 'Активен' : 'Неактивен'}
                               </Badge>
-                              <span className="text-xs text-muted-foreground">Скорость: {portSpeed} Mbps</span>
+                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
                             </div>
                           </div>
                         </div>
 
                         {/* Панель управления портом */}
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <div>
-                            <label className="text-xs font-medium mb-2 block">Управление портом</label>
+                            <label className="text-sm font-medium mb-3 block">Управление портом</label>
                             <div className="flex gap-2">
                               <Button
                                 variant={portStatus === 'down' ? 'default' : 'outline'}
                                 size="sm"
                                 onClick={() => handlePortStatusChange('down')}
-                                className="min-w-[60px] h-8 text-xs"
+                                className="min-w-[70px]"
                               >
                                 Down
                               </Button>
@@ -594,7 +594,7 @@ const Index = () => {
                                 variant={portStatus === 'up' ? 'default' : 'outline'}
                                 size="sm"
                                 onClick={() => handlePortStatusChange('up')}
-                                className="min-w-[60px] h-8 text-xs"
+                                className="min-w-[70px]"
                               >
                                 Up
                               </Button>
@@ -602,7 +602,7 @@ const Index = () => {
                           </div>
 
                           <div>
-                            <label className="text-xs font-medium mb-2 block">Скорость порта</label>
+                            <label className="text-sm font-medium mb-3 block">Скорость порта</label>
                             <div className="flex gap-2 flex-wrap">
                               {['10', '100', '1000', 'auto'].map((speed) => (
                                 <Button
@@ -610,7 +610,7 @@ const Index = () => {
                                   variant={portSpeed === speed ? 'default' : 'outline'}
                                   size="sm"
                                   onClick={() => handlePortSpeedChange(speed)}
-                                  className="min-w-[60px] h-8 text-xs"
+                                  className="min-w-[70px]"
                                 >
                                   {speed === 'auto' ? 'Auto' : speed}
                                 </Button>
@@ -618,8 +618,8 @@ const Index = () => {
                             </div>
                           </div>
 
-                          <div className="flex items-start gap-2 p-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                            <Icon name="Info" size={14} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
+                          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                            <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
                             <p className="text-xs text-amber-800 dark:text-amber-200">
                               После любого изменения линк обычно отключается на несколько секунд, 
                               поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
@@ -631,33 +631,23 @@ const Index = () => {
 
                     {/* Диагностика кабеля */}
                     <Card>
-                      <CardContent className="pt-4 pb-4">
-                        <div className="space-y-3">
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
                           <div className="flex items-center justify-between">
-                            <h3 className="text-base font-semibold">Диагностика кабеля</h3>
+                            <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
                             <Button 
                               onClick={handleCableDiagnostics}
                               disabled={isDiagnostingCable}
                               size="sm"
-                              className="h-8 text-xs"
                             >
-                              {isDiagnostingCable && <Icon name="Loader2" size={14} className="mr-1.5 animate-spin" />}
-                              {isDiagnostingCable ? 'Диагностика...' : 'Запустить'}
+                              {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
+                              {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
                             </Button>
                           </div>
                           
-                          {!cableDiagnostics && (
-                            <div className="flex items-start gap-2 p-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                              <Icon name="AlertTriangle" size={14} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
-                              <p className="text-xs text-amber-800 dark:text-amber-200">
-                                При запуске линк прервётся на 5 секунд
-                              </p>
-                            </div>
-                          )}
-                          
                           {cableDiagnostics && (
-                            <div className="p-3 bg-muted/50 rounded-lg border">
-                              <p className="text-xs font-mono">{cableDiagnostics}</p>
+                            <div className="p-4 bg-muted/50 rounded-lg border">
+                              <p className="text-sm font-mono">{cableDiagnostics}</p>
                             </div>
                           )}
                         </div>
@@ -666,55 +656,55 @@ const Index = () => {
 
                     {/* Таблица подключений */}
                     <Card>
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-base">Подключенные устройства</CardTitle>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Подключенные устройства</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="border rounded-lg overflow-hidden">
                           <table className="w-full">
                             <thead className="bg-muted/50">
                               <tr>
-                                <th className="text-left p-2 text-xs font-medium">VLAN</th>
-                                <th className="text-left p-2 text-xs font-medium">MAC / Интерфейс</th>
-                                <th className="text-left p-2 text-xs font-medium">IP</th>
-                                <th className="text-left p-2 text-xs font-medium">DHCP</th>
+                                <th className="text-left p-3 text-sm font-medium">VLAN</th>
+                                <th className="text-left p-3 text-sm font-medium">MAC / Интерфейс</th>
+                                <th className="text-left p-3 text-sm font-medium">IP</th>
+                                <th className="text-left p-3 text-sm font-medium">DHCP</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y">
                               <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-2 text-xs">1</td>
-                                <td className="p-2">
-                                  <div className="text-xs font-mono">74:56:3c:4c:1c:c7</div>
-                                  <div className="text-[10px] text-muted-foreground mt-0.5">GIGA-BYTE TECHNOLOGY CO.,LTD.</div>
+                                <td className="p-3 text-sm">1</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">74:56:3c:4c:1c:c7</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">GIGA-BYTE TECHNOLOGY CO.,LTD.</div>
                                 </td>
-                                <td className="p-2 text-xs font-mono">10.190.1.205</td>
-                                <td className="p-2">
-                                  <div className="text-xs">23 мин</div>
-                                  <div className="text-[10px] text-muted-foreground">onix</div>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-2 text-xs">1</td>
-                                <td className="p-2">
-                                  <div className="text-xs font-mono">a8:5e:45:2b:8f:3d</div>
-                                  <div className="text-[10px] text-muted-foreground mt-0.5">Apple, Inc.</div>
-                                </td>
-                                <td className="p-2 text-xs font-mono">10.190.1.156</td>
-                                <td className="p-2">
-                                  <div className="text-xs">1 ч 12 мин</div>
-                                  <div className="text-[10px] text-muted-foreground">MacBook-Pro</div>
+                                <td className="p-3 text-sm font-mono">10.190.1.205</td>
+                                <td className="p-3">
+                                  <div className="text-sm">23 мин</div>
+                                  <div className="text-xs text-muted-foreground">onix</div>
                                 </td>
                               </tr>
                               <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-2 text-xs">100</td>
-                                <td className="p-2">
-                                  <div className="text-xs font-mono">00:1a:2b:3c:4d:5e</div>
-                                  <div className="text-[10px] text-muted-foreground mt-0.5">Cisco Systems</div>
+                                <td className="p-3 text-sm">1</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">a8:5e:45:2b:8f:3d</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">Apple, Inc.</div>
                                 </td>
-                                <td className="p-2 text-xs font-mono">192.168.100.45</td>
-                                <td className="p-2">
-                                  <div className="text-xs">5 мин</div>
-                                  <div className="text-[10px] text-muted-foreground">server-01</div>
+                                <td className="p-3 text-sm font-mono">10.190.1.156</td>
+                                <td className="p-3">
+                                  <div className="text-sm">1 ч 12 мин</div>
+                                  <div className="text-xs text-muted-foreground">MacBook-Pro</div>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/30 transition-colors">
+                                <td className="p-3 text-sm">100</td>
+                                <td className="p-3">
+                                  <div className="text-sm font-mono">00:1a:2b:3c:4d:5e</div>
+                                  <div className="text-xs text-muted-foreground mt-0.5">Cisco Systems</div>
+                                </td>
+                                <td className="p-3 text-sm font-mono">192.168.100.45</td>
+                                <td className="p-3">
+                                  <div className="text-sm">5 мин</div>
+                                  <div className="text-xs text-muted-foreground">server-01</div>
                                 </td>
                               </tr>
                             </tbody>
