@@ -6,6 +6,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface Port {
   id: number;
@@ -328,6 +334,27 @@ const Index = () => {
                               )}
                               {!port.device && <span className="text-xs text-muted-foreground">Не подключено</span>}
                             </div>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <Icon name="MoreVertical" size={16} />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => console.log('Переместить порт', port.id)}>
+                                  <Icon name="Move" size={14} className="mr-2" />
+                                  Переместить
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => console.log('Изменить описание', port.id)}>
+                                  <Icon name="Pencil" size={14} className="mr-2" />
+                                  Изменить описание
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => console.log('Диагностика', port.id)}>
+                                  <Icon name="Activity" size={14} className="mr-2" />
+                                  Диагностика
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                         ))}
                         
