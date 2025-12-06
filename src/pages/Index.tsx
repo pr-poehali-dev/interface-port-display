@@ -590,7 +590,7 @@ const Index = () => {
                             onClick={() => setIsRealtime(!isRealtime)}
                             className="gap-1.5 h-8"
                           >
-                            <Icon name={isRealtime ? 'Radio' : 'Clock'} size={14} />
+                            <Icon name={isRealtime ? 'Zap' : 'Clock'} size={14} />
                             Realtime
                           </Button>
 
