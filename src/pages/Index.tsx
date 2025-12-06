@@ -97,6 +97,11 @@ const Index = () => {
   const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
   const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
 
+  // Состояния для графика
+  const [chartType, setChartType] = useState<'link' | 'traffic' | 'unicast' | 'broadcast' | 'errors'>('traffic');
+  const [isRealtime, setIsRealtime] = useState(false);
+  const [timeInterval, setTimeInterval] = useState<'5m' | '10m' | '30m' | '1h' | '6h' | '1d'>('10m');
+
   const handleDeletePorts = (switchId: number) => {
     const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
     const portsToDelete = selectedPorts.filter(id => switchPortIds.includes(id));
@@ -547,13 +552,120 @@ const Index = () => {
                 <TabsContent value="graph" className="space-y-4 mt-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">График трафика</CardTitle>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">График трафика</CardTitle>
+                      </div>
                     </CardHeader>
-                    <CardContent>
-                      <div className="h-64 flex items-center justify-center border-2 border-dashed rounded-lg">
+                    <CardContent className="space-y-4">
+                      {/* Панель управления графиком */}
+                      <div className="space-y-3">
+                        {/* Верхняя строка: типы графиков */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[
+                            { value: 'link', label: 'Link', icon: 'Link' },
+                            { value: 'traffic', label: 'Traffic', icon: 'Activity' },
+                            { value: 'unicast', label: 'Unicast', icon: 'Send' },
+                            { value: 'broadcast', label: 'Broadcast', icon: 'Radio' },
+                            { value: 'errors', label: 'Errors', icon: 'AlertCircle' },
+                          ].map((type) => (
+                            <Button
+                              key={type.value}
+                              variant={chartType === type.value ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => setChartType(type.value as any)}
+                              className="gap-1.5 h-9"
+                            >
+                              <Icon name={type.icon as any} size={14} />
+                              {type.label}
+                            </Button>
+                          ))}
+                        </div>
+
+                        {/* Нижняя строка: управление и настройки */}
+                        <div className="flex flex-wrap items-center gap-3 p-3 bg-muted/30 rounded-lg border">
+                          {/* Режим реального времени */}
+                          <Button
+                            variant={isRealtime ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setIsRealtime(!isRealtime)}
+                            className="gap-1.5 h-8"
+                          >
+                            <Icon name={isRealtime ? 'Radio' : 'Clock'} size={14} />
+                            Realtime
+                          </Button>
+
+                          <div className="h-6 w-px bg-border" />
+
+                          {/* Интервал времени */}
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => {
+                                const intervals: typeof timeInterval[] = ['5m', '10m', '30m', '1h', '6h', '1d'];
+                                const currentIndex = intervals.indexOf(timeInterval);
+                                if (currentIndex > 0) {
+                                  setTimeInterval(intervals[currentIndex - 1]);
+                                }
+                              }}
+                            >
+                              <Icon name="Minus" size={14} />
+                            </Button>
+                            <div className="min-w-[70px] text-center px-2 py-1 bg-background rounded border">
+                              <span className="text-xs font-medium">
+                                {timeInterval === '5m' && '5 мин'}
+                                {timeInterval === '10m' && '10 мин'}
+                                {timeInterval === '30m' && '30 мин'}
+                                {timeInterval === '1h' && '1 час'}
+                                {timeInterval === '6h' && '6 ч'}
+                                {timeInterval === '1d' && '1 день'}
+                              </span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => {
+                                const intervals: typeof timeInterval[] = ['5m', '10m', '30m', '1h', '6h', '1d'];
+                                const currentIndex = intervals.indexOf(timeInterval);
+                                if (currentIndex < intervals.length - 1) {
+                                  setTimeInterval(intervals[currentIndex + 1]);
+                                }
+                              }}
+                            >
+                              <Icon name="Plus" size={14} />
+                            </Button>
+                          </div>
+
+                          <div className="h-6 w-px bg-border" />
+
+                          {/* Управление графиком */}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            title="К текущему моменту"
+                          >
+                            <Icon name="SkipForward" size={14} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            title="Обновить график"
+                          >
+                            <Icon name="RefreshCw" size={14} />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* График */}
+                      <div className="h-80 flex items-center justify-center border-2 border-dashed rounded-lg bg-muted/20">
                         <div className="text-center">
                           <Icon name="LineChart" size={48} className="mx-auto text-muted-foreground mb-2" />
-                          <p className="text-muted-foreground">График трафика будет здесь</p>
+                          <p className="text-muted-foreground mb-1">График {chartType} будет здесь</p>
+                          <p className="text-xs text-muted-foreground">Интервал: {timeInterval} • Режим: {isRealtime ? 'Realtime' : 'Static'}</p>
                         </div>
                       </div>
                     </CardContent>
