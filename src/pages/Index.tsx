@@ -467,6 +467,18 @@ const Index = () => {
             </div>
           )}
         </Card>
+
+        {/* Ссылка на расширенный функционал */}
+        <div className="flex justify-center py-6">
+          <a
+            href="#"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 border border-primary/30 rounded-lg transition-all group"
+          >
+            <Icon name="Sparkles" size={18} className="text-primary group-hover:rotate-12 transition-transform" />
+            <span className="font-semibold text-foreground">Расширенный функционал</span>
+            <Icon name="ChevronRight" size={18} className="text-primary group-hover:translate-x-1 transition-transform" />
+          </a>
+        </div>
       </div>
 
       {/* Модальное окно диагностики */}
