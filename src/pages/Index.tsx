@@ -472,8 +472,9 @@ const Index = () => {
         <div className="flex justify-center py-8">
           <a
             href="#"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors underline decoration-dashed underline-offset-4"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent hover:border-primary transition-all"
           >
+            <Icon name="Settings" size={16} />
             Расширенный функционал
           </a>
         </div>
