@@ -824,6 +824,20 @@ const Index = () => {
                         </div>
                       </CardContent>
                     </Card>
+
+                    {/* Ссылка на расширенный функционал */}
+                    <div className="flex items-center justify-center py-4">
+                      <a
+                        href="https://docs.poehali.dev"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors group"
+                      >
+                        <Icon name="Sparkles" size={16} className="group-hover:scale-110 transition-transform" />
+                        <span className="font-medium">Расширенный функционал</span>
+                        <Icon name="ExternalLink" size={14} />
+                      </a>
+                    </div>
                   </div>
                 </TabsContent>
               </div>
