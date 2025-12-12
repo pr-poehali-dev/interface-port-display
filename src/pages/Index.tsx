@@ -701,70 +701,77 @@ const Index = () => {
 
                           <div>
                             <h3 className="text-lg font-semibold mb-3">Управление портом</h3>
-                            <div className="flex gap-2 flex-wrap items-center">
-                              <Button
-                                variant={portStatus === 'down' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => handlePortStatusChange('down')}
-                                className="min-w-[70px]"
-                              >
-                                Down
-                              </Button>
-                              <Button
-                                variant={portStatus === 'up' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => handlePortStatusChange('up')}
-                                className="min-w-[70px]"
-                              >
-                                Up
-                              </Button>
-                              
-                              <div className="h-6 w-px bg-border mx-1" />
-                              
-                              {['10', '100', '1000', 'auto'].map((speed) => (
+                            <div className="space-y-3">
+                              <div className="flex gap-2 flex-wrap items-center">
                                 <Button
-                                  key={speed}
-                                  variant={portSpeed === speed ? 'default' : 'outline'}
+                                  variant={portStatus === 'down' ? 'default' : 'outline'}
                                   size="sm"
-                                  onClick={() => handlePortSpeedChange(speed)}
+                                  onClick={() => handlePortStatusChange('down')}
                                   className="min-w-[70px]"
                                 >
-                                  {speed === 'auto' ? 'Auto' : speed}
+                                  Down
                                 </Button>
-                              ))}
+                                <Button
+                                  variant={portStatus === 'up' ? 'default' : 'outline'}
+                                  size="sm"
+                                  onClick={() => handlePortStatusChange('up')}
+                                  className="min-w-[70px]"
+                                >
+                                  Up
+                                </Button>
+                                
+                                <div className="h-6 w-px bg-border mx-1" />
+                                
+                                {['10', '100', '1000', 'auto'].map((speed) => (
+                                  <Button
+                                    key={speed}
+                                    variant={portSpeed === speed ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => handlePortSpeedChange(speed)}
+                                    className="min-w-[70px]"
+                                  >
+                                    {speed === 'auto' ? 'Auto' : speed}
+                                  </Button>
+                                ))}
+                              </div>
+
+                              <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                                <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
+                                <p className="text-xs text-amber-800 dark:text-amber-200">
+                                  После любого изменения линк обычно отключается на несколько секунд, 
+                                  поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
+                                </p>
+                              </div>
                             </div>
                           </div>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-                          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                            <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
-                            <p className="text-xs text-amber-800 dark:text-amber-200">
-                              После любого изменения линк обычно отключается на несколько секунд, 
-                              поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
-                            </p>
-                          </div>
-
-                          <div className="space-y-3 pt-2">
-                            <div className="flex items-start justify-between">
-                              <div>
-                                <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
-                                <p className="text-xs text-muted-foreground mt-1">(при запуске линк прервётся на 5 секунд)</p>
-                              </div>
-                              <Button 
-                                onClick={handleCableDiagnostics}
-                                disabled={isDiagnostingCable}
-                                size="sm"
-                              >
-                                {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
-                                {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
-                              </Button>
+                    {/* Диагностика кабеля */}
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
+                              <p className="text-xs text-muted-foreground mt-1">(при запуске линк прервётся на 5 секунд)</p>
                             </div>
-                            
-                            {cableDiagnostics && (
-                              <div className="p-4 bg-muted/50 rounded-lg border">
-                                <p className="text-sm font-mono">{cableDiagnostics}</p>
-                              </div>
-                            )}
+                            <Button 
+                              onClick={handleCableDiagnostics}
+                              disabled={isDiagnostingCable}
+                              size="sm"
+                            >
+                              {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
+                              {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
+                            </Button>
                           </div>
+                          
+                          {cableDiagnostics && (
+                            <div className="p-4 bg-muted/50 rounded-lg border">
+                              <p className="text-sm font-mono">{cableDiagnostics}</p>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
