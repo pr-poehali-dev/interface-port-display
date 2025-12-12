@@ -700,7 +700,7 @@ const Index = () => {
                           </div>
 
                           <div>
-                            <label className="text-sm font-medium mb-3 block">Управление портом</label>
+                            <h3 className="text-lg font-semibold mb-3">Управление портом</h3>
                             <div className="flex gap-2 flex-wrap items-center">
                               <Button
                                 variant={portStatus === 'down' ? 'default' : 'outline'}
@@ -742,34 +742,29 @@ const Index = () => {
                               поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
                             </p>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
 
-                    {/* Диагностика кабеля */}
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="space-y-4">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
-                              <p className="text-xs text-muted-foreground mt-1">(при запуске линк прервётся на 5 секунд)</p>
+                          <div className="space-y-3 pt-2">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
+                                <p className="text-xs text-muted-foreground mt-1">(при запуске линк прервётся на 5 секунд)</p>
+                              </div>
+                              <Button 
+                                onClick={handleCableDiagnostics}
+                                disabled={isDiagnostingCable}
+                                size="sm"
+                              >
+                                {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
+                                {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
+                              </Button>
                             </div>
-                            <Button 
-                              onClick={handleCableDiagnostics}
-                              disabled={isDiagnostingCable}
-                              size="sm"
-                            >
-                              {isDiagnostingCable && <Icon name="Loader2" size={16} className="mr-2 animate-spin" />}
-                              {isDiagnostingCable ? 'Диагностика...' : 'Запустить диагностику'}
-                            </Button>
+                            
+                            {cableDiagnostics && (
+                              <div className="p-4 bg-muted/50 rounded-lg border">
+                                <p className="text-sm font-mono">{cableDiagnostics}</p>
+                              </div>
+                            )}
                           </div>
-                          
-                          {cableDiagnostics && (
-                            <div className="p-4 bg-muted/50 rounded-lg border">
-                              <p className="text-sm font-mono">{cableDiagnostics}</p>
-                            </div>
-                          )}
                         </div>
                       </CardContent>
                     </Card>
