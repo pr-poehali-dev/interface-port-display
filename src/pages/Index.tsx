@@ -692,7 +692,7 @@ const Index = () => {
                           <div>
                             <h3 className="text-lg font-semibold mb-1">Текущее состояние порта</h3>
                             <div className="flex items-center gap-3">
-                              <span className={`px-3 py-1 rounded-md text-sm font-bold border-2 ${portStatus === 'up' ? 'bg-green-50 text-green-700 border-green-600' : 'bg-red-50 text-red-700 border-red-600'}`}>
+                              <span className={`text-base font-bold ${portStatus === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                                 {portStatus === 'up' ? 'UP' : 'DOWN'}
                               </span>
                               <span className="text-sm text-muted-foreground">• Скорость: {portSpeed} Mbps</span>
