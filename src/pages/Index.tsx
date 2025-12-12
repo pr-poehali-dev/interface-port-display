@@ -685,63 +685,68 @@ const Index = () => {
 
                 <TabsContent value="diagnostics" className="space-y-4 mt-4">
                   <div className="space-y-6">
-                    {/* Управление портом */}
+                    {/* Статус порта */}
                     <Card>
                       <CardContent className="pt-6">
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h3 className="text-lg font-semibold mb-1">Статус порта</h3>
+                            <div className="flex items-center gap-3">
+                              <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-sm">
+                                {portStatus === 'up' ? 'Активен' : 'Неактивен'}
+                              </Badge>
+                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Панель управления портом */}
                         <div className="space-y-4">
                           <div>
-                            <h3 className="text-lg font-semibold mb-1">Текущее состояние порта</h3>
-                            <div className="flex items-center gap-3">
-                              <span className={`text-base font-bold ${portStatus === 'up' ? 'text-green-600' : 'text-red-600'}`}>
-                                {portStatus === 'up' ? 'UP' : 'DOWN'}
-                              </span>
-                              <span className="text-sm text-muted-foreground">• Скорость: {portSpeed} Mbps</span>
+                            <label className="text-sm font-medium mb-3 block">Управление портом</label>
+                            <div className="flex gap-2">
+                              <Button
+                                variant={portStatus === 'down' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => handlePortStatusChange('down')}
+                                className="min-w-[70px]"
+                              >
+                                Down
+                              </Button>
+                              <Button
+                                variant={portStatus === 'up' ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => handlePortStatusChange('up')}
+                                className="min-w-[70px]"
+                              >
+                                Up
+                              </Button>
                             </div>
                           </div>
 
                           <div>
-                            <h3 className="text-lg font-semibold mb-3">Управление портом</h3>
-                            <div className="space-y-3">
-                              <div className="flex gap-2 flex-wrap items-center">
+                            <label className="text-sm font-medium mb-3 block">Скорость порта</label>
+                            <div className="flex gap-2 flex-wrap">
+                              {['10', '100', '1000', 'auto'].map((speed) => (
                                 <Button
-                                  variant={portStatus === 'down' ? 'default' : 'outline'}
+                                  key={speed}
+                                  variant={portSpeed === speed ? 'default' : 'outline'}
                                   size="sm"
-                                  onClick={() => handlePortStatusChange('down')}
+                                  onClick={() => handlePortSpeedChange(speed)}
                                   className="min-w-[70px]"
                                 >
-                                  Down
+                                  {speed === 'auto' ? 'Auto' : speed}
                                 </Button>
-                                <Button
-                                  variant={portStatus === 'up' ? 'default' : 'outline'}
-                                  size="sm"
-                                  onClick={() => handlePortStatusChange('up')}
-                                  className="min-w-[70px]"
-                                >
-                                  Up
-                                </Button>
-                                
-                                <div className="h-6 w-px bg-border mx-1" />
-                                
-                                {['10', '100', '1000', 'auto'].map((speed) => (
-                                  <Button
-                                    key={speed}
-                                    variant={portSpeed === speed ? 'default' : 'outline'}
-                                    size="sm"
-                                    onClick={() => handlePortSpeedChange(speed)}
-                                    className="min-w-[70px]"
-                                  >
-                                    {speed === 'auto' ? 'Auto' : speed}
-                                  </Button>
-                                ))}
-                              </div>
-
-                              <div className="flex items-start gap-1.5 p-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded">
-                                <Icon name="Info" size={14} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
-                                <p className="text-[11px] leading-tight text-amber-800 dark:text-amber-200">
-                                  После изменения линк отключается на несколько секунд
-                                </p>
-                              </div>
+                              ))}
                             </div>
+                          </div>
+
+                          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                            <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
+                            <p className="text-xs text-amber-800 dark:text-amber-200">
+                              После любого изменения линк обычно отключается на несколько секунд, 
+                              поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
+                            </p>
                           </div>
                         </div>
                       </CardContent>
@@ -751,11 +756,8 @@ const Index = () => {
                     <Card>
                       <CardContent className="pt-6">
                         <div className="space-y-4">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
-                              <p className="text-xs text-muted-foreground mt-1">(при запуске линк прервётся на 5 секунд)</p>
-                            </div>
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold">Диагностика кабеля</h3>
                             <Button 
                               onClick={handleCableDiagnostics}
                               disabled={isDiagnostingCable}
@@ -834,7 +836,19 @@ const Index = () => {
                       </CardContent>
                     </Card>
 
-
+                    {/* Ссылка на расширенный функционал */}
+                    <div className="flex items-center justify-center py-6 mt-4 border-t">
+                      <a
+                        href="https://docs.poehali.dev"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors group font-medium"
+                      >
+                        <Icon name="Sparkles" size={16} className="group-hover:rotate-12 transition-transform" />
+                        <span>Расширенный функционал</span>
+                        <Icon name="ExternalLink" size={14} />
+                      </a>
+                    </div>
                   </div>
                 </TabsContent>
               </div>
