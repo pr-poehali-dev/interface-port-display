@@ -735,11 +735,10 @@ const Index = () => {
                                 ))}
                               </div>
 
-                              <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                                <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
-                                <p className="text-xs text-amber-800 dark:text-amber-200">
-                                  После любого изменения линк обычно отключается на несколько секунд, 
-                                  поэтому необходимо повторно обновить состояние не меньше, чем через 5 сек
+                              <div className="flex items-start gap-1.5 p-2 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded">
+                                <Icon name="Info" size={14} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
+                                <p className="text-[11px] leading-tight text-amber-800 dark:text-amber-200">
+                                  После изменения линк отключается на несколько секунд
                                 </p>
                               </div>
                             </div>
