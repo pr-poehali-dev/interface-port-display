@@ -770,7 +770,14 @@ const Index = () => {
                           
                           {cableDiagnostics && (
                             <div className="p-4 bg-muted/50 rounded-lg border">
-                              <p className="text-sm font-mono">{cableDiagnostics}</p>
+                              <p className="text-sm font-mono">
+                                {cableDiagnostics.split(' ').map((word, index) => {
+                                  if (/^\d+$/.test(word)) {
+                                    return <span key={index} className="font-bold text-primary">{word} </span>;
+                                  }
+                                  return <span key={index}>{word} </span>;
+                                })}
+                              </p>
                             </div>
                           )}
                         </div>
