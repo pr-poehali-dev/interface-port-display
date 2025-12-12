@@ -692,13 +692,10 @@ const Index = () => {
                           <div>
                             <h3 className="text-lg font-semibold mb-1">Статус порта</h3>
                             <div className="flex items-center gap-3">
-                              <Badge 
-                                variant={portStatus === 'up' ? 'default' : 'secondary'} 
-                                className={`text-sm font-semibold ${portStatus === 'up' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
-                              >
+                              <span className={`text-sm font-bold ${portStatus === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                                 {portStatus === 'up' ? 'UP' : 'DOWN'}
-                              </Badge>
-                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
+                              </span>
+                              <span className="text-sm text-muted-foreground">• Скорость: {portSpeed} Mbps</span>
                             </div>
                           </div>
                         </div>
