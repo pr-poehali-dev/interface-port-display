@@ -685,12 +685,12 @@ const Index = () => {
 
                 <TabsContent value="diagnostics" className="space-y-4 mt-4">
                   <div className="space-y-6">
-                    {/* Статус порта */}
+                    {/* Управление портом */}
                     <Card>
                       <CardContent className="pt-6">
-                        <div className="flex items-center justify-between mb-6">
+                        <div className="space-y-4">
                           <div>
-                            <h3 className="text-lg font-semibold mb-1">Статус порта</h3>
+                            <h3 className="text-lg font-semibold mb-1">Текущее состояние порта</h3>
                             <div className="flex items-center gap-3">
                               <span className={`text-sm font-bold ${portStatus === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                                 {portStatus === 'up' ? 'UP' : 'DOWN'}
@@ -698,13 +698,10 @@ const Index = () => {
                               <span className="text-sm text-muted-foreground">• Скорость: {portSpeed} Mbps</span>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Панель управления портом */}
-                        <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium mb-3 block">Управление портом</label>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 flex-wrap items-center">
                               <Button
                                 variant={portStatus === 'down' ? 'default' : 'outline'}
                                 size="sm"
@@ -721,12 +718,9 @@ const Index = () => {
                               >
                                 Up
                               </Button>
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="text-sm font-medium mb-3 block">Скорость порта</label>
-                            <div className="flex gap-2 flex-wrap">
+                              
+                              <div className="h-6 w-px bg-border mx-1" />
+                              
                               {['10', '100', '1000', 'auto'].map((speed) => (
                                 <Button
                                   key={speed}
