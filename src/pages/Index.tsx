@@ -747,28 +747,6 @@ const Index = () => {
                             </div>
                           </div>
 
-                          <div>
-                            <label className="text-sm font-medium mb-3 block">Режим Duplex</label>
-                            <div className="flex gap-2">
-                              <Button
-                                variant={portDuplex === 'full' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => setPortDuplex('full')}
-                                className="min-w-[100px]"
-                              >
-                                Full-duplex
-                              </Button>
-                              <Button
-                                variant={portDuplex === 'half' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => setPortDuplex('half')}
-                                className="min-w-[100px]"
-                              >
-                                Half-duplex
-                              </Button>
-                            </div>
-                          </div>
-
                           <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
                             <Icon name="Info" size={16} className="text-amber-600 dark:text-amber-500 mt-0.5 flex-shrink-0" />
                             <p className="text-xs text-amber-800 dark:text-amber-200">
