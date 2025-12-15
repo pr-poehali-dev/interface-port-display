@@ -94,7 +94,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [portStatus, setPortStatus] = useState<'up' | 'down'>('up');
   const [portSpeed, setPortSpeed] = useState<string>('100');
-  const [portDuplex, setPortDuplex] = useState<'full' | 'half'>('full');
+  const [portDuplex, setPortDuplex] = useState<'full' | 'half'>('half');
   const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
   const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
 
