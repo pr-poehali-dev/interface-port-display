@@ -730,47 +730,26 @@ const Index = () => {
                             </div>
                           </div>
 
-                          <div className="space-y-3">
-                            <div>
-                              <label className="text-sm font-medium mb-3 block">Скорость порта</label>
-                              <div className="flex gap-2 flex-wrap">
-                                {['10', '100', '1000', 'auto'].map((speed) => (
-                                  <Button
-                                    key={speed}
-                                    variant={portSpeed === speed ? 'default' : 'outline'}
-                                    size="sm"
-                                    onClick={() => handlePortSpeedChange(speed)}
-                                    className="min-w-[70px]"
-                                  >
+                          <div>
+                            <label className="text-sm font-medium mb-3 block">Скорость порта</label>
+                            <div className="flex gap-2 flex-wrap">
+                              {['10', '100', '1000', 'auto'].map((speed) => (
+                                <Button
+                                  key={speed}
+                                  variant={portSpeed === speed ? 'default' : 'outline'}
+                                  size="sm"
+                                  onClick={() => handlePortSpeedChange(speed)}
+                                  className="min-w-[70px]"
+                                >
+                                  <span className="flex items-center gap-1">
                                     {speed === 'auto' ? 'Auto' : speed}
-                                  </Button>
-                                ))}
-                              </div>
+                                    {portSpeed === speed && portDuplex === 'half' && (
+                                      <span className="text-[10px] opacity-70">(HD)</span>
+                                    )}
+                                  </span>
+                                </Button>
+                              ))}
                             </div>
-                            
-                            {portSpeed !== 'auto' && (
-                              <div>
-                                <label className="text-sm font-medium mb-2 block">Режим дуплекса</label>
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant={portDuplex === 'full' ? 'default' : 'outline'}
-                                    size="sm"
-                                    onClick={() => setPortDuplex('full')}
-                                    className="min-w-[100px]"
-                                  >
-                                    Full-Duplex
-                                  </Button>
-                                  <Button
-                                    variant={portDuplex === 'half' ? 'default' : 'outline'}
-                                    size="sm"
-                                    onClick={() => setPortDuplex('half')}
-                                    className="min-w-[100px]"
-                                  >
-                                    Half-Duplex
-                                  </Button>
-                                </div>
-                              </div>
-                            )}
                           </div>
 
                           <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
