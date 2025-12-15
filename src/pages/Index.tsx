@@ -94,7 +94,6 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [portStatus, setPortStatus] = useState<'up' | 'down'>('up');
   const [portSpeed, setPortSpeed] = useState<string>('100');
-  const [portDuplex, setPortDuplex] = useState<string>('full');
   const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
   const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
 
@@ -696,9 +695,7 @@ const Index = () => {
                               <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-sm">
                                 {portStatus === 'up' ? 'Активен' : 'Неактивен'}
                               </Badge>
-                              <span className="text-sm text-muted-foreground">
-                                Скорость: {portSpeed} Mbps {portDuplex === 'half' && <span className="text-orange-500 font-medium">(half-duplex)</span>}
-                              </span>
+                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
                             </div>
                           </div>
                         </div>
@@ -741,28 +738,6 @@ const Index = () => {
                                   {speed === 'auto' ? 'Auto' : speed}
                                 </Button>
                               ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="text-sm font-medium mb-3 block">Режим Duplex</label>
-                            <div className="flex gap-2">
-                              <Button
-                                variant={portDuplex === 'full' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => setPortDuplex('full')}
-                                className="min-w-[100px]"
-                              >
-                                Full-duplex
-                              </Button>
-                              <Button
-                                variant={portDuplex === 'half' ? 'default' : 'outline'}
-                                size="sm"
-                                onClick={() => setPortDuplex('half')}
-                                className="min-w-[100px]"
-                              >
-                                Half-duplex
-                              </Button>
                             </div>
                           </div>
 
