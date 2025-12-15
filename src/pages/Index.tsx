@@ -741,7 +741,12 @@ const Index = () => {
                                   onClick={() => handlePortSpeedChange(speed)}
                                   className="min-w-[70px]"
                                 >
-                                  {speed === 'auto' ? 'Auto' : speed}
+                                  <span className="flex items-center gap-1">
+                                    {speed === 'auto' ? 'Auto' : speed}
+                                    {portSpeed === speed && portDuplex === 'half' && (
+                                      <span className="text-[10px] opacity-70">(HD)</span>
+                                    )}
+                                  </span>
                                 </Button>
                               ))}
                             </div>
