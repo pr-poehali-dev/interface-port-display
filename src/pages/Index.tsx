@@ -734,15 +734,32 @@ const Index = () => {
                             <label className="text-sm font-medium mb-3 block">Скорость порта</label>
                             <div className="flex gap-2 flex-wrap">
                               {['10', '100', '1000', 'auto'].map((speed) => (
-                                <Button
-                                  key={speed}
-                                  variant={portSpeed === speed ? 'default' : 'outline'}
-                                  size="sm"
-                                  onClick={() => handlePortSpeedChange(speed)}
-                                  className="min-w-[70px]"
-                                >
-                                  {speed === 'auto' ? 'Auto' : speed}
-                                </Button>
+                                <div key={speed} className="flex gap-1">
+                                  <Button
+                                    variant={portSpeed === speed && portDuplex === 'full' ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => {
+                                      handlePortSpeedChange(speed);
+                                      setPortDuplex('full');
+                                    }}
+                                    className="min-w-[70px]"
+                                  >
+                                    {speed === 'auto' ? 'Auto' : speed}
+                                  </Button>
+                                  {speed !== 'auto' && (
+                                    <Button
+                                      variant={portSpeed === speed && portDuplex === 'half' ? 'default' : 'outline'}
+                                      size="sm"
+                                      onClick={() => {
+                                        handlePortSpeedChange(speed);
+                                        setPortDuplex('half');
+                                      }}
+                                      className="text-xs px-2"
+                                    >
+                                      HD
+                                    </Button>
+                                  )}
+                                </div>
                               ))}
                             </div>
                           </div>
