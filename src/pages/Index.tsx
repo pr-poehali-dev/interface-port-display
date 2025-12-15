@@ -739,12 +739,12 @@ const Index = () => {
                                   variant={portSpeed === speed ? 'default' : 'outline'}
                                   size="sm"
                                   onClick={() => handlePortSpeedChange(speed)}
-                                  className="min-w-[70px]"
+                                  className={`min-w-[70px] ${portSpeed === speed && portDuplex === 'half' ? 'border-2 border-orange-500 bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-950/50' : ''}`}
                                 >
-                                  <span className="flex items-center gap-1">
-                                    {speed === 'auto' ? 'Auto' : speed}
+                                  <span className="flex flex-col items-center gap-0.5">
+                                    <span>{speed === 'auto' ? 'Auto' : speed}</span>
                                     {portSpeed === speed && portDuplex === 'half' && (
-                                      <span className="text-[10px] opacity-70">(HD)</span>
+                                      <span className="text-[9px] font-semibold uppercase tracking-wider">Half</span>
                                     )}
                                   </span>
                                 </Button>
