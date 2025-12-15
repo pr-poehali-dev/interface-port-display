@@ -94,6 +94,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [portStatus, setPortStatus] = useState<'up' | 'down'>('up');
   const [portSpeed, setPortSpeed] = useState<string>('100');
+  const [portDuplex, setPortDuplex] = useState<string>('full');
   const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
   const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
 
@@ -695,7 +696,9 @@ const Index = () => {
                               <Badge variant={portStatus === 'up' ? 'default' : 'secondary'} className="text-sm">
                                 {portStatus === 'up' ? 'Активен' : 'Неактивен'}
                               </Badge>
-                              <span className="text-sm text-muted-foreground">Скорость: {portSpeed} Mbps</span>
+                              <span className="text-sm text-muted-foreground">
+                                Скорость: {portSpeed} Mbps {portDuplex === 'half' && <span className="text-orange-500 font-medium">(half-duplex)</span>}
+                              </span>
                             </div>
                           </div>
                         </div>
