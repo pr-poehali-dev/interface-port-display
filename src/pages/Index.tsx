@@ -97,6 +97,8 @@ const Index = () => {
   const [portDuplex, setPortDuplex] = useState<'full' | 'half'>('half');
   const [cableDiagnostics, setCableDiagnostics] = useState<string>('');
   const [isDiagnostingCable, setIsDiagnostingCable] = useState(false);
+  const [connectedDevices, setConnectedDevices] = useState<any[]>([]);
+  const [isLoadingDevices, setIsLoadingDevices] = useState(false);
 
   // Состояния для графика
   const [chartType, setChartType] = useState<'link' | 'traffic' | 'unicast' | 'broadcast' | 'errors'>('traffic');
@@ -170,6 +172,39 @@ const Index = () => {
     ];
     setCableDiagnostics(mockResults[Math.floor(Math.random() * mockResults.length)]);
     setIsDiagnostingCable(false);
+  };
+
+  const handleLoadConnectedDevices = async () => {
+    setIsLoadingDevices(true);
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    const mockDevices = [
+      {
+        vlan: 1,
+        mac: '74:56:3c:4c:1c:c7',
+        vendor: 'GIGA-BYTE TECHNOLOGY CO.,LTD.',
+        ip: '10.190.1.205',
+        uptime: '23 мин',
+        hostname: 'onix'
+      },
+      {
+        vlan: 1,
+        mac: 'a8:5e:45:2b:8f:3d',
+        vendor: 'Apple, Inc.',
+        ip: '10.190.1.156',
+        uptime: '1 ч 12 мин',
+        hostname: 'MacBook-Pro'
+      },
+      {
+        vlan: 100,
+        mac: '00:1a:2b:3c:4d:5e',
+        vendor: 'Cisco Systems',
+        ip: '192.168.100.45',
+        uptime: '5 мин',
+        hostname: 'server-01'
+      }
+    ];
+    setConnectedDevices(mockDevices);
+    setIsLoadingDevices(false);
   };
 
   const getAvailablePorts = () => {
@@ -797,60 +832,64 @@ const Index = () => {
 
                     {/* Таблица подключений */}
                     <Card>
-                      <CardHeader>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                         <CardTitle className="text-lg">Подключенные устройства</CardTitle>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleLoadConnectedDevices}
+                          disabled={isLoadingDevices}
+                          className="gap-2"
+                        >
+                          {isLoadingDevices ? (
+                            <>
+                              <Icon name="Loader2" className="animate-spin" size={16} />
+                              Загрузка...
+                            </>
+                          ) : (
+                            <>
+                              <Icon name="RefreshCw" size={16} />
+                              Запросить данные
+                            </>
+                          )}
+                        </Button>
                       </CardHeader>
                       <CardContent>
-                        <div className="border rounded-lg overflow-hidden">
-                          <table className="w-full">
-                            <thead className="bg-muted/50">
-                              <tr>
-                                <th className="text-left p-3 text-sm font-medium">VLAN</th>
-                                <th className="text-left p-3 text-sm font-medium">MAC / Интерфейс</th>
-                                <th className="text-left p-3 text-sm font-medium">IP</th>
-                                <th className="text-left p-3 text-sm font-medium">DHCP</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y">
-                              <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-3 text-sm">1</td>
-                                <td className="p-3">
-                                  <div className="text-sm font-mono">74:56:3c:4c:1c:c7</div>
-                                  <div className="text-xs text-muted-foreground mt-0.5">GIGA-BYTE TECHNOLOGY CO.,LTD.</div>
-                                </td>
-                                <td className="p-3 text-sm font-mono">10.190.1.205</td>
-                                <td className="p-3">
-                                  <div className="text-sm">23 мин</div>
-                                  <div className="text-xs text-muted-foreground">onix</div>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-3 text-sm">1</td>
-                                <td className="p-3">
-                                  <div className="text-sm font-mono">a8:5e:45:2b:8f:3d</div>
-                                  <div className="text-xs text-muted-foreground mt-0.5">Apple, Inc.</div>
-                                </td>
-                                <td className="p-3 text-sm font-mono">10.190.1.156</td>
-                                <td className="p-3">
-                                  <div className="text-sm">1 ч 12 мин</div>
-                                  <div className="text-xs text-muted-foreground">MacBook-Pro</div>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/30 transition-colors">
-                                <td className="p-3 text-sm">100</td>
-                                <td className="p-3">
-                                  <div className="text-sm font-mono">00:1a:2b:3c:4d:5e</div>
-                                  <div className="text-xs text-muted-foreground mt-0.5">Cisco Systems</div>
-                                </td>
-                                <td className="p-3 text-sm font-mono">192.168.100.45</td>
-                                <td className="p-3">
-                                  <div className="text-sm">5 мин</div>
-                                  <div className="text-xs text-muted-foreground">server-01</div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                        {connectedDevices.length === 0 ? (
+                          <div className="text-center py-12 text-muted-foreground">
+                            <Icon name="Network" size={48} className="mx-auto mb-3 opacity-20" />
+                            <p className="text-sm">Нажмите кнопку "Запросить данные" для получения информации</p>
+                          </div>
+                        ) : (
+                          <div className="border rounded-lg overflow-hidden">
+                            <table className="w-full">
+                              <thead className="bg-muted/50">
+                                <tr>
+                                  <th className="text-left p-3 text-sm font-medium">VLAN</th>
+                                  <th className="text-left p-3 text-sm font-medium">MAC / Интерфейс</th>
+                                  <th className="text-left p-3 text-sm font-medium">IP</th>
+                                  <th className="text-left p-3 text-sm font-medium">DHCP</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y">
+                                {connectedDevices.map((device, index) => (
+                                  <tr key={index} className="hover:bg-muted/30 transition-colors">
+                                    <td className="p-3 text-sm">{device.vlan}</td>
+                                    <td className="p-3">
+                                      <div className="text-sm font-mono">{device.mac}</div>
+                                      <div className="text-xs text-muted-foreground mt-0.5">{device.vendor}</div>
+                                    </td>
+                                    <td className="p-3 text-sm font-mono">{device.ip}</td>
+                                    <td className="p-3">
+                                      <div className="text-sm">{device.uptime}</div>
+                                      <div className="text-xs text-muted-foreground">{device.hostname}</div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </div>
