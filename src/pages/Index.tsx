@@ -876,18 +876,20 @@ const Index = () => {
                               <tbody className="divide-y">
                                 {connectedDevices.map((device, index) => (
                                   <tr key={index} className="hover:bg-muted/30 transition-colors">
-                                    <td className="p-3 text-sm align-top">{device.vlan}</td>
-                                    <td className="p-3 align-top">
+                                    <td className="p-3 text-sm align-middle">{device.vlan}</td>
+                                    <td className="p-3 align-middle">
                                       <div className="text-sm font-mono">{device.mac}</div>
                                       <div className="text-xs text-muted-foreground mt-0.5">{device.vendor}</div>
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-3 align-middle">
                                       <div className="space-y-2">
                                         {device.ips.map((ipInfo: any, ipIndex: number) => (
                                           <div key={ipIndex} className="flex flex-col">
-                                            <div className="text-sm font-mono">{ipInfo.ip}</div>
+                                            <div className="text-sm font-mono">
+                                              {ipInfo.ip} <span className="text-muted-foreground font-normal">• {ipInfo.uptime}</span>
+                                            </div>
                                             <div className="text-xs text-muted-foreground mt-0.5">
-                                              {ipInfo.hostname} • {ipInfo.uptime}
+                                              {ipInfo.hostname}
                                             </div>
                                           </div>
                                         ))}
