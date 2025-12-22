@@ -182,25 +182,28 @@ const Index = () => {
         vlan: 1,
         mac: '74:56:3c:4c:1c:c7',
         vendor: 'GIGA-BYTE TECHNOLOGY CO.,LTD.',
-        ip: '10.190.1.205',
-        uptime: '23 мин',
-        hostname: 'onix'
+        ips: [
+          { ip: '10.190.1.205', uptime: '23 мин', hostname: 'onix' },
+          { ip: '10.190.1.240', uptime: '45 мин', hostname: 'onix-backup' }
+        ]
       },
       {
         vlan: 1,
         mac: 'a8:5e:45:2b:8f:3d',
         vendor: 'Apple, Inc.',
-        ip: '10.190.1.156',
-        uptime: '1 ч 12 мин',
-        hostname: 'MacBook-Pro'
+        ips: [
+          { ip: '10.190.1.156', uptime: '1 ч 12 мин', hostname: 'MacBook-Pro' }
+        ]
       },
       {
         vlan: 100,
         mac: '00:1a:2b:3c:4d:5e',
         vendor: 'Cisco Systems',
-        ip: '192.168.100.45',
-        uptime: '5 мин',
-        hostname: 'server-01'
+        ips: [
+          { ip: '192.168.100.45', uptime: '5 мин', hostname: 'server-01' },
+          { ip: '192.168.100.46', uptime: '3 ч', hostname: 'server-01-mgmt' },
+          { ip: '192.168.100.47', uptime: '2 д', hostname: 'server-01-backup' }
+        ]
       }
     ];
     setConnectedDevices(mockDevices);
@@ -867,22 +870,28 @@ const Index = () => {
                                 <tr>
                                   <th className="text-left p-3 text-sm font-medium">VLAN</th>
                                   <th className="text-left p-3 text-sm font-medium">MAC / Интерфейс</th>
-                                  <th className="text-left p-3 text-sm font-medium">IP</th>
-                                  <th className="text-left p-3 text-sm font-medium">DHCP</th>
+                                  <th className="text-left p-3 text-sm font-medium">IP адреса</th>
                                 </tr>
                               </thead>
                               <tbody className="divide-y">
                                 {connectedDevices.map((device, index) => (
                                   <tr key={index} className="hover:bg-muted/30 transition-colors">
-                                    <td className="p-3 text-sm">{device.vlan}</td>
-                                    <td className="p-3">
+                                    <td className="p-3 text-sm align-top">{device.vlan}</td>
+                                    <td className="p-3 align-top">
                                       <div className="text-sm font-mono">{device.mac}</div>
                                       <div className="text-xs text-muted-foreground mt-0.5">{device.vendor}</div>
                                     </td>
-                                    <td className="p-3 text-sm font-mono">{device.ip}</td>
                                     <td className="p-3">
-                                      <div className="text-sm">{device.uptime}</div>
-                                      <div className="text-xs text-muted-foreground">{device.hostname}</div>
+                                      <div className="space-y-2">
+                                        {device.ips.map((ipInfo: any, ipIndex: number) => (
+                                          <div key={ipIndex} className="flex flex-col">
+                                            <div className="text-sm font-mono">{ipInfo.ip}</div>
+                                            <div className="text-xs text-muted-foreground mt-0.5">
+                                              {ipInfo.hostname} • {ipInfo.uptime}
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
                                     </td>
                                   </tr>
                                 ))}
