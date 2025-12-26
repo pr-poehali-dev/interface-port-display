@@ -420,21 +420,15 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-primary">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2 text-muted-foreground font-medium">
-                <Icon name="Network" size={18} />
-                Физические порты подключения (Level-2 OSI)
-              </CardTitle>
-              <Button onClick={handleAddSwitch} size="sm" className="gap-2">
-                <Icon name="Plus" size={16} />
-                Добавить коммутатор
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-foreground">Физические порты подключения (Level-2 OSI)</h2>
+            <Button onClick={handleAddSwitch} className="gap-2">
+              <Icon name="Plus" size={16} />
+              Добавить коммутатор
+            </Button>
+          </div>
+          <div className="space-y-4">
             {filteredSwitches.map((switchItem) => {
             const activePorts = switchItem.ports.filter((p) => p.status === 'active').length;
             const totalPorts = switchItem.ports.length;
@@ -580,16 +574,15 @@ const Index = () => {
               </Card>
             );
           })}
-            </div>
+          </div>
 
-            {filteredSwitches.length === 0 && (
-              <div className="p-12 text-center">
-                <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
-                <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
-                <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
-              </div>
-            )}
-          </CardContent>
+          {filteredSwitches.length === 0 && (
+            <div className="p-12 text-center">
+              <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
+              <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
+              <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
+            </div>
+          )}
         </Card>
 
         {/* Ссылка на расширенный функционал */}
