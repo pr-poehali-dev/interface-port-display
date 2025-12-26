@@ -318,41 +318,35 @@ const Index = () => {
           </div>
         </div>
 
-        <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <Icon name="Info" size={20} className="text-primary" />
+        <Card className="border-l-4 border-l-primary">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2 text-muted-foreground font-medium">
+              <Icon name="Info" size={18} />
               Сведения о точке подключения
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Icon name="Hash" size={24} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Номер подключения</p>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Номер подключения</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Hash" size={16} className="text-primary" />
                   <p className="text-lg font-bold">{connectionInfo.vlanNumber}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Icon name="Server" size={24} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Коммутаторов</p>
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Коммутаторов</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Server" size={16} className="text-primary" />
                   <p className="text-lg font-bold">{mockData.length}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-accent/10">
-                  <Icon name="Network" size={24} className="text-accent" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Активных портов</p>
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Активных портов</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Network" size={16} className="text-accent" />
                   <p className="text-lg font-bold">
                     {mockData.reduce((acc, sw) => acc + sw.ports.filter((p) => p.status === 'active').length, 0)}
                   </p>
@@ -360,11 +354,9 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-border">
+            <div className="pt-3 border-t border-border">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-muted mt-0.5">
-                  <Icon name="FileText" size={20} className="text-muted-foreground" />
-                </div>
+                <Icon name="FileText" size={16} className="text-muted-foreground mt-0.5" />
                 <div className="flex-1">
                   <p className="text-xs text-muted-foreground mb-1">Описание</p>
                   {isEditingDescription ? (
