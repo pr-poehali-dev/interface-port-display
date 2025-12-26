@@ -348,7 +348,7 @@ const Index = () => {
               <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Активных портов</p>
                 <div className="flex items-center gap-2">
-                  <Icon name="Network" size={20} className="text-accent" />
+                  <Icon name="Network" size={20} className="text-primary" />
                   <p className="text-2xl font-bold">
                     {mockData.reduce((acc, sw) => acc + sw.ports.filter((p) => p.status === 'active').length, 0)}
                   </p>
