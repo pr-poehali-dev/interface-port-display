@@ -318,55 +318,49 @@ const Index = () => {
           </div>
         </div>
 
-        <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <Icon name="Info" size={20} className="text-primary" />
+            <CardTitle className="text-xl flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-primary/10">
+                <Icon name="Info" size={22} className="text-primary" />
+              </div>
               Сведения о точке подключения
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Icon name="Hash" size={24} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Номер подключения</p>
-                  <p className="text-lg font-bold">{connectionInfo.vlanNumber}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Номер подключения</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Hash" size={20} className="text-primary" />
+                  <p className="text-2xl font-bold">{connectionInfo.vlanNumber}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Icon name="Server" size={24} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Коммутаторов</p>
-                  <p className="text-lg font-bold">{mockData.length}</p>
+              <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Коммутаторов</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Server" size={20} className="text-primary" />
+                  <p className="text-2xl font-bold">{mockData.length}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-lg bg-accent/10">
-                  <Icon name="Network" size={24} className="text-accent" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Активных портов</p>
-                  <p className="text-lg font-bold">
+              <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Активных портов</p>
+                <div className="flex items-center gap-2">
+                  <Icon name="Network" size={20} className="text-accent" />
+                  <p className="text-2xl font-bold">
                     {mockData.reduce((acc, sw) => acc + sw.ports.filter((p) => p.status === 'active').length, 0)}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-border">
+            <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-muted mt-0.5">
-                  <Icon name="FileText" size={20} className="text-muted-foreground" />
-                </div>
+                <Icon name="FileText" size={20} className="text-muted-foreground mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-xs text-muted-foreground mb-1">Описание</p>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Описание</p>
                   {isEditingDescription ? (
                     <div className="flex items-center gap-2">
                       <Input
@@ -428,22 +422,30 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <Card className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-foreground">Физические порты подключения (Level-2 OSI)</h2>
-            <Button onClick={handleAddSwitch} className="gap-2">
-              <Icon name="Plus" size={16} />
-              Добавить коммутатор
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {filteredSwitches.map((switchItem) => {
-            const activePorts = switchItem.ports.filter((p) => p.status === 'active').length;
-            const totalPorts = switchItem.ports.length;
-            const isOpen = openSwitches.includes(switchItem.id);
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-primary/10">
+                  <Icon name="Network" size={22} className="text-primary" />
+                </div>
+                Физические порты подключения (Level-2 OSI)
+              </CardTitle>
+              <Button onClick={handleAddSwitch} className="gap-2">
+                <Icon name="Plus" size={18} />
+                Добавить коммутатор
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {filteredSwitches.map((switchItem) => {
+              const activePorts = switchItem.ports.filter((p) => p.status === 'active').length;
+              const totalPorts = switchItem.ports.length;
+              const isOpen = openSwitches.includes(switchItem.id);
 
-            return (
-              <Card key={switchItem.id} className="overflow-hidden transition-all hover:shadow-lg">
+              return (
+                <Card key={switchItem.id} className="overflow-hidden transition-all hover:shadow-md border-border/50">
                 <Collapsible open={isOpen} onOpenChange={() => toggleSwitch(switchItem.id)}>
                   <CollapsibleTrigger className="w-full">
                     <CardHeader className="cursor-pointer hover:bg-secondary/50 transition-colors">
@@ -580,17 +582,18 @@ const Index = () => {
                   </CollapsibleContent>
                 </Collapsible>
               </Card>
-            );
-          })}
-          </div>
-
-          {filteredSwitches.length === 0 && (
-            <div className="p-12 text-center">
-              <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
-              <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
-              <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
+              );
+            })}
             </div>
-          )}
+
+            {filteredSwitches.length === 0 && (
+              <div className="p-12 text-center">
+                <Icon name="Search" size={48} className="mx-auto text-muted-foreground mb-4" />
+                <p className="text-lg text-muted-foreground">Коммутаторы не найдены</p>
+                <p className="text-sm text-muted-foreground mt-1">Попробуйте изменить параметры поиска</p>
+              </div>
+            )}
+          </CardContent>
         </Card>
 
         {/* Ссылка на расширенный функционал */}
