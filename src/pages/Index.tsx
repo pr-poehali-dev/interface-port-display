@@ -324,7 +324,7 @@ const Index = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-lg bg-primary/10">
                   <Icon name="Hash" size={24} className="text-primary" />
@@ -356,19 +356,21 @@ const Index = () => {
                   </p>
                 </div>
               </div>
+            </div>
 
-              {connectionInfo.description && (
-                <div className="md:col-span-1 flex items-center gap-3">
-                  <div className="p-3 rounded-lg bg-muted">
-                    <Icon name="FileText" size={24} className="text-muted-foreground" />
+            {connectionInfo.description && (
+              <div className="pt-4 border-t border-border">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 rounded-lg bg-muted mt-0.5">
+                    <Icon name="FileText" size={20} className="text-muted-foreground" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-xs text-muted-foreground mb-1">Описание</p>
-                    <p className="text-sm font-medium">{connectionInfo.description}</p>
+                    <p className="text-sm font-medium leading-relaxed">{connectionInfo.description}</p>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
