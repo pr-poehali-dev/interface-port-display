@@ -106,10 +106,12 @@ const Index = () => {
   const [timeInterval, setTimeInterval] = useState<'5m' | '10m' | '30m' | '1h' | '6h' | '1d'>('10m');
 
   // Информация о подключении
-  const connectionInfo = {
+  const [connectionInfo, setConnectionInfo] = useState({
     vlanNumber: '01-0179',
     description: 'Помещение правления на 1ом этаже'
-  };
+  });
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [tempDescription, setTempDescription] = useState(connectionInfo.description);
 
   const handleDeletePorts = (switchId: number) => {
     const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
@@ -358,19 +360,71 @@ const Index = () => {
               </div>
             </div>
 
-            {connectionInfo.description && (
-              <div className="pt-4 border-t border-border">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-muted mt-0.5">
-                    <Icon name="FileText" size={20} className="text-muted-foreground" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs text-muted-foreground mb-1">Описание</p>
-                    <p className="text-sm font-medium leading-relaxed">{connectionInfo.description}</p>
-                  </div>
+            <div className="pt-4 border-t border-border">
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-muted mt-0.5">
+                  <Icon name="FileText" size={20} className="text-muted-foreground" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-muted-foreground mb-1">Описание</p>
+                  {isEditingDescription ? (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        value={tempDescription}
+                        onChange={(e) => setTempDescription(e.target.value)}
+                        className="h-9"
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            setConnectionInfo({ ...connectionInfo, description: tempDescription });
+                            setIsEditingDescription(false);
+                          } else if (e.key === 'Escape') {
+                            setTempDescription(connectionInfo.description);
+                            setIsEditingDescription(false);
+                          }
+                        }}
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setConnectionInfo({ ...connectionInfo, description: tempDescription });
+                          setIsEditingDescription(false);
+                        }}
+                      >
+                        <Icon name="Check" size={16} />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setTempDescription(connectionInfo.description);
+                          setIsEditingDescription(false);
+                        }}
+                      >
+                        <Icon name="X" size={16} />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 group">
+                      <p className="text-sm font-medium leading-relaxed">
+                        {connectionInfo.description || 'Нажмите для добавления описания'}
+                      </p>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 p-0"
+                        onClick={() => {
+                          setTempDescription(connectionInfo.description);
+                          setIsEditingDescription(true);
+                        }}
+                      >
+                        <Icon name="Pencil" size={14} />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
 
