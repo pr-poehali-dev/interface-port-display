@@ -105,6 +105,12 @@ const Index = () => {
   const [isRealtime, setIsRealtime] = useState(false);
   const [timeInterval, setTimeInterval] = useState<'5m' | '10m' | '30m' | '1h' | '6h' | '1d'>('10m');
 
+  // Информация о подключении
+  const connectionInfo = {
+    vlanNumber: '01-0179',
+    description: 'Помещение правления на 1ом этаже'
+  };
+
   const handleDeletePorts = (switchId: number) => {
     const switchPortIds = mockData.find(s => s.id === switchId)?.ports.map(p => p.id) || [];
     const portsToDelete = selectedPorts.filter(id => switchPortIds.includes(id));
@@ -308,29 +314,63 @@ const Index = () => {
             <h1 className="text-4xl font-bold text-foreground mb-2">Сетевое оборудование</h1>
             <p className="text-muted-foreground">Управление коммутаторами и портами</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Card className="px-4 py-2">
-              <div className="flex items-center gap-2">
-                <Icon name="Server" size={20} className="text-primary" />
+        </div>
+
+        <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Icon name="Info" size={20} className="text-primary" />
+              Сведения о точке подключения
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Icon name="Hash" size={24} className="text-primary" />
+                </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Коммутаторов</p>
-                  <p className="text-xl font-bold">{mockData.length}</p>
+                  <p className="text-xs text-muted-foreground mb-1">Номер подключения</p>
+                  <p className="text-lg font-bold">{connectionInfo.vlanNumber}</p>
                 </div>
               </div>
-            </Card>
-            <Card className="px-4 py-2">
-              <div className="flex items-center gap-2">
-                <Icon name="Network" size={20} className="text-accent" />
+              
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Icon name="Server" size={24} className="text-primary" />
+                </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Активных портов</p>
-                  <p className="text-xl font-bold">
+                  <p className="text-xs text-muted-foreground mb-1">Коммутаторов</p>
+                  <p className="text-lg font-bold">{mockData.length}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-lg bg-accent/10">
+                  <Icon name="Network" size={24} className="text-accent" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Активных портов</p>
+                  <p className="text-lg font-bold">
                     {mockData.reduce((acc, sw) => acc + sw.ports.filter((p) => p.status === 'active').length, 0)}
                   </p>
                 </div>
               </div>
-            </Card>
-          </div>
-        </div>
+
+              {connectionInfo.description && (
+                <div className="md:col-span-1 flex items-center gap-3">
+                  <div className="p-3 rounded-lg bg-muted">
+                    <Icon name="FileText" size={24} className="text-muted-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Описание</p>
+                    <p className="text-sm font-medium">{connectionInfo.description}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="relative">
           <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
