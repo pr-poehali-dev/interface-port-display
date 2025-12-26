@@ -470,7 +470,7 @@ const Index = () => {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-accent">
+                            <p className="text-2xl font-bold text-green-600">
                               {activePorts}/{totalPorts}
                             </p>
                             <p className="text-xs text-muted-foreground">активных портов</p>
