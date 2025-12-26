@@ -358,7 +358,7 @@ const Index = () => {
 
             <div className="p-5 rounded-xl bg-muted/40 border border-border/50">
               <div className="flex items-start gap-3">
-                <Icon name="FileText" size={20} className="text-muted-foreground mt-0.5" />
+                <Icon name="FileText" size={20} className="text-primary mt-0.5" />
                 <div className="flex-1">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Описание</p>
                   {isEditingDescription ? (
