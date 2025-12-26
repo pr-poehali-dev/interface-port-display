@@ -318,47 +318,45 @@ const Index = () => {
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Icon name="Info" size={20} className="text-primary" />
-              </div>
+        <Card className="border-l-4 border-l-primary">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2 text-muted-foreground font-medium">
+              <Icon name="Info" size={18} />
               Сведения о точке подключения
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Номер подключения</p>
                 <div className="flex items-center gap-2">
-                  <Icon name="Hash" size={18} className="text-primary" />
-                  <p className="text-xl font-bold">{connectionInfo.vlanNumber}</p>
+                  <Icon name="Hash" size={16} className="text-primary" />
+                  <p className="text-lg font-bold">{connectionInfo.vlanNumber}</p>
                 </div>
               </div>
               
-              <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+              <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Коммутаторов</p>
                 <div className="flex items-center gap-2">
-                  <Icon name="Server" size={18} className="text-primary" />
-                  <p className="text-xl font-bold">{mockData.length}</p>
+                  <Icon name="Server" size={16} className="text-primary" />
+                  <p className="text-lg font-bold">{mockData.length}</p>
                 </div>
               </div>
               
-              <div className="p-4 rounded-lg bg-muted/50 space-y-2">
+              <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">Активных портов</p>
                 <div className="flex items-center gap-2">
-                  <Icon name="Network" size={18} className="text-accent" />
-                  <p className="text-xl font-bold">
+                  <Icon name="Network" size={16} className="text-accent" />
+                  <p className="text-lg font-bold">
                     {mockData.reduce((acc, sw) => acc + sw.ports.filter((p) => p.status === 'active').length, 0)}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-muted/50">
+            <div className="pt-3 border-t border-border">
               <div className="flex items-start gap-3">
-                <Icon name="FileText" size={18} className="text-muted-foreground mt-0.5" />
+                <Icon name="FileText" size={16} className="text-muted-foreground mt-0.5" />
                 <div className="flex-1">
                   <p className="text-xs text-muted-foreground mb-1">Описание</p>
                   {isEditingDescription ? (
@@ -422,16 +420,14 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="border-l-4 border-l-primary">
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Icon name="Network" size={20} className="text-primary" />
-                </div>
+              <CardTitle className="text-lg flex items-center gap-2 text-muted-foreground font-medium">
+                <Icon name="Network" size={18} />
                 Физические порты подключения (Level-2 OSI)
               </CardTitle>
-              <Button onClick={handleAddSwitch} className="gap-2">
+              <Button onClick={handleAddSwitch} size="sm" className="gap-2">
                 <Icon name="Plus" size={16} />
                 Добавить коммутатор
               </Button>
