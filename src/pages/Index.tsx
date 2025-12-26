@@ -372,16 +372,6 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <div className="relative">
-          <Icon name="Search" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Поиск по названию, расположению или модели..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold text-foreground">Физические порты подключения (Level-2 OSI)</h2>
