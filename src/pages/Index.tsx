@@ -606,6 +606,18 @@ const Index = () => {
             Расширенный функционал
           </a>
         </div>
+
+        {/* IP-уровень */}
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
+                <Icon name="Route" size={20} className="text-white" />
+              </div>
+              IP-уровень (Level-3 OSI, маршрутизация)
+            </CardTitle>
+          </CardHeader>
+        </Card>
       </div>
 
       {/* Модальное окно диагностики */}
