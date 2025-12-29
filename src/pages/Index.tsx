@@ -321,7 +321,7 @@ const Index = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-[#3b82f6]">
+              <div className="p-2.5 rounded-lg bg-gradient-to-br from-red-500 to-rose-600">
                 <Icon name="Info" size={20} className="text-white" />
               </div>
               Сведения о точке подключения
@@ -426,7 +426,7 @@ const Index = () => {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-xl flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-[#a855f7]">
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-pink-500 to-purple-600">
                   <Icon name="Network" size={20} className="text-white" />
                 </div>
                 Физические порты подключения (Level-2 OSI)
