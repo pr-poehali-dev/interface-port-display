@@ -893,6 +893,18 @@ const Index = () => {
                           )}
                         </div>
 
+                        {/* MAC привязка */}
+                        {item.macBind && (
+                          <div className="text-xs flex items-center gap-1.5">
+                            <Icon name="Link" size={12} className="text-blue-600" />
+                            <span className="text-muted-foreground">Привязан к:</span>{' '}
+                            <span className="font-mono text-blue-600">{item.macBind}</span>
+                          </div>
+                        )}
+
+                        {/* Разделитель */}
+                        <div className="border-t my-2"></div>
+
                         {/* Вторая строка: DHCP и Интернет */}
                         <div className="text-xs text-muted-foreground">
                           DHCP: {item.dhcp} · Интернет: {item.internet}
@@ -903,15 +915,6 @@ const Index = () => {
                           <div className="text-xs">
                             <span className="text-muted-foreground">MAC:</span>{' '}
                             <span className="font-mono">{item.mac}</span>
-                          </div>
-                        )}
-
-                        {/* MAC привязка */}
-                        {item.macBind && (
-                          <div className="text-xs flex items-center gap-1.5">
-                            <Icon name="Link" size={12} className="text-blue-600" />
-                            <span className="text-muted-foreground">Привязан к:</span>{' '}
-                            <span className="font-mono text-blue-600">{item.macBind}</span>
                           </div>
                         )}
 
