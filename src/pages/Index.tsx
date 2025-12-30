@@ -92,6 +92,7 @@ const Index = () => {
   const [diagnosticsPort, setDiagnosticsPort] = useState<string>('');
   const [diagnosticsTab, setDiagnosticsTab] = useState<string>('graph');
   const [isLoading, setIsLoading] = useState(false);
+  const [expandedIpRows, setExpandedIpRows] = useState<number[]>([]);
   const [portStatus, setPortStatus] = useState<'up' | 'down'>('up');
   const [portSpeed, setPortSpeed] = useState<string>('100');
   const [portDuplex, setPortDuplex] = useState<'full' | 'half'>('half');
@@ -108,12 +109,58 @@ const Index = () => {
   const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('smtp');
 
   const mockIpAddresses = [
-    { ip: '10.190.1.205', mac: '74:56:3c:4c:1c:c7', hostname: 'onix', status: 'active', lease: '23 мин' },
-    { ip: '10.190.1.240', mac: '74:56:3c:4c:1c:c7', hostname: 'onix-backup', status: 'active', lease: '45 мин' },
-    { ip: '10.190.1.156', mac: 'a8:5e:45:2b:8f:3d', hostname: 'MacBook-Pro', status: 'active', lease: '1 ч 12 мин' },
-    { ip: '192.168.100.45', mac: '00:1a:2b:3c:4d:5e', hostname: 'server-01', status: 'active', lease: '5 мин' },
-    { ip: '192.168.100.46', mac: '00:1a:2b:3c:4d:5e', hostname: 'server-01-mgmt', status: 'active', lease: '3 ч' },
-    { ip: '10.190.1.89', mac: 'b4:2e:99:7a:1f:cc', hostname: 'printer-office', status: 'inactive', lease: '—' },
+    { 
+      ip: '10.190.1.160', 
+      mac: 'd8:bb:c1:5f:5c:2c', 
+      hostname: 'iMacPro-mixa', 
+      status: 'active', 
+      dhcp: '16 мин',
+      internet: '9.89 kbit/s',
+      mask: '255.255.255.0',
+      gateway: '10.190.1.1',
+      dns: ['192.168.50.100', '192.168.50.50'],
+      description: 'wi-fi Офис',
+      macBind: 'd8:bb:c1:5f:5c:2c'
+    },
+    { 
+      ip: '10.190.1.205', 
+      mac: '74:56:3c:4c:1c:c7', 
+      hostname: 'onix', 
+      status: 'active', 
+      dhcp: '23 мин',
+      internet: '45.2 Mbit/s',
+      mask: '255.255.255.0',
+      gateway: '10.190.1.1',
+      dns: ['192.168.50.100', '192.168.50.50'],
+      description: '',
+      macBind: null
+    },
+    { 
+      ip: '10.190.1.156', 
+      mac: 'a8:5e:45:2b:8f:3d', 
+      hostname: 'MacBook-Pro', 
+      status: 'active', 
+      dhcp: '1 ч 12 мин',
+      internet: '12.5 Mbit/s',
+      mask: '255.255.255.0',
+      gateway: '10.190.1.1',
+      dns: ['192.168.50.100'],
+      description: 'Рабочий MacBook',
+      macBind: 'a8:5e:45:2b:8f:3d'
+    },
+    { 
+      ip: '10.190.1.89', 
+      mac: 'b4:2e:99:7a:1f:cc', 
+      hostname: 'printer-office', 
+      status: 'blocked', 
+      dhcp: '—',
+      internet: '—',
+      mask: '255.255.255.0',
+      gateway: '10.190.1.1',
+      dns: ['192.168.50.100'],
+      description: 'Принтер 2 этаж',
+      macBind: 'b4:2e:99:7a:1f:cc'
+    },
   ];
 
   // Состояния для графика
@@ -813,51 +860,150 @@ const Index = () => {
                 </Button>
               </div>
               
-              <div className="border rounded-lg overflow-hidden">
-                <table className="w-full text-xs">
-                  <thead className="bg-muted/50">
-                    <tr className="border-b">
-                      <th className="text-left p-2 font-medium">IP-адрес</th>
-                      <th className="text-left p-2 font-medium">MAC-адрес</th>
-                      <th className="text-left p-2 font-medium">Hostname</th>
-                      <th className="text-left p-2 font-medium">Статус</th>
-                      <th className="text-left p-2 font-medium">Аренда</th>
-                      <th className="text-right p-2 font-medium">Действия</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockIpAddresses.map((item, index) => (
-                      <tr key={index} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
-                        <td className="p-2 font-mono">{item.ip}</td>
-                        <td className="p-2 font-mono text-muted-foreground">{item.mac}</td>
-                        <td className="p-2">{item.hostname}</td>
-                        <td className="p-2">
-                          <Badge 
-                            variant="outline" 
-                            className={`text-xs px-1.5 py-0 ${
-                              item.status === 'active' 
-                                ? 'bg-green-50 text-green-700 border-green-200' 
-                                : 'bg-gray-50 text-gray-700 border-gray-200'
-                            }`}
-                          >
-                            {item.status === 'active' ? 'активен' : 'неактивен'}
-                          </Badge>
-                        </td>
-                        <td className="p-2 text-muted-foreground">{item.lease}</td>
-                        <td className="p-2 text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                              <Icon name="Pencil" size={12} />
-                            </Button>
-                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive hover:text-destructive">
+              <div className="space-y-2">
+                {mockIpAddresses.map((item, index) => {
+                  const isExpanded = expandedIpRows.includes(index);
+                  
+                  return (
+                    <div key={index} className="border rounded-lg overflow-hidden bg-card">
+                      <div className="p-3 hover:bg-muted/30 transition-colors">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => {
+                                  setExpandedIpRows(prev => 
+                                    prev.includes(index) 
+                                      ? prev.filter(i => i !== index)
+                                      : [...prev, index]
+                                  );
+                                }}
+                                className="hover:bg-muted rounded p-0.5"
+                              >
+                                <Icon 
+                                  name={isExpanded ? "ChevronDown" : "ChevronRight"} 
+                                  size={14} 
+                                  className="text-muted-foreground" 
+                                />
+                              </button>
+                              <span className="font-mono font-medium text-sm">{item.ip}</span>
+                              <Badge 
+                                variant="outline" 
+                                className={`text-xs px-1.5 py-0 ${
+                                  item.status === 'active' 
+                                    ? 'bg-green-50 text-green-700 border-green-200' 
+                                    : item.status === 'blocked'
+                                    ? 'bg-red-50 text-red-700 border-red-200'
+                                    : 'bg-gray-50 text-gray-700 border-gray-200'
+                                }`}
+                              >
+                                {item.status === 'active' ? 'активен' : item.status === 'blocked' ? 'заблокирован' : 'неактивен'}
+                              </Badge>
+                              {item.description && (
+                                <span className="text-xs text-muted-foreground italic">
+                                  {item.description}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-xs text-muted-foreground pl-6">
+                              DHCP: {item.dhcp} · Интернет: {item.internet}
+                            </div>
+                            <div className="text-xs pl-6">
+                              <span className="text-muted-foreground">MAC:</span>{' '}
+                              <span className="font-mono">{item.mac}</span>
+                              {' · '}
+                              <span className="text-muted-foreground">Host:</span>{' '}
+                              <span>{item.hostname}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-1">
+                            {item.status !== 'blocked' ? (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-7 px-2 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                              >
+                                <Icon name="Ban" size={12} className="mr-1" />
+                                Заблокировать
+                              </Button>
+                            ) : (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-7 px-2 text-xs text-green-600 hover:text-green-700 hover:bg-green-50"
+                              >
+                                <Icon name="CheckCircle" size={12} className="mr-1" />
+                                Разблокировать
+                              </Button>
+                            )}
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                            >
                               <Icon name="Trash2" size={12} />
                             </Button>
                           </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                        
+                        {isExpanded && (
+                          <div className="mt-3 pl-6 space-y-2 text-xs border-t pt-3">
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                              <div>
+                                <span className="text-muted-foreground">Маска:</span>{' '}
+                                <span className="font-mono">{item.mask}</span>
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">Шлюз:</span>{' '}
+                                <span className="font-mono">{item.gateway}</span>
+                              </div>
+                              {item.dns.map((dns, dnsIndex) => (
+                                <div key={dnsIndex}>
+                                  <span className="text-muted-foreground">DNS:</span>{' '}
+                                  <span className="font-mono">{dns}</span>
+                                </div>
+                              ))}
+                            </div>
+                            
+                            <div className="pt-2 border-t space-y-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-muted-foreground">MAC-привязка:</span>
+                                {item.macBind ? (
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                                      {item.macBind}
+                                    </span>
+                                    <Button variant="ghost" size="sm" className="h-6 px-2">
+                                      Отвязать
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-muted-foreground italic">нет</span>
+                                    <Button variant="outline" size="sm" className="h-6 px-2">
+                                      <Icon name="Link" size={10} className="mr-1" />
+                                      Привязать MAC
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                <span className="text-muted-foreground">Описание:</span>
+                                <Input 
+                                  placeholder="Добавить описание..." 
+                                  defaultValue={item.description}
+                                  className="h-6 text-xs flex-1"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </CardContent>
