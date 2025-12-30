@@ -107,6 +107,15 @@ const Index = () => {
   const [outgoingSpeed, setOutgoingSpeed] = useState('100');
   const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('smtp');
 
+  const mockIpAddresses = [
+    { ip: '10.190.1.205', mac: '74:56:3c:4c:1c:c7', hostname: 'onix', status: 'active', lease: '23 мин' },
+    { ip: '10.190.1.240', mac: '74:56:3c:4c:1c:c7', hostname: 'onix-backup', status: 'active', lease: '45 мин' },
+    { ip: '10.190.1.156', mac: 'a8:5e:45:2b:8f:3d', hostname: 'MacBook-Pro', status: 'active', lease: '1 ч 12 мин' },
+    { ip: '192.168.100.45', mac: '00:1a:2b:3c:4d:5e', hostname: 'server-01', status: 'active', lease: '5 мин' },
+    { ip: '192.168.100.46', mac: '00:1a:2b:3c:4d:5e', hostname: 'server-01-mgmt', status: 'active', lease: '3 ч' },
+    { ip: '10.190.1.89', mac: 'b4:2e:99:7a:1f:cc', hostname: 'printer-office', status: 'inactive', lease: '—' },
+  ];
+
   // Состояния для графика
   const [chartType, setChartType] = useState<'link' | 'traffic' | 'unicast' | 'broadcast' | 'errors'>('traffic');
   const [isRealtime, setIsRealtime] = useState(false);
@@ -792,6 +801,64 @@ const Index = () => {
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Таблица IP-адресов */}
+            <div className="space-y-2 pt-2 border-t">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium">IP-адреса</h3>
+                <Button variant="outline" size="sm">
+                  <Icon name="Plus" size={14} className="mr-1.5" />
+                  Добавить
+                </Button>
+              </div>
+              
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full text-xs">
+                  <thead className="bg-muted/50">
+                    <tr className="border-b">
+                      <th className="text-left p-2 font-medium">IP-адрес</th>
+                      <th className="text-left p-2 font-medium">MAC-адрес</th>
+                      <th className="text-left p-2 font-medium">Hostname</th>
+                      <th className="text-left p-2 font-medium">Статус</th>
+                      <th className="text-left p-2 font-medium">Аренда</th>
+                      <th className="text-right p-2 font-medium">Действия</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mockIpAddresses.map((item, index) => (
+                      <tr key={index} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
+                        <td className="p-2 font-mono">{item.ip}</td>
+                        <td className="p-2 font-mono text-muted-foreground">{item.mac}</td>
+                        <td className="p-2">{item.hostname}</td>
+                        <td className="p-2">
+                          <Badge 
+                            variant="outline" 
+                            className={`text-xs px-1.5 py-0 ${
+                              item.status === 'active' 
+                                ? 'bg-green-50 text-green-700 border-green-200' 
+                                : 'bg-gray-50 text-gray-700 border-gray-200'
+                            }`}
+                          >
+                            {item.status === 'active' ? 'активен' : 'неактивен'}
+                          </Badge>
+                        </td>
+                        <td className="p-2 text-muted-foreground">{item.lease}</td>
+                        <td className="p-2 text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                              <Icon name="Pencil" size={12} />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="h-7 w-7 p-0 text-destructive hover:text-destructive">
+                              <Icon name="Trash2" size={12} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </CardContent>
         </Card>
