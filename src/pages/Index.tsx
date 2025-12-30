@@ -915,14 +915,6 @@ const Index = () => {
                           </div>
                         )}
 
-                        {/* ARP */}
-                        {item.arp && (
-                          <div className="text-xs">
-                            <span className="text-muted-foreground">ARP:</span>{' '}
-                            <span className="font-mono">{item.arp}</span>
-                          </div>
-                        )}
-
                         {/* Четвертая строка: Host и Vendor */}
                         {(item.hostname || item.vendor) && (
                           <div className="text-xs">
@@ -939,6 +931,14 @@ const Index = () => {
                                 <span>{item.vendor}</span>
                               </>
                             )}
+                          </div>
+                        )}
+
+                        {/* ARP */}
+                        {item.arp && (
+                          <div className="text-xs">
+                            <span className="text-muted-foreground">ARP:</span>{' '}
+                            <span className="font-mono">{item.arp}</span>
                           </div>
                         )}
                       </div>
