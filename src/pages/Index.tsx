@@ -903,7 +903,7 @@ const Index = () => {
                         )}
 
                         {/* Разделитель */}
-                        <div className="border-t my-2"></div>
+                        <div className="border-t my-2 w-1/2"></div>
 
                         {/* Вторая строка: DHCP и Интернет */}
                         <div className="text-xs text-muted-foreground">
