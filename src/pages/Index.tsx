@@ -668,59 +668,25 @@ const Index = () => {
                 <Icon name="Globe" size={16} className="text-muted-foreground" />
                 Выдача IP
               </label>
-              <div className="grid gap-3">
-                <div 
-                  onClick={() => setIpDistributionMode('simple')}
-                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    ipDistributionMode === 'simple' 
-                      ? 'border-primary bg-primary/5' 
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      ipDistributionMode === 'simple' ? 'border-primary' : 'border-muted-foreground'
-                    }`}>
-                      {ipDistributionMode === 'simple' && (
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium mb-1">Простая</p>
+              <div className="p-4 bg-muted/30 rounded-lg border">
+                <div className="flex items-start gap-3">
+                  <Icon name="Info" size={16} className="text-muted-foreground mt-0.5" />
+                  <div>
+                    <p className="font-medium mb-1">{ipDistributionMode === 'simple' ? 'Простая' : 'Расширенная'}</p>
+                    {ipDistributionMode === 'simple' ? (
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         Любое подключенное устройство получит один и тот же IP. 
                         Нет привязки к времени аренды — при смене устройства новое получит указанный IP сразу же, 
                         ждать его освобождения (час) не надо. 
                         При подключении двух и более устройств одновременно будет конфликт IP-адресов.
                       </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div 
-                  onClick={() => setIpDistributionMode('advanced')}
-                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                    ipDistributionMode === 'advanced' 
-                      ? 'border-primary bg-primary/5' 
-                      : 'border-border hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      ipDistributionMode === 'advanced' ? 'border-primary' : 'border-muted-foreground'
-                    }`}>
-                      {ipDistributionMode === 'advanced' && (
-                        <div className="w-2 h-2 rounded-full bg-primary" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium mb-1">Расширенная</p>
+                    ) : (
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         Устройства получают IP из пула адресов с привязкой к времени аренды. 
                         Поддерживается работа множества устройств одновременно без конфликтов. 
                         Освобожденные адреса становятся доступны после истечения срока аренды.
                       </p>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -799,16 +765,13 @@ const Index = () => {
                 Автоблокировка трафика
               </label>
               {autoBlock === 'none' ? (
-                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                <div className="p-4 bg-muted/30 rounded-lg border">
                   <div className="flex items-center gap-3">
                     <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
                       Нет
                     </Badge>
                     <p className="text-sm text-muted-foreground">Автоблокировка отключена</p>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => setAutoBlock('smtp')}>
-                    Включить SMTP
-                  </Button>
                 </div>
               ) : (
                 <div className="p-4 bg-orange-50 rounded-lg border border-orange-200 space-y-3">
