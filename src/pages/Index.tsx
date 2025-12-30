@@ -942,6 +942,16 @@ const Index = () => {
                             </>
                           )}
                         </div>
+
+                        {/* Шестая строка: Описание */}
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="text-muted-foreground">Описание:</span>
+                          <Input 
+                            placeholder="Добавить описание..." 
+                            defaultValue={item.description}
+                            className="h-6 text-xs flex-1"
+                          />
+                        </div>
                       </div>
 
                       {/* Кнопки действий */}
