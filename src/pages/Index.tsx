@@ -113,6 +113,7 @@ const Index = () => {
       ip: '10.190.1.160', 
       mac: 'd8:bb:c1:5f:5c:2c', 
       hostname: 'iMacPro-mixa', 
+      vendor: 'Apple Inc.',
       status: 'active', 
       dhcp: '16 мин',
       internet: '9.89 kbit/s',
@@ -126,6 +127,7 @@ const Index = () => {
       ip: '10.190.1.205', 
       mac: '74:56:3c:4c:1c:c7', 
       hostname: 'onix', 
+      vendor: 'MSFT 5.0',
       status: 'active', 
       dhcp: '23 мин',
       internet: '45.2 Mbit/s',
@@ -139,6 +141,7 @@ const Index = () => {
       ip: '10.190.1.156', 
       mac: 'a8:5e:45:2b:8f:3d', 
       hostname: 'MacBook-Pro', 
+      vendor: null,
       status: 'active', 
       dhcp: '1 ч 12 мин',
       internet: '12.5 Mbit/s',
@@ -152,6 +155,7 @@ const Index = () => {
       ip: '10.190.1.89', 
       mac: 'b4:2e:99:7a:1f:cc', 
       hostname: 'printer-office', 
+      vendor: 'HP',
       status: 'blocked', 
       dhcp: '—',
       internet: '—',
@@ -893,13 +897,23 @@ const Index = () => {
                           DHCP: {item.dhcp} · Интернет: {item.internet}
                         </div>
 
-                        {/* Третья строка: MAC и Host */}
+                        {/* Третья строка: MAC */}
                         <div className="text-xs">
                           <span className="text-muted-foreground">MAC:</span>{' '}
                           <span className="font-mono">{item.mac}</span>
-                          {' · '}
+                        </div>
+
+                        {/* Четвертая строка: Host и Vendor */}
+                        <div className="text-xs">
                           <span className="text-muted-foreground">Host:</span>{' '}
                           <span>{item.hostname}</span>
+                          {item.vendor && (
+                            <>
+                              {' · '}
+                              <span className="text-muted-foreground">Vendor:</span>{' '}
+                              <span>{item.vendor}</span>
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -922,23 +936,23 @@ const Index = () => {
                       </div>
 
                       {/* Правая часть: Кнопки действий */}
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-0.5 items-start">
                         {item.status !== 'blocked' ? (
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-7 px-2 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                            className="h-6 px-2 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 justify-start"
                           >
-                            <Icon name="Ban" size={12} className="mr-1" />
+                            <Icon name="Ban" size={12} className="mr-1.5" />
                             Заблокировать
                           </Button>
                         ) : (
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-7 px-2 text-xs text-green-600 hover:text-green-700 hover:bg-green-50"
+                            className="h-6 px-2 text-xs text-green-600 hover:text-green-700 hover:bg-green-50 justify-start"
                           >
-                            <Icon name="CheckCircle" size={12} className="mr-1" />
+                            <Icon name="CheckCircle" size={12} className="mr-1.5" />
                             Разблокировать
                           </Button>
                         )}
@@ -947,18 +961,18 @@ const Index = () => {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-7 px-2 text-xs"
+                            className="h-6 px-2 text-xs justify-start"
                           >
-                            <Icon name="LinkOff" size={12} className="mr-1" />
+                            <Icon name="LinkOff" size={12} className="mr-1.5" />
                             Отвязать MAC
                           </Button>
                         ) : (
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="h-7 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            className="h-6 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 justify-start"
                           >
-                            <Icon name="Link" size={12} className="mr-1" />
+                            <Icon name="Link" size={12} className="mr-1.5" />
                             Привязать MAC
                           </Button>
                         )}
@@ -966,18 +980,18 @@ const Index = () => {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 px-2 text-xs"
+                          className="h-6 px-2 text-xs justify-start"
                         >
-                          <Icon name="FileEdit" size={12} className="mr-1" />
+                          <Icon name="FileEdit" size={12} className="mr-1.5" />
                           {item.description ? 'Изменить описание' : 'Добавить описание'}
                         </Button>
                         
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="h-7 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10"
+                          className="h-6 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 justify-start"
                         >
-                          <Icon name="Trash2" size={12} className="mr-1" />
+                          <Icon name="Trash2" size={12} className="mr-1.5" />
                           Удалить
                         </Button>
                       </div>
