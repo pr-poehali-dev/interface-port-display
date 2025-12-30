@@ -897,21 +897,37 @@ const Index = () => {
                           DHCP: {item.dhcp} · Интернет: {item.internet}
                         </div>
 
-                        {/* Третья строка: MAC */}
-                        <div className="text-xs">
-                          <span className="text-muted-foreground">MAC:</span>{' '}
-                          <span className="font-mono">{item.mac}</span>
-                        </div>
+                        {/* Третья строка: MAC (оперативный) */}
+                        {item.mac && (
+                          <div className="text-xs">
+                            <span className="text-muted-foreground">MAC:</span>{' '}
+                            <span className="font-mono">{item.mac}</span>
+                          </div>
+                        )}
+
+                        {/* MAC привязка */}
+                        {item.macBind && (
+                          <div className="text-xs flex items-center gap-1.5">
+                            <Icon name="Link" size={12} className="text-blue-600" />
+                            <span className="text-muted-foreground">Привязан к:</span>{' '}
+                            <span className="font-mono text-blue-600">{item.macBind}</span>
+                          </div>
+                        )}
 
                         {/* Четвертая строка: Host и Vendor */}
-                        <div className="text-xs">
-                          <span className="text-muted-foreground">Host:</span>{' '}
-                          <span>{item.hostname}</span>
-                          {item.vendor && (
-                            <>
-                              {' · '}
-                              <span className="text-muted-foreground">Vendor:</span>{' '}
-                              <span>{item.vendor}</span>
+                        {(item.hostname || item.vendor) && (
+                          <div className="text-xs">
+                            {item.hostname && (
+                              <>
+                                <span className="text-muted-foreground">Host:</span>{' '}
+                                <span>{item.hostname}</span>
+                              </>
+                            )}
+                            {item.vendor && (
+                              <>
+                                {item.hostname && ' · '}
+                                <span className="text-muted-foreground">Vendor:</span>{' '}
+                                <span>{item.vendor}</span>
                             </>
                           )}
                         </div>
