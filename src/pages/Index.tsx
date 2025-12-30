@@ -105,7 +105,7 @@ const Index = () => {
   const [internetAccess, setInternetAccess] = useState<'closed' | 'open'>('closed');
   const [incomingSpeed, setIncomingSpeed] = useState('100');
   const [outgoingSpeed, setOutgoingSpeed] = useState('100');
-  const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('none');
+  const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('smtp');
 
   // Состояния для графика
   const [chartType, setChartType] = useState<'link' | 'traffic' | 'unicast' | 'broadcast' | 'errors'>('traffic');
