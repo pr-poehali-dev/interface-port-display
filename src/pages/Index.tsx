@@ -903,7 +903,7 @@ const Index = () => {
                         )}
 
                         {/* Разделитель */}
-                        <div className="border-t my-2 w-1/2"></div>
+                        <div className="border-t my-2 w-1/3"></div>
 
                         {/* Вторая строка: DHCP и Интернет */}
                         <div className="text-xs text-muted-foreground">
@@ -947,7 +947,7 @@ const Index = () => {
                       </div>
 
                       {/* Центр: Сетевые параметры в столбик */}
-                      <div className="text-xs space-y-1 px-4 border-x flex flex-col justify-center">
+                      <div className="text-xs space-y-2 px-4 border-x flex flex-col justify-center">
                         <div>
                           <span className="text-muted-foreground">Маска:</span>{' '}
                           <span className="font-mono">{item.mask}</span>
