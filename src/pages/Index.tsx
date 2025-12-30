@@ -901,39 +901,6 @@ const Index = () => {
                           <span className="text-muted-foreground">Host:</span>{' '}
                           <span>{item.hostname}</span>
                         </div>
-
-                        {/* MAC-привязка */}
-                        <div className="flex items-center gap-2 text-xs pt-1 border-t">
-                          <span className="text-muted-foreground">MAC-привязка:</span>
-                          {item.macBind ? (
-                            <>
-                              <span className="font-mono text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                                {item.macBind}
-                              </span>
-                              <Button variant="ghost" size="sm" className="h-5 px-2 text-xs">
-                                Отвязать
-                              </Button>
-                            </>
-                          ) : (
-                            <>
-                              <span className="text-muted-foreground italic">нет</span>
-                              <Button variant="outline" size="sm" className="h-5 px-2 text-xs">
-                                <Icon name="Link" size={10} className="mr-1" />
-                                Привязать MAC
-                              </Button>
-                            </>
-                          )}
-                        </div>
-
-                        {/* Описание */}
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="text-muted-foreground">Описание:</span>
-                          <Input 
-                            placeholder="Добавить описание..." 
-                            defaultValue={item.description}
-                            className="h-6 text-xs flex-1"
-                          />
-                        </div>
                       </div>
 
                       {/* Центр: Сетевые параметры в столбик */}
@@ -975,6 +942,36 @@ const Index = () => {
                             Разблокировать
                           </Button>
                         )}
+                        
+                        {item.macBind ? (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-7 px-2 text-xs"
+                          >
+                            <Icon name="LinkOff" size={12} className="mr-1" />
+                            Отвязать MAC
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-7 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          >
+                            <Icon name="Link" size={12} className="mr-1" />
+                            Привязать MAC
+                          </Button>
+                        )}
+                        
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-7 px-2 text-xs"
+                        >
+                          <Icon name="FileEdit" size={12} className="mr-1" />
+                          {item.description ? 'Изменить описание' : 'Добавить описание'}
+                        </Button>
+                        
                         <Button 
                           variant="ghost" 
                           size="sm" 
