@@ -670,7 +670,9 @@ const Index = () => {
               </label>
               <div className="p-4 bg-muted/30 rounded-lg border">
                 <div className="flex items-start gap-3">
-                  <Icon name="Info" size={16} className="text-muted-foreground mt-0.5" />
+                  <div className="p-2 rounded-lg bg-blue-100">
+                    <Icon name="Network" size={20} className="text-blue-600" />
+                  </div>
                   <div>
                     <p className="font-medium mb-1">{ipDistributionMode === 'simple' ? 'Простая' : 'Расширенная'}</p>
                     {ipDistributionMode === 'simple' ? (
