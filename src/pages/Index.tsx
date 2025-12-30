@@ -121,7 +121,8 @@ const Index = () => {
       gateway: '10.190.1.1',
       dns: ['192.168.50.100', '192.168.50.50'],
       description: 'wi-fi Офис',
-      macBind: 'd8:bb:c1:5f:5c:2c'
+      macBind: 'd8:bb:c1:5f:5c:2c',
+      arp: 'b8:cc:f1:5f:bb:4a'
     },
     { 
       ip: '10.190.1.205', 
@@ -911,6 +912,14 @@ const Index = () => {
                             <Icon name="Link" size={12} className="text-blue-600" />
                             <span className="text-muted-foreground">Привязан к:</span>{' '}
                             <span className="font-mono text-blue-600">{item.macBind}</span>
+                          </div>
+                        )}
+
+                        {/* ARP */}
+                        {item.arp && (
+                          <div className="text-xs">
+                            <span className="text-muted-foreground">ARP:</span>{' '}
+                            <span className="font-mono">{item.arp}</span>
                           </div>
                         )}
 
