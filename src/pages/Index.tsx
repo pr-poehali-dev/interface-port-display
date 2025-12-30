@@ -923,7 +923,7 @@ const Index = () => {
                       </div>
 
                       {/* Центр: Сетевые параметры в столбик */}
-                      <div className="text-xs space-y-1 text-center px-4 border-x">
+                      <div className="text-xs space-y-1 px-4 border-x flex flex-col justify-center">
                         <div>
                           <span className="text-muted-foreground">Маска:</span>{' '}
                           <span className="font-mono">{item.mask}</span>
