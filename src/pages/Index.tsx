@@ -928,9 +928,10 @@ const Index = () => {
                                 {item.hostname && ' · '}
                                 <span className="text-muted-foreground">Vendor:</span>{' '}
                                 <span>{item.vendor}</span>
-                            </>
-                          )}
-                        </div>
+                              </>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                       {/* Центр: Сетевые параметры в столбик */}
