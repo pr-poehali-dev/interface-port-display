@@ -898,14 +898,9 @@ const Index = () => {
                         </div>
 
                         {/* Третья строка: MAC */}
-                        <div className="text-xs flex items-center gap-1.5">
+                        <div className="text-xs">
                           <span className="text-muted-foreground">MAC:</span>{' '}
                           <span className="font-mono">{item.mac}</span>
-                          {item.macBind && (
-                            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] px-1 py-0 h-4">
-                              привязан
-                            </Badge>
-                          )}
                         </div>
 
                         {/* Четвертая строка: Host и Vendor */}
