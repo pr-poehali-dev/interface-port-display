@@ -100,6 +100,13 @@ const Index = () => {
   const [connectedDevices, setConnectedDevices] = useState<any[]>([]);
   const [isLoadingDevices, setIsLoadingDevices] = useState(false);
 
+  const [dhcpMode, setDhcpMode] = useState('auto');
+  const [ipDistributionMode, setIpDistributionMode] = useState<'simple' | 'advanced'>('simple');
+  const [internetAccess, setInternetAccess] = useState<'closed' | 'open'>('closed');
+  const [incomingSpeed, setIncomingSpeed] = useState('100');
+  const [outgoingSpeed, setOutgoingSpeed] = useState('100');
+  const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('none');
+
   // Состояния для графика
   const [chartType, setChartType] = useState<'link' | 'traffic' | 'unicast' | 'broadcast' | 'errors'>('traffic');
   const [isRealtime, setIsRealtime] = useState(false);
@@ -617,6 +624,212 @@ const Index = () => {
               IP-уровень (Level-3 OSI, маршрутизация)
             </CardTitle>
           </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Сервер */}
+            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+              <div className="flex items-center gap-3">
+                <Icon name="Server" size={20} className="text-muted-foreground" />
+                <div>
+                  <p className="font-medium">Сервер</p>
+                  <p className="text-sm text-muted-foreground">term-14</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  priority: 200
+                </Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  active
+                </Badge>
+              </div>
+            </div>
+
+            {/* DHCP */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Icon name="Network" size={16} className="text-muted-foreground" />
+                DHCP
+              </label>
+              <Select value={dhcpMode} onValueChange={setDhcpMode}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="auto">Только автоматическое получение настроек</SelectItem>
+                  <SelectItem value="auto-manual">Автоматическое получение и ручной ввод настроек</SelectItem>
+                  <SelectItem value="manual">Только ручной ввод настроек</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Выдача IP */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Icon name="Globe" size={16} className="text-muted-foreground" />
+                Выдача IP
+              </label>
+              <div className="grid gap-3">
+                <div 
+                  onClick={() => setIpDistributionMode('simple')}
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    ipDistributionMode === 'simple' 
+                      ? 'border-primary bg-primary/5' 
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      ipDistributionMode === 'simple' ? 'border-primary' : 'border-muted-foreground'
+                    }`}>
+                      {ipDistributionMode === 'simple' && (
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium mb-1">Простая</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Любое подключенное устройство получит один и тот же IP. 
+                        Нет привязки к времени аренды — при смене устройства новое получит указанный IP сразу же, 
+                        ждать его освобождения (час) не надо. 
+                        При подключении двух и более устройств одновременно будет конфликт IP-адресов.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div 
+                  onClick={() => setIpDistributionMode('advanced')}
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    ipDistributionMode === 'advanced' 
+                      ? 'border-primary bg-primary/5' 
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`mt-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      ipDistributionMode === 'advanced' ? 'border-primary' : 'border-muted-foreground'
+                    }`}>
+                      {ipDistributionMode === 'advanced' && (
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium mb-1">Расширенная</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Устройства получают IP из пула адресов с привязкой к времени аренды. 
+                        Поддерживается работа множества устройств одновременно без конфликтов. 
+                        Освобожденные адреса становятся доступны после истечения срока аренды.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Доступ в Интернет */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Icon name="Wifi" size={16} className="text-muted-foreground" />
+                Доступ в Интернет
+              </label>
+              {internetAccess === 'closed' ? (
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                      Закрыт
+                    </Badge>
+                    <p className="text-sm text-muted-foreground">Доступ в интернет заблокирован</p>
+                  </div>
+                  <Button onClick={() => setInternetAccess('open')}>
+                    <Icon name="Unlock" size={16} className="mr-2" />
+                    Открыть
+                  </Button>
+                </div>
+              ) : (
+                <div className="p-4 bg-muted/30 rounded-lg border space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                      Открыт
+                    </Badge>
+                    <Button variant="outline" size="sm" onClick={() => setInternetAccess('closed')}>
+                      <Icon name="Lock" size={14} className="mr-2" />
+                      Закрыть
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm text-muted-foreground">Входящая скорость</label>
+                      <Select value={incomingSpeed} onValueChange={setIncomingSpeed}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="10">10 Мбит/с</SelectItem>
+                          <SelectItem value="50">50 Мбит/с</SelectItem>
+                          <SelectItem value="100">100 Мбит/с</SelectItem>
+                          <SelectItem value="500">500 Мбит/с</SelectItem>
+                          <SelectItem value="1000">1 Гбит/с</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm text-muted-foreground">Исходящая скорость</label>
+                      <Select value={outgoingSpeed} onValueChange={setOutgoingSpeed}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="10">10 Мбит/с</SelectItem>
+                          <SelectItem value="50">50 Мбит/с</SelectItem>
+                          <SelectItem value="100">100 Мбит/с</SelectItem>
+                          <SelectItem value="500">500 Мбит/с</SelectItem>
+                          <SelectItem value="1000">1 Гбит/с</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Автоблокировка трафика */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Icon name="ShieldAlert" size={16} className="text-muted-foreground" />
+                Автоблокировка трафика
+              </label>
+              {autoBlock === 'none' ? (
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+                      Нет
+                    </Badge>
+                    <p className="text-sm text-muted-foreground">Автоблокировка отключена</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={() => setAutoBlock('smtp')}>
+                    Включить SMTP
+                  </Button>
+                </div>
+              ) : (
+                <div className="p-4 bg-orange-50 rounded-lg border border-orange-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="bg-orange-100 text-orange-700 border-orange-300">
+                      SMTP
+                    </Badge>
+                    <Button variant="outline" size="sm" onClick={() => setAutoBlock('none')}>
+                      Отменить
+                    </Button>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm">
+                    <Icon name="AlertTriangle" size={16} className="text-orange-600 mt-0.5" />
+                    <p className="text-orange-900 font-mono">
+                      31.05.2021 3:43 91.219.24.200: 35 pkts by 60 sec (0.58 pps)
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
         </Card>
       </div>
 
