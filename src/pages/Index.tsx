@@ -863,8 +863,8 @@ const Index = () => {
               <div className="space-y-2">
                 {mockIpAddresses.map((item, index) => (
                   <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
-                    <div className="grid grid-cols-[1fr_auto] gap-3">
-                      {/* Основная информация */}
+                    <div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
+                      {/* Левая часть: Основная информация */}
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
@@ -902,25 +902,7 @@ const Index = () => {
                           <span>{item.hostname}</span>
                         </div>
 
-                        {/* Четвертая строка: Сетевые параметры */}
-                        <div className="text-xs grid grid-cols-2 gap-x-4">
-                          <div>
-                            <span className="text-muted-foreground">Маска:</span>{' '}
-                            <span className="font-mono">{item.mask}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Шлюз:</span>{' '}
-                            <span className="font-mono">{item.gateway}</span>
-                          </div>
-                          {item.dns.map((dns, dnsIndex) => (
-                            <div key={dnsIndex}>
-                              <span className="text-muted-foreground">DNS:</span>{' '}
-                              <span className="font-mono">{dns}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Пятая строка: MAC-привязка */}
+                        {/* MAC-привязка */}
                         <div className="flex items-center gap-2 text-xs pt-1 border-t">
                           <span className="text-muted-foreground">MAC-привязка:</span>
                           {item.macBind ? (
@@ -943,7 +925,7 @@ const Index = () => {
                           )}
                         </div>
 
-                        {/* Шестая строка: Описание */}
+                        {/* Описание */}
                         <div className="flex items-center gap-2 text-xs">
                           <span className="text-muted-foreground">Описание:</span>
                           <Input 
@@ -954,7 +936,25 @@ const Index = () => {
                         </div>
                       </div>
 
-                      {/* Кнопки действий */}
+                      {/* Центр: Сетевые параметры в столбик */}
+                      <div className="text-xs space-y-1 text-center px-4 border-x">
+                        <div>
+                          <span className="text-muted-foreground">Маска:</span>{' '}
+                          <span className="font-mono">{item.mask}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Шлюз:</span>{' '}
+                          <span className="font-mono">{item.gateway}</span>
+                        </div>
+                        {item.dns.map((dns, dnsIndex) => (
+                          <div key={dnsIndex}>
+                            <span className="text-muted-foreground">DNS:</span>{' '}
+                            <span className="font-mono">{dns}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Правая часть: Кнопки действий */}
                       <div className="flex flex-col gap-1.5">
                         {item.status !== 'blocked' ? (
                           <Button 
