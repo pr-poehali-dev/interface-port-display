@@ -669,12 +669,11 @@ const Index = () => {
                 Выдача IP
               </label>
               <div className="p-4 bg-muted/30 rounded-lg border">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-blue-100">
-                    <Icon name="Network" size={20} className="text-blue-600" />
-                  </div>
+                <div className="space-y-2">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    {ipDistributionMode === 'simple' ? 'Простая' : 'Расширенная'}
+                  </Badge>
                   <div>
-                    <p className="font-medium mb-1">{ipDistributionMode === 'simple' ? 'Простая' : 'Расширенная'}</p>
                     {ipDistributionMode === 'simple' ? (
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         Любое подключенное устройство получит один и тот же IP. 
