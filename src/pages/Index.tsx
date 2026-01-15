@@ -870,11 +870,6 @@ const Index = () => {
               </CardHeader>
               <CardContent>
             <div className="space-y-2">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium">IP-адреса</h3>
-              </div>
-              
-              <div className="space-y-2">
                 {mockIpAddresses.map((item, index) => (
                   <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
                     <div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
