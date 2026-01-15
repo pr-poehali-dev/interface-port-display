@@ -686,6 +686,12 @@ const Index = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Опции терминации */}
+            <Card className="border-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">Опции терминации</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
             {/* Сервер */}
             <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border">
               <div className="flex items-center gap-2">
@@ -854,9 +860,16 @@ const Index = () => {
                 </div>
               )}
             </div>
+              </CardContent>
+            </Card>
 
-            {/* Таблица IP-адресов */}
-            <div className="space-y-2 pt-2 border-t">
+            {/* IPv4 */}
+            <Card className="border-2">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base font-semibold">IPv4</CardTitle>
+              </CardHeader>
+              <CardContent>
+            <div className="space-y-2">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium">IP-адреса</h3>
               </div>
@@ -1037,6 +1050,8 @@ const Index = () => {
                 </button>
               </div>
             </div>
+              </CardContent>
+            </Card>
           </CardContent>
         </Card>
       </div>
