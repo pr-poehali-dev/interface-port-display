@@ -1028,12 +1028,11 @@ const Index = () => {
                 ))}
                 
                 <button
-                  className="flex items-center gap-3 px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 hover:border-primary hover:bg-primary/5 transition-all w-full group"
+                  className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 hover:border-primary hover:bg-primary/5 transition-all w-full group"
                 >
-                  <div className="w-5 h-5 rounded border-2 border-dashed border-muted-foreground/30 group-hover:border-primary transition-colors" />
                   <div className="flex items-center gap-2 text-muted-foreground group-hover:text-primary transition-colors">
-                    <Icon name="Plus" size={16} />
-                    <span className="text-sm font-medium">Добавить IP-адрес</span>
+                    <Icon name="Plus" size={14} />
+                    <span className="text-xs font-medium">Добавить IP-адрес</span>
                   </div>
                 </button>
               </div>
