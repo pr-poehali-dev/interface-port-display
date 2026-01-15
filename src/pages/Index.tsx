@@ -859,7 +859,7 @@ const Index = () => {
             <div className="space-y-2 pt-4 mt-4 border-t-2">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium flex items-center gap-2">
-                  <Icon name="Globe" size={16} />
+                  <Icon name="Hash" size={16} />
                   IP-адреса
                 </h3>
                 <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
