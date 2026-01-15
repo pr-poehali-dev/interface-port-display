@@ -856,13 +856,10 @@ const Index = () => {
             </div>
 
             {/* Таблица IP-адресов */}
-            <div className="space-y-2 pt-4 mt-4 border-t-2">
+            <div className="space-y-2 pt-2 border-t">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium flex items-center gap-2">
-                  <Icon name="Hash" size={16} />
-                  IP-адреса
-                </h3>
-                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <h3 className="text-sm font-medium">IP-адреса</h3>
+                <Button variant="outline" size="sm">
                   <Icon name="Plus" size={14} className="mr-1.5" />
                   Добавить
                 </Button>
@@ -906,7 +903,10 @@ const Index = () => {
                         )}
 
                         {/* Разделитель */}
-                        <div className="border-t my-2 w-1/3"></div>
+                        <div className="flex items-center gap-2 my-2">
+                          <div className="border-t w-1/3"></div>
+                          <div className="border-t w-1/3"></div>
+                        </div>
 
                         {/* Вторая строка: DHCP и Интернет */}
                         <div className="text-xs text-muted-foreground">
