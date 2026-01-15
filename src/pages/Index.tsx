@@ -107,6 +107,7 @@ const Index = () => {
   const [incomingSpeed, setIncomingSpeed] = useState('100');
   const [outgoingSpeed, setOutgoingSpeed] = useState('100');
   const [autoBlock, setAutoBlock] = useState<'none' | 'smtp'>('smtp');
+  const [showIpAddresses, setShowIpAddresses] = useState(true);
 
   const mockIpAddresses = [
     { 
@@ -865,12 +866,21 @@ const Index = () => {
 
             {/* IPv4 */}
             <Card className="border-2">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-base font-semibold">IPv4</CardTitle>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowIpAddresses(!showIpAddresses)}
+                  className="h-7 text-xs"
+                >
+                  <Icon name="RefreshCw" size={12} className="mr-1.5" />
+                  {showIpAddresses ? 'Скрыть адреса' : 'Показать адреса'}
+                </Button>
               </CardHeader>
               <CardContent>
             <div className="space-y-2">
-                {mockIpAddresses.length === 0 ? (
+                {!showIpAddresses || mockIpAddresses.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-8 text-center">
                     <Icon name="NetworkOff" size={48} className="text-muted-foreground/30 mb-3" />
                     <p className="text-sm text-muted-foreground mb-1">IP-адреса не найдены</p>
