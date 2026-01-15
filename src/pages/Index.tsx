@@ -870,7 +870,14 @@ const Index = () => {
               </CardHeader>
               <CardContent>
             <div className="space-y-2">
-                {mockIpAddresses.map((item, index) => (
+                {mockIpAddresses.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <Icon name="NetworkOff" size={48} className="text-muted-foreground/30 mb-3" />
+                    <p className="text-sm text-muted-foreground mb-1">IP-адреса не найдены</p>
+                    <p className="text-xs text-muted-foreground/70">Нажмите кнопку ниже, чтобы добавить первый адрес</p>
+                  </div>
+                ) : (
+                  mockIpAddresses.map((item, index) => (
                   <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
                     <div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
                       {/* Левая часть: Основная информация */}
@@ -1033,7 +1040,8 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+                )}
                 
                 <button
                   className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 hover:border-primary hover:bg-primary/5 transition-all w-full group"
