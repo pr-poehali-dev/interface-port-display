@@ -1044,7 +1044,6 @@ const Index = () => {
                   </div>
                 </button>
               </div>
-            </div>
               </CardContent>
             </Card>
           </CardContent>
