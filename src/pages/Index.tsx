@@ -856,10 +856,10 @@ const Index = () => {
             </div>
 
             {/* Таблица IP-адресов */}
-            <div className="space-y-2 pt-2 border-t">
+            <div className="space-y-2 pt-4 mt-4 border-t-2">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium">IP-адреса</h3>
-                <Button variant="outline" size="sm">
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                   <Icon name="Plus" size={14} className="mr-1.5" />
                   Добавить
                 </Button>
