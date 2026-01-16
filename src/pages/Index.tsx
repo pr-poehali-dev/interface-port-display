@@ -914,12 +914,12 @@ const Index = () => {
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
-                          <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${
+                          <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${
                             item.status === 'active' 
-                              ? 'bg-green-50' 
+                              ? 'bg-green-50 border-green-200' 
                               : item.status === 'blocked'
-                              ? 'bg-red-50'
-                              : 'bg-gray-50'
+                              ? 'bg-red-50 border-red-200'
+                              : 'bg-gray-50 border-gray-200'
                           }`}>
                             <Icon 
                               name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
