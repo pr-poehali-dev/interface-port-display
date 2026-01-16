@@ -914,24 +914,22 @@ const Index = () => {
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
-                          <div className={`flex items-center gap-1 px-1.5 py-0 rounded-md border text-xs ${
-                            item.status === 'active' 
-                              ? 'bg-green-50 border-green-200' 
-                              : item.status === 'blocked'
-                              ? 'bg-red-50 border-red-200'
-                              : 'bg-gray-50 border-gray-200'
-                          }`}>
-                            <Icon 
-                              name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
-                              size={14} 
-                              className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
-                            />
-                            <span className={`font-mono font-medium text-sm ${
+                          <div className="flex items-center gap-1.5">
+                            <div className={`flex items-center justify-center w-5 h-5 rounded-full ${
                               item.status === 'active' 
-                                ? 'text-green-700' 
+                                ? 'bg-green-100' 
                                 : item.status === 'blocked'
-                                ? 'text-red-700'
-                                : 'text-gray-700'
+                                ? 'bg-red-100'
+                                : 'bg-gray-100'
+                            }`}>
+                              <Icon 
+                                name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
+                                size={12} 
+                                className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
+                              />
+                            </div>
+                            <span className={`font-mono font-medium text-sm ${
+                              item.status === 'blocked' ? 'text-gray-400' : ''
                             }`}>{item.ip}</span>
                           </div>
                           {item.isRealIp && (
