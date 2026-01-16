@@ -111,7 +111,24 @@ const Index = () => {
 
   const mockIpAddresses = [
     { 
+      ip: '91.219.26.250',
+      isRealIp: true,
+      mac: '—', 
+      hostname: 'gateway-internet', 
+      vendor: 'ISP Gateway',
+      status: 'active', 
+      dhcp: '—',
+      internet: '100 Mbit/s',
+      mask: '255.255.255.0',
+      gateway: '91.219.26.1',
+      dns: ['8.8.8.8', '8.8.4.4'],
+      description: 'Реальный IP-адрес',
+      macBind: null,
+      arp: null
+    },
+    { 
       ip: '10.190.1.160', 
+      isRealIp: false,
       mac: 'd8:bb:c1:5f:5c:2c', 
       hostname: 'iMacPro-mixa', 
       vendor: 'Apple Inc.',
@@ -126,7 +143,8 @@ const Index = () => {
       arp: 'b8:cc:f1:5f:bb:4a'
     },
     { 
-      ip: '10.190.1.205', 
+      ip: '10.190.1.205',
+      isRealIp: false, 
       mac: '74:56:3c:4c:1c:c7', 
       hostname: 'onix', 
       vendor: 'MSFT 5.0',
@@ -140,7 +158,8 @@ const Index = () => {
       macBind: null
     },
     { 
-      ip: '10.190.1.156', 
+      ip: '10.190.1.156',
+      isRealIp: false, 
       mac: 'a8:5e:45:2b:8f:3d', 
       hostname: 'MacBook-Pro', 
       vendor: null,
@@ -154,7 +173,8 @@ const Index = () => {
       macBind: 'a8:5e:45:2b:8f:3d'
     },
     { 
-      ip: '10.190.1.89', 
+      ip: '10.190.1.89',
+      isRealIp: false, 
       mac: 'b4:2e:99:7a:1f:cc', 
       hostname: 'printer-office', 
       vendor: 'HP',
@@ -895,6 +915,12 @@ const Index = () => {
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
                           <span className="font-mono font-medium text-sm">{item.ip}</span>
+                          {item.isRealIp && (
+                            <Badge variant="outline" className="text-xs px-1.5 py-0 bg-blue-50 text-blue-700 border-blue-200">
+                              <Icon name="Globe" size={10} className="mr-1" />
+                              Реальный
+                            </Badge>
+                          )}
                           <Badge 
                             variant="outline" 
                             className={`text-xs px-1.5 py-0 ${
