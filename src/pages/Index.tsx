@@ -914,7 +914,7 @@ const Index = () => {
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
-                          <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${
+                          <div className={`flex items-center gap-1 px-1.5 py-0 rounded-md border text-xs ${
                             item.status === 'active' 
                               ? 'bg-green-50 border-green-200' 
                               : item.status === 'blocked'
