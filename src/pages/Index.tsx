@@ -908,72 +908,11 @@ const Index = () => {
                   </div>
                 ) : (
                   mockIpAddresses.map((item, index) => (
-                  <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors relative">
-                    {/* Действия в правом верхнем углу */}
-                    <div className="absolute top-2 right-2 flex items-center gap-1">
-                      {item.status !== 'blocked' ? (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-                          title="Заблокировать"
-                        >
-                          <Icon name="Ban" size={14} />
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7 text-green-600 hover:text-green-700 hover:bg-green-50"
-                          title="Разблокировать"
-                        >
-                          <Icon name="CheckCircle" size={14} />
-                        </Button>
-                      )}
-                      
-                      {item.macBind ? (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7"
-                          title="Отвязать MAC"
-                        >
-                          <Icon name="LinkOff" size={14} />
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                          title="Привязать MAC"
-                        >
-                          <Icon name="Link" size={14} />
-                        </Button>
-                      )}
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        className="h-7 w-7"
-                        title={item.description ? 'Изменить описание' : 'Добавить описание'}
-                      >
-                        <Icon name="FileEdit" size={14} />
-                      </Button>
-                      
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
-                        title="Удалить"
-                      >
-                        <Icon name="Trash2" size={14} />
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-[1fr_auto] gap-4 items-center pr-36">
-                      {/* Левая часть: Основная информация */}
+                  <div key={index} className="border rounded-lg p-4 bg-card hover:bg-muted/20 transition-colors">
+                    {/* Верхняя часть: IP + MAC привязка слева, кнопки справа */}
+                    <div className="flex items-center justify-between pb-3 border-b">
                       <div className="space-y-2">
-                        {/* Первая строка: IP, статус, описание */}
+                        {/* IP адрес */}
                         <div className="flex items-center gap-2">
                           <div className="flex items-center gap-1.5">
                             <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
@@ -1014,29 +953,85 @@ const Index = () => {
                             <span className="font-mono text-blue-600">{item.macBind}</span>
                           </div>
                         )}
+                      </div>
 
-                        {/* Разделитель */}
-                        <div className="flex items-center gap-2 my-2">
-                          <div className="border-t w-1/3"></div>
-                          <div className="border-t w-1/3"></div>
-                        </div>
+                      {/* Кнопки управления справа */}
+                      <div className="flex items-center gap-1">
+                        {item.status !== 'blocked' ? (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                            title="Заблокировать"
+                          >
+                            <Icon name="Ban" size={16} />
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                            title="Разблокировать"
+                          >
+                            <Icon name="CheckCircle" size={16} />
+                          </Button>
+                        )}
+                        
+                        {item.macBind ? (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8"
+                            title="Отвязать MAC"
+                          >
+                            <Icon name="LinkOff" size={16} />
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            title="Привязать MAC"
+                          >
+                            <Icon name="Link" size={16} />
+                          </Button>
+                        )}
+                        
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8"
+                          title={item.description ? 'Изменить описание' : 'Добавить описание'}
+                        >
+                          <Icon name="FileEdit" size={16} />
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          title="Удалить"
+                        >
+                          <Icon name="Trash2" size={16} />
+                        </Button>
+                      </div>
+                    </div>
 
-                        {/* Вторая строка: DHCP и Интернет */}
-                        <div className="text-xs text-muted-foreground">
+                    {/* Нижняя часть: информация в 3 колонки */}
+                    <div className="grid grid-cols-3 gap-6 pt-3 text-xs">
+                      {/* Колонка 1: DHCP, MAC, Host/Vendor, ARP */}
+                      <div className="space-y-1.5">
+                        <div className="text-muted-foreground">
                           DHCP: {item.dhcp} · Интернет: {item.internet}
                         </div>
-
-                        {/* Третья строка: MAC (оперативный) */}
                         {item.mac && (
-                          <div className="text-xs">
+                          <div>
                             <span className="text-muted-foreground">MAC:</span>{' '}
                             <span className="font-mono">{item.mac}</span>
                           </div>
                         )}
-
-                        {/* Четвертая строка: Host и Vendor */}
                         {(item.hostname || item.vendor) && (
-                          <div className="text-xs">
+                          <div>
                             {item.hostname && (
                               <>
                                 <span className="text-muted-foreground">Host:</span>{' '}
@@ -1052,18 +1047,16 @@ const Index = () => {
                             )}
                           </div>
                         )}
-
-                        {/* ARP */}
                         {item.arp && (
-                          <div className="text-xs">
+                          <div>
                             <span className="text-muted-foreground">ARP:</span>{' '}
                             <span className="font-mono">{item.arp}</span>
                           </div>
                         )}
                       </div>
 
-                      {/* Правая часть: Сетевые параметры в столбик */}
-                      <div className="text-xs space-y-2 px-4 border-l flex flex-col justify-center">
+                      {/* Колонка 2: Маска, Шлюз */}
+                      <div className="space-y-1.5">
                         <div>
                           <span className="text-muted-foreground">Маска:</span>{' '}
                           <span className="font-mono">{item.mask}</span>
@@ -1072,6 +1065,10 @@ const Index = () => {
                           <span className="text-muted-foreground">Шлюз:</span>{' '}
                           <span className="font-mono">{item.gateway}</span>
                         </div>
+                      </div>
+
+                      {/* Колонка 3: DNS */}
+                      <div className="space-y-1.5">
                         {item.dns.map((dns, dnsIndex) => (
                           <div key={dnsIndex}>
                             <span className="text-muted-foreground">DNS:</span>{' '}
