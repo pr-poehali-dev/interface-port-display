@@ -914,25 +914,32 @@ const Index = () => {
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
                         <div className="flex items-center gap-2">
-                          <span className="font-mono font-medium text-sm">{item.ip}</span>
+                          <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${
+                            item.status === 'active' 
+                              ? 'bg-green-50' 
+                              : item.status === 'blocked'
+                              ? 'bg-red-50'
+                              : 'bg-gray-50'
+                          }`}>
+                            <Icon 
+                              name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
+                              size={14} 
+                              className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
+                            />
+                            <span className={`font-mono font-medium text-sm ${
+                              item.status === 'active' 
+                                ? 'text-green-700' 
+                                : item.status === 'blocked'
+                                ? 'text-red-700'
+                                : 'text-gray-700'
+                            }`}>{item.ip}</span>
+                          </div>
                           {item.isRealIp && (
                             <Badge variant="outline" className="text-xs px-1.5 py-0 bg-blue-50 text-blue-700 border-blue-200">
                               <Icon name="Globe" size={10} className="mr-1" />
                               Реальный
                             </Badge>
                           )}
-                          <Badge 
-                            variant="outline" 
-                            className={`text-xs px-1.5 py-0 ${
-                              item.status === 'active' 
-                                ? 'bg-green-50 text-green-700 border-green-200' 
-                                : item.status === 'blocked'
-                                ? 'bg-red-50 text-red-700 border-red-200'
-                                : 'bg-gray-50 text-gray-700 border-gray-200'
-                            }`}
-                          >
-                            {item.status === 'active' ? 'активен' : item.status === 'blocked' ? 'заблокирован' : 'неактивен'}
-                          </Badge>
                           {item.description && (
                             <span className="text-xs text-muted-foreground italic">
                               — {item.description}
