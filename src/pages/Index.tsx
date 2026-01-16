@@ -928,7 +928,7 @@ const Index = () => {
                                 className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
                               />
                             </div>
-                            <span className={`font-mono font-medium text-sm ${
+                            <span className={`font-mono font-semibold text-sm ${
                               item.status === 'blocked' ? 'text-gray-400' : ''
                             }`}>{item.ip}</span>
                           </div>
