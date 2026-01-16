@@ -928,8 +928,10 @@ const Index = () => {
                                 className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
                               />
                             </div>
-                            <span className={`font-mono font-semibold text-sm ${
-                              item.status === 'blocked' ? 'text-gray-400' : ''
+                            <span className={`font-mono font-medium text-sm px-2 py-0.5 rounded border ${
+                              item.status === 'blocked' 
+                                ? 'text-gray-400 bg-gray-50 border-gray-200' 
+                                : 'bg-blue-50 border-blue-200 text-blue-900'
                             }`}>{item.ip}</span>
                           </div>
                           {item.isRealIp && (
