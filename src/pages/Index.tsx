@@ -908,8 +908,69 @@ const Index = () => {
                   </div>
                 ) : (
                   mockIpAddresses.map((item, index) => (
-                  <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
-                    <div className="grid grid-cols-[1fr_auto_auto] gap-4 items-center">
+                  <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors relative">
+                    {/* Действия в правом верхнем углу */}
+                    <div className="absolute top-2 right-2 flex items-center gap-1">
+                      {item.status !== 'blocked' ? (
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-7 w-7 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                          title="Заблокировать"
+                        >
+                          <Icon name="Ban" size={14} />
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-7 w-7 text-green-600 hover:text-green-700 hover:bg-green-50"
+                          title="Разблокировать"
+                        >
+                          <Icon name="CheckCircle" size={14} />
+                        </Button>
+                      )}
+                      
+                      {item.macBind ? (
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-7 w-7"
+                          title="Отвязать MAC"
+                        >
+                          <Icon name="LinkOff" size={14} />
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-7 w-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          title="Привязать MAC"
+                        >
+                          <Icon name="Link" size={14} />
+                        </Button>
+                      )}
+                      
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        className="h-7 w-7"
+                        title={item.description ? 'Изменить описание' : 'Добавить описание'}
+                      >
+                        <Icon name="FileEdit" size={14} />
+                      </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        title="Удалить"
+                      >
+                        <Icon name="Trash2" size={14} />
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-[1fr_auto] gap-4 items-center pr-36">
                       {/* Левая часть: Основная информация */}
                       <div className="space-y-2">
                         {/* Первая строка: IP, статус, описание */}
@@ -1001,8 +1062,8 @@ const Index = () => {
                         )}
                       </div>
 
-                      {/* Центр: Сетевые параметры в столбик */}
-                      <div className="text-xs space-y-2 px-4 border-x flex flex-col justify-center">
+                      {/* Правая часть: Сетевые параметры в столбик */}
+                      <div className="text-xs space-y-2 px-4 border-l flex flex-col justify-center">
                         <div>
                           <span className="text-muted-foreground">Маска:</span>{' '}
                           <span className="font-mono">{item.mask}</span>
@@ -1017,67 +1078,6 @@ const Index = () => {
                             <span className="font-mono">{dns}</span>
                           </div>
                         ))}
-                      </div>
-
-                      {/* Правая часть: Кнопки действий */}
-                      <div className="flex flex-col gap-0.5 items-start">
-                        {item.status !== 'blocked' ? (
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-6 px-2 text-xs text-orange-600 hover:text-orange-700 hover:bg-orange-50 justify-start"
-                          >
-                            <Icon name="Ban" size={12} className="mr-1.5" />
-                            Заблокировать
-                          </Button>
-                        ) : (
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-6 px-2 text-xs text-green-600 hover:text-green-700 hover:bg-green-50 justify-start"
-                          >
-                            <Icon name="CheckCircle" size={12} className="mr-1.5" />
-                            Разблокировать
-                          </Button>
-                        )}
-                        
-                        {item.macBind ? (
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-6 px-2 text-xs justify-start"
-                          >
-                            <Icon name="LinkOff" size={12} className="mr-1.5" />
-                            Отвязать MAC
-                          </Button>
-                        ) : (
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-6 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50 justify-start"
-                          >
-                            <Icon name="Link" size={12} className="mr-1.5" />
-                            Привязать MAC
-                          </Button>
-                        )}
-                        
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-6 px-2 text-xs justify-start"
-                        >
-                          <Icon name="FileEdit" size={12} className="mr-1.5" />
-                          {item.description ? 'Изменить описание' : 'Добавить описание'}
-                        </Button>
-                        
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-6 px-2 text-xs text-destructive hover:text-destructive hover:bg-destructive/10 justify-start"
-                        >
-                          <Icon name="Trash2" size={12} className="mr-1.5" />
-                          Удалить
-                        </Button>
                       </div>
                     </div>
                   </div>
