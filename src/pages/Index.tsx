@@ -937,22 +937,12 @@ const Index = () => {
                             </Badge>
                           )}
                         </div>
-                        {item.description && (
-                          <div className="text-xs text-muted-foreground italic ml-7 mt-0.5">
-                            {item.description}
-                          </div>
-                        )}
-                        {item.macBind && (
-                          <div className="text-xs flex items-center gap-1 ml-7 mt-0.5 text-blue-600">
-                            <Icon name="Link" size={10} />
-                            <span>Привязан к {item.macBind}</span>
-                          </div>
-                        )}
+
                       </div>
 
                       {/* Сетевые параметры по центру (столбик) */}
-                      <div className="flex-1 flex justify-center items-center">
-                        <div className="text-xs space-y-0.5 text-center">
+                      <div className="flex-1 flex items-center">
+                        <div className="text-xs space-y-0.5 text-left">
                           <div>
                             <span className="text-muted-foreground">Маска:</span>{' '}
                             <span className="font-mono">{item.mask}</span>
@@ -961,78 +951,51 @@ const Index = () => {
                             <span className="text-muted-foreground">Шлюз:</span>{' '}
                             <span className="font-mono">{item.gateway}</span>
                           </div>
-                          <div>
-                            <span className="text-muted-foreground">DNS:</span>{' '}
-                            <span className="font-mono">{item.dns.join(', ')}</span>
-                          </div>
+                          {item.dns.map((dns, idx) => (
+                            <div key={idx}>
+                              <span className="text-muted-foreground">DNS:</span>{' '}
+                              <span className="font-mono">{dns}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
 
                       {/* Кнопки управления */}
-                      <div className="flex items-center gap-0.5">
+                      <div className="flex flex-col gap-1">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="h-8 px-2 text-destructive hover:text-destructive hover:bg-destructive/10 justify-start"
+                        >
+                          <Icon name="Trash2" size={14} className="mr-1.5" />
+                          <span className="text-xs">Удалить</span>
+                        </Button>
+                        
                         {item.status !== 'blocked' ? (
                           <Button 
                             variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-                            title="Заблокировать"
+                            size="sm"
+                            className="h-8 px-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 justify-start"
                           >
-                            <Icon name="Ban" size={14} />
+                            <Icon name="Ban" size={14} className="mr-1.5" />
+                            <span className="text-xs">Заблокировать</span>
                           </Button>
                         ) : (
                           <Button 
                             variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7 text-green-600 hover:text-green-700 hover:bg-green-50"
-                            title="Разблокировать"
+                            size="sm"
+                            className="h-8 px-2 text-green-600 hover:text-green-700 hover:bg-green-50 justify-start"
                           >
-                            <Icon name="CheckCircle" size={14} />
+                            <Icon name="CheckCircle" size={14} className="mr-1.5" />
+                            <span className="text-xs">Разблокировать</span>
                           </Button>
                         )}
-                        
-                        {item.macBind ? (
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7"
-                            title="Отвязать MAC"
-                          >
-                            <Icon name="LinkOff" size={14} />
-                          </Button>
-                        ) : (
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                            title="Привязать MAC"
-                          >
-                            <Icon name="Link" size={14} />
-                          </Button>
-                        )}
-                        
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7"
-                          title={item.description ? 'Изменить описание' : 'Добавить описание'}
-                        >
-                          <Icon name="FileEdit" size={14} />
-                        </Button>
-                        
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
-                          title="Удалить"
-                        >
-                          <Icon name="Trash2" size={14} />
-                        </Button>
                       </div>
                     </div>
 
                     {/* Нижняя часть: динамические поля в столбик */}
-                    {(item.dhcp || item.internet || item.mac || item.hostname || item.vendor || item.arp) && (
-                      <div className="pt-2 mt-2 border-t text-xs space-y-0.5">
+                    {(item.dhcp || item.internet || item.mac || item.hostname || item.vendor || item.arp || item.description || item.macBind) && (
+                      <div className="pt-2 mt-2 border-t text-xs space-y-1.5">
                         {(item.dhcp || item.internet) && (
                           <div className="text-muted-foreground">
                             DHCP: {item.dhcp} · Интернет: {item.internet}
@@ -1062,6 +1025,60 @@ const Index = () => {
                             <span className="font-mono">{item.arp}</span>
                           </div>
                         )}
+                        
+                        {/* Comment */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-muted-foreground">Comment:</span>
+                          {item.description ? (
+                            <>
+                              <span>{item.description}</span>
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                className="h-5 w-5 ml-auto"
+                                title="Редактировать"
+                              >
+                                <Icon name="Pencil" size={12} />
+                              </Button>
+                            </>
+                          ) : (
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              className="h-5 w-5 ml-auto"
+                              title="Добавить"
+                            >
+                              <Icon name="Plus" size={12} />
+                            </Button>
+                          )}
+                        </div>
+                        
+                        {/* MAC Bind */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-muted-foreground">Привязан к Mac:</span>
+                          {item.macBind ? (
+                            <>
+                              <span className="font-mono">{item.macBind}</span>
+                              <Button 
+                                variant="ghost" 
+                                size="icon"
+                                className="h-5 w-5 ml-auto"
+                                title="Изменить привязку"
+                              >
+                                <Icon name="Link" size={12} />
+                              </Button>
+                            </>
+                          ) : (
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              className="h-5 w-5 ml-auto"
+                              title="Привязать MAC"
+                            >
+                              <Icon name="Link" size={12} />
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
