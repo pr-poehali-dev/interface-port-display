@@ -910,9 +910,9 @@ const Index = () => {
                   mockIpAddresses.map((item, index) => (
                   <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
                     {/* Верхняя часть: IP слева, сетевые параметры по центру, кнопки справа */}
-                    <div className="flex items-center justify-between gap-4 pb-3 border-b">
-                      {/* IP адрес с описанием */}
-                      <div className="min-w-[160px]">
+                    <div className="flex items-center justify-between gap-4">
+                      {/* IP адрес с описанием и привязкой MAC */}
+                      <div className="min-w-[180px]">
                         <div className="flex items-center gap-2">
                           <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
                             item.status === 'active' 
@@ -942,11 +942,17 @@ const Index = () => {
                             {item.description}
                           </div>
                         )}
+                        {item.macBind && (
+                          <div className="text-xs flex items-center gap-1 ml-7 mt-0.5 text-blue-600">
+                            <Icon name="Link" size={10} />
+                            <span>Привязан к {item.macBind}</span>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Сетевые параметры по центру */}
-                      <div className="flex-1 text-xs space-y-0.5">
-                        <div className="flex items-center gap-4">
+                      {/* Сетевые параметры по центру (столбик) */}
+                      <div className="flex-1 flex justify-center items-center">
+                        <div className="text-xs space-y-0.5 text-center">
                           <div>
                             <span className="text-muted-foreground">Маска:</span>{' '}
                             <span className="font-mono">{item.mask}</span>
@@ -955,10 +961,10 @@ const Index = () => {
                             <span className="text-muted-foreground">Шлюз:</span>{' '}
                             <span className="font-mono">{item.gateway}</span>
                           </div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">DNS:</span>{' '}
-                          <span className="font-mono">{item.dns.join(', ')}</span>
+                          <div>
+                            <span className="text-muted-foreground">DNS:</span>{' '}
+                            <span className="font-mono">{item.dns.join(', ')}</span>
+                          </div>
                         </div>
                       </div>
 
@@ -1024,41 +1030,40 @@ const Index = () => {
                       </div>
                     </div>
 
-                    {/* Нижняя часть: динамические поля */}
-                    <div className="pt-2 text-xs flex flex-wrap gap-x-4 gap-y-1">
-                      <div className="text-muted-foreground">
-                        DHCP: {item.dhcp} · Интернет: {item.internet}
+                    {/* Нижняя часть: динамические поля в столбик */}
+                    {(item.dhcp || item.internet || item.mac || item.hostname || item.vendor || item.arp) && (
+                      <div className="pt-2 mt-2 border-t text-xs space-y-0.5">
+                        {(item.dhcp || item.internet) && (
+                          <div className="text-muted-foreground">
+                            DHCP: {item.dhcp} · Интернет: {item.internet}
+                          </div>
+                        )}
+                        {item.mac && (
+                          <div>
+                            <span className="text-muted-foreground">MAC:</span>{' '}
+                            <span className="font-mono">{item.mac}</span>
+                          </div>
+                        )}
+                        {item.hostname && (
+                          <div>
+                            <span className="text-muted-foreground">Host:</span>{' '}
+                            <span>{item.hostname}</span>
+                          </div>
+                        )}
+                        {item.vendor && (
+                          <div>
+                            <span className="text-muted-foreground">Vendor:</span>{' '}
+                            <span>{item.vendor}</span>
+                          </div>
+                        )}
+                        {item.arp && (
+                          <div>
+                            <span className="text-muted-foreground">ARP:</span>{' '}
+                            <span className="font-mono">{item.arp}</span>
+                          </div>
+                        )}
                       </div>
-                      {item.mac && (
-                        <div>
-                          <span className="text-muted-foreground">MAC:</span>{' '}
-                          <span className="font-mono">{item.mac}</span>
-                          {item.macBind && (
-                            <span className="text-blue-600 ml-1.5">
-                              <Icon name="Link" size={10} className="inline mr-0.5" />
-                              → {item.macBind}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {item.hostname && (
-                        <div>
-                          <span className="text-muted-foreground">Host:</span>{' '}
-                          <span>{item.hostname}</span>
-                        </div>
-                      )}
-                      {item.vendor && (
-                        <div>
-                          <span className="text-muted-foreground">Vendor:</span>{' '}
-                          <span>{item.vendor}</span>
-                        </div>
-                      )}
-                      {item.arp && (
-                        <div>
-                          <span className="text-muted-foreground">ARP:</span>{' '}
-                          <span className="font-mono">{item.arp}</span>
-                        </div>
-                      )}
+                    )}
                     </div>
                   </div>
                 ))
