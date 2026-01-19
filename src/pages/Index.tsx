@@ -912,7 +912,7 @@ const Index = () => {
                     {/* Верхняя часть: IP слева, сетевые параметры по центру, кнопки справа */}
                     <div className="flex items-center justify-between gap-4">
                       {/* IP адрес с описанием и привязкой MAC */}
-                      <div className="min-w-[180px]">
+                      <div className="min-w-[180px] space-y-2">
                         <div className="flex items-center gap-2">
                           <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
                             item.status === 'active' 
@@ -938,10 +938,37 @@ const Index = () => {
                           )}
                         </div>
 
+                        {/* Comment */}
+                        <div className="flex items-center gap-2 group">
+                          <div className="text-xs text-muted-foreground">Comment:</div>
+                          <div className="text-xs">{item.description || ''}</div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity h-5 w-5 p-0 ml-auto"
+                            title={item.description ? 'Редактировать' : 'Добавить'}
+                          >
+                            <Icon name={item.description ? 'Pencil' : 'Plus'} size={12} />
+                          </Button>
+                        </div>
+
+                        {/* MAC Bind */}
+                        <div className="flex items-center gap-2 group">
+                          <div className="text-xs text-muted-foreground">Привязан к Mac:</div>
+                          <div className="text-xs font-mono">{item.macBind || ''}</div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity h-5 w-5 p-0 ml-auto"
+                            title={item.macBind ? 'Изменить привязку' : 'Привязать MAC'}
+                          >
+                            <Icon name="Link" size={12} />
+                          </Button>
+                        </div>
                       </div>
 
                       {/* Сетевые параметры по центру (столбик) */}
-                      <div className="flex-1 flex items-center">
+                      <div className="flex-1 flex items-center justify-center">
                         <div className="text-xs space-y-0.5 text-left">
                           <div>
                             <span className="text-muted-foreground">Маска:</span>{' '}
@@ -994,7 +1021,7 @@ const Index = () => {
                     </div>
 
                     {/* Нижняя часть: динамические поля в столбик */}
-                    {(item.dhcp || item.internet || item.mac || item.hostname || item.vendor || item.arp || item.description || item.macBind) && (
+                    {(item.dhcp || item.internet || item.mac || item.hostname || item.vendor || item.arp) && (
                       <div className="pt-2 mt-2 border-t text-xs space-y-1.5">
                         {(item.dhcp || item.internet) && (
                           <div className="text-muted-foreground">
@@ -1025,60 +1052,6 @@ const Index = () => {
                             <span className="font-mono">{item.arp}</span>
                           </div>
                         )}
-                        
-                        {/* Comment */}
-                        <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground">Comment:</span>
-                          {item.description ? (
-                            <>
-                              <span>{item.description}</span>
-                              <Button 
-                                variant="ghost" 
-                                size="icon"
-                                className="h-5 w-5 ml-auto"
-                                title="Редактировать"
-                              >
-                                <Icon name="Pencil" size={12} />
-                              </Button>
-                            </>
-                          ) : (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-5 w-5 ml-auto"
-                              title="Добавить"
-                            >
-                              <Icon name="Plus" size={12} />
-                            </Button>
-                          )}
-                        </div>
-                        
-                        {/* MAC Bind */}
-                        <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground">Привязан к Mac:</span>
-                          {item.macBind ? (
-                            <>
-                              <span className="font-mono">{item.macBind}</span>
-                              <Button 
-                                variant="ghost" 
-                                size="icon"
-                                className="h-5 w-5 ml-auto"
-                                title="Изменить привязку"
-                              >
-                                <Icon name="Link" size={12} />
-                              </Button>
-                            </>
-                          ) : (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-5 w-5 ml-auto"
-                              title="Привязать MAC"
-                            >
-                              <Icon name="Link" size={12} />
-                            </Button>
-                          )}
-                        </div>
                       </div>
                     )}
                   </div>
