@@ -1018,7 +1018,7 @@ const Index = () => {
                     </div>
 
                     {/* Нижняя часть: информация в 3 колонки */}
-                    <div className="grid grid-cols-3 gap-6 pt-3 text-xs">
+                    <div className="grid grid-cols-3 gap-6 pt-3 text-xs items-center">
                       {/* Колонка 1: DHCP, MAC, Host/Vendor, ARP */}
                       <div className="space-y-1.5">
                         <div className="text-muted-foreground">
@@ -1056,7 +1056,7 @@ const Index = () => {
                       </div>
 
                       {/* Колонка 2: Маска, Шлюз */}
-                      <div className="space-y-1.5">
+                      <div className="space-y-1.5 flex flex-col justify-center">
                         <div>
                           <span className="text-muted-foreground">Маска:</span>{' '}
                           <span className="font-mono">{item.mask}</span>
@@ -1068,7 +1068,7 @@ const Index = () => {
                       </div>
 
                       {/* Колонка 3: DNS */}
-                      <div className="space-y-1.5">
+                      <div className="space-y-1.5 flex flex-col justify-center">
                         {item.dns.map((dns, dnsIndex) => (
                           <div key={dnsIndex}>
                             <span className="text-muted-foreground">DNS:</span>{' '}
