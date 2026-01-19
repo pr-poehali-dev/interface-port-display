@@ -908,153 +908,173 @@ const Index = () => {
                   </div>
                 ) : (
                   mockIpAddresses.map((item, index) => (
-                  <div key={index} className="border rounded-lg p-3 bg-card hover:bg-muted/20 transition-colors">
-                    <div className="flex items-center gap-4">
-                      {/* Левая часть: Статус + IP */}
-                      <div className="flex items-center gap-2 min-w-[180px]">
-                        <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
-                          item.status === 'active' 
-                            ? 'bg-green-100 border-green-200' 
-                            : item.status === 'blocked'
-                            ? 'bg-red-100 border-red-200'
-                            : 'bg-gray-100 border-gray-200'
-                        }`}>
-                          <Icon 
-                            name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
-                            size={12} 
-                            className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
-                          />
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className={`font-mono font-medium ${
+                  <div key={index} className="border rounded-lg p-4 bg-card hover:bg-muted/20 transition-colors">
+                    {/* Верхняя часть: IP + MAC привязка слева, кнопки справа */}
+                    <div className="flex items-center justify-between pb-3 border-b">
+                      <div className="space-y-2">
+                        {/* IP адрес */}
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5">
+                            <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
+                              item.status === 'active' 
+                                ? 'bg-green-100 border-green-200' 
+                                : item.status === 'blocked'
+                                ? 'bg-red-100 border-red-200'
+                                : 'bg-gray-100 border-gray-200'
+                            }`}>
+                              <Icon 
+                                name={item.status === 'active' ? 'Check' : item.status === 'blocked' ? 'Lock' : 'Minus'} 
+                                size={12} 
+                                className={item.status === 'active' ? 'text-green-600' : item.status === 'blocked' ? 'text-red-600' : 'text-gray-600'}
+                              />
+                            </div>
+                            <span className={`font-mono font-medium text-sm ${
                               item.status === 'blocked' ? 'text-gray-400' : ''
                             }`}>{item.ip}</span>
-                            {item.isRealIp && (
-                              <Badge variant="outline" className="text-[10px] px-1 py-0 bg-blue-50 text-blue-700 border-blue-200">
-                                <Icon name="Globe" size={10} className="mr-0.5" />
-                                Real
-                              </Badge>
-                            )}
                           </div>
+                          {item.isRealIp && (
+                            <Badge variant="outline" className="text-xs px-1.5 py-0 bg-blue-50 text-blue-700 border-blue-200">
+                              <Icon name="Globe" size={10} className="mr-1" />
+                              Реальный
+                            </Badge>
+                          )}
                           {item.description && (
-                            <div className="text-[11px] text-muted-foreground italic mt-0.5">
-                              {item.description}
-                            </div>
+                            <span className="text-xs text-muted-foreground italic">
+                              — {item.description}
+                            </span>
                           )}
                         </div>
+
+                        {/* MAC привязка */}
+                        {item.macBind && (
+                          <div className="text-xs flex items-center gap-1.5">
+                            <Icon name="Link" size={12} className="text-blue-600" />
+                            <span className="text-muted-foreground">Привязан к:</span>{' '}
+                            <span className="font-mono text-blue-600">{item.macBind}</span>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Средняя часть: Основная информация */}
-                      <div className="flex-1 text-xs space-y-0.5">
+                      {/* Кнопки управления справа */}
+                      <div className="flex items-center gap-1">
+                        {item.status !== 'blocked' ? (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                            title="Заблокировать"
+                          >
+                            <Icon name="Ban" size={16} />
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                            title="Разблокировать"
+                          >
+                            <Icon name="CheckCircle" size={16} />
+                          </Button>
+                        )}
+                        
+                        {item.macBind ? (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8"
+                            title="Отвязать MAC"
+                          >
+                            <Icon name="LinkOff" size={16} />
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            title="Привязать MAC"
+                          >
+                            <Icon name="Link" size={16} />
+                          </Button>
+                        )}
+                        
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8"
+                          title={item.description ? 'Изменить описание' : 'Добавить описание'}
+                        >
+                          <Icon name="FileEdit" size={16} />
+                        </Button>
+                        
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          title="Удалить"
+                        >
+                          <Icon name="Trash2" size={16} />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Нижняя часть: информация в 3 колонки */}
+                    <div className="grid grid-cols-3 gap-6 pt-3 text-xs items-center">
+                      {/* Колонка 1: DHCP, MAC, Host/Vendor, ARP */}
+                      <div className="space-y-1.5">
+                        <div className="text-muted-foreground">
+                          DHCP: {item.dhcp} · Интернет: {item.internet}
+                        </div>
                         {item.mac && (
                           <div>
                             <span className="text-muted-foreground">MAC:</span>{' '}
                             <span className="font-mono">{item.mac}</span>
-                            {item.macBind && (
-                              <span className="text-blue-600 ml-2">
-                                <Icon name="Link" size={10} className="inline mr-0.5" />
-                                привязан к {item.macBind}
-                              </span>
+                          </div>
+                        )}
+                        {(item.hostname || item.vendor) && (
+                          <div>
+                            {item.hostname && (
+                              <>
+                                <span className="text-muted-foreground">Host:</span>{' '}
+                                <span>{item.hostname}</span>
+                              </>
+                            )}
+                            {item.vendor && (
+                              <>
+                                {item.hostname && ' · '}
+                                <span className="text-muted-foreground">Vendor:</span>{' '}
+                                <span>{item.vendor}</span>
+                              </>
                             )}
                           </div>
                         )}
-                        <div className="flex items-center gap-3 text-muted-foreground">
-                          <span>DHCP: {item.dhcp}</span>
-                          <span>·</span>
-                          <span>Интернет: {item.internet}</span>
-                          {item.hostname && (
-                            <>
-                              <span>·</span>
-                              <span>Host: {item.hostname}</span>
-                            </>
-                          )}
-                          {item.vendor && (
-                            <>
-                              <span>·</span>
-                              <span>{item.vendor}</span>
-                            </>
-                          )}
+                        {item.arp && (
+                          <div>
+                            <span className="text-muted-foreground">ARP:</span>{' '}
+                            <span className="font-mono">{item.arp}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Колонка 2: Маска, Шлюз */}
+                      <div className="space-y-1.5 flex flex-col justify-center">
+                        <div>
+                          <span className="text-muted-foreground">Маска:</span>{' '}
+                          <span className="font-mono">{item.mask}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Шлюз:</span>{' '}
+                          <span className="font-mono">{item.gateway}</span>
                         </div>
                       </div>
 
-                      {/* Правая часть: Сетевые параметры + Кнопки */}
-                      <div className="flex items-center gap-4">
-                        <div className="text-xs text-muted-foreground space-y-0.5 min-w-[200px]">
-                          <div>
-                            <span className="inline-block w-12">Маска:</span>
-                            <span className="font-mono">{item.mask}</span>
+                      {/* Колонка 3: DNS */}
+                      <div className="space-y-1.5 flex flex-col justify-center">
+                        {item.dns.map((dns, dnsIndex) => (
+                          <div key={dnsIndex}>
+                            <span className="text-muted-foreground">DNS:</span>{' '}
+                            <span className="font-mono">{dns}</span>
                           </div>
-                          <div>
-                            <span className="inline-block w-12">Шлюз:</span>
-                            <span className="font-mono">{item.gateway}</span>
-                          </div>
-                          <div>
-                            <span className="inline-block w-12">DNS:</span>
-                            <span className="font-mono">{item.dns.join(', ')}</span>
-                          </div>
-                        </div>
-
-                        {/* Кнопки управления */}
-                        <div className="flex items-center gap-0.5">
-                          {item.status !== 'blocked' ? (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-7 w-7 text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-                              title="Заблокировать"
-                            >
-                              <Icon name="Ban" size={14} />
-                            </Button>
-                          ) : (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-7 w-7 text-green-600 hover:text-green-700 hover:bg-green-50"
-                              title="Разблокировать"
-                            >
-                              <Icon name="CheckCircle" size={14} />
-                            </Button>
-                          )}
-                          
-                          {item.macBind ? (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-7 w-7"
-                              title="Отвязать MAC"
-                            >
-                              <Icon name="LinkOff" size={14} />
-                            </Button>
-                          ) : (
-                            <Button 
-                              variant="ghost" 
-                              size="icon"
-                              className="h-7 w-7 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                              title="Привязать MAC"
-                            >
-                              <Icon name="Link" size={14} />
-                            </Button>
-                          )}
-                          
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7"
-                            title={item.description ? 'Изменить описание' : 'Добавить описание'}
-                          >
-                            <Icon name="FileEdit" size={14} />
-                          </Button>
-                          
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
-                            title="Удалить"
-                          >
-                            <Icon name="Trash2" size={14} />
-                          </Button>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
