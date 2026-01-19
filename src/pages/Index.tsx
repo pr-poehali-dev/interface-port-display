@@ -969,26 +969,24 @@ const Index = () => {
 
                       {/* Сетевые параметры по центру (столбик) */}
                       <div className="flex-1 flex items-center justify-center">
-                        <div className="text-xs space-y-0.5 text-left">
-                          <div>
-                            <span className="text-muted-foreground">Маска:</span>{' '}
-                            <span className="font-mono">{item.mask}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">Шлюз:</span>{' '}
-                            <span className="font-mono">{item.gateway}</span>
-                          </div>
+                        <div className="text-xs space-y-0.5 text-left grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
+                          <span className="text-muted-foreground">Маска:</span>
+                          <span className="font-mono">{item.mask}</span>
+                          
+                          <span className="text-muted-foreground">Шлюз:</span>
+                          <span className="font-mono">{item.gateway}</span>
+                          
                           {item.dns.map((dns, idx) => (
-                            <div key={idx}>
-                              <span className="text-muted-foreground">DNS:</span>{' '}
-                              <span className="font-mono">{dns}</span>
-                            </div>
+                            <>
+                              <span key={`label-${idx}`} className="text-muted-foreground">DNS:</span>
+                              <span key={`value-${idx}`} className="font-mono">{dns}</span>
+                            </>
                           ))}
                         </div>
                       </div>
 
                       {/* Кнопки управления */}
-                      <div className="flex flex-col gap-0.5">
+                      <div className="flex flex-col gap-px">
                         <Button 
                           variant="ghost" 
                           size="sm"
@@ -1004,7 +1002,7 @@ const Index = () => {
                             size="sm"
                             className="h-8 px-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 justify-start"
                           >
-                            <Icon name="Ban" size={14} className="mr-1.5" />
+                            <Icon name="Lock" size={14} className="mr-1.5" />
                             <span className="text-xs">Заблокировать</span>
                           </Button>
                         ) : (
