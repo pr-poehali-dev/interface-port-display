@@ -912,7 +912,7 @@ const Index = () => {
                     {/* Верхняя часть: IP слева, сетевые параметры по центру, кнопки справа */}
                     <div className="flex items-center justify-between gap-4">
                       {/* IP адрес с описанием и привязкой MAC */}
-                      <div className="min-w-[180px] space-y-2">
+                      <div className="min-w-[180px] space-y-1">
                         <div className="flex items-center gap-2">
                           <div className={`flex items-center justify-center w-5 h-5 rounded-full border ${
                             item.status === 'active' 
@@ -941,7 +941,7 @@ const Index = () => {
                         {/* Comment */}
                         <div className="flex items-center gap-2 group">
                           <div className="text-xs text-muted-foreground">Comment:</div>
-                          <div className="text-xs">{item.description || ''}</div>
+                          <div className="text-xs italic">{item.description || ''}</div>
                           <Button
                             size="sm"
                             variant="ghost"
@@ -988,7 +988,7 @@ const Index = () => {
                       </div>
 
                       {/* Кнопки управления */}
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col gap-0.5">
                         <Button 
                           variant="ghost" 
                           size="sm"
