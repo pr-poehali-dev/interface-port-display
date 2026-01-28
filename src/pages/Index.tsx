@@ -1011,7 +1011,7 @@ const Index = () => {
                             size="sm"
                             className="h-8 px-2 text-green-600 hover:text-green-700 hover:bg-green-50 justify-start"
                           >
-                            <Icon name="CheckCircle" size={14} className="mr-1.5" />
+                            <Icon name="LockOpen" size={14} className="mr-1.5" />
                             <span className="text-xs">Разблокировать</span>
                           </Button>
                         )}
