@@ -409,12 +409,17 @@ const Index = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-gradient-to-br from-red-500 to-rose-600">
-                <Icon name="Info" size={20} className="text-white" />
-              </div>
-              Сведения о точке подключения
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl flex items-center gap-3">
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-red-500 to-rose-600">
+                  <Icon name="Info" size={20} className="text-white" />
+                </div>
+                Сведения о точке подключения
+              </CardTitle>
+              <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                <Icon name="Trash2" size={20} />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
