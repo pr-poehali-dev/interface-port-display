@@ -153,35 +153,38 @@ const VlanList = () => {
                   )}
 
                   <div className="flex items-center gap-6 md:ml-auto flex-wrap">
-                    <div className="flex items-center gap-2">
-                      <Icon name="Globe" size={16} className="text-muted-foreground" />
+                    <div className="flex gap-2">
+                      <Icon name="Globe" size={16} className="text-muted-foreground mt-0.5" />
                       <div>
                         <p className="text-xs text-muted-foreground">IP адресов</p>
-                        <p className="text-lg font-bold">{vlan.ipCount}</p>
+                        <p className="text-lg font-bold text-center">{vlan.ipCount}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <Icon name="Cable" size={16} className="text-muted-foreground" />
+                    <div className="flex gap-2">
+                      <Icon name="Cable" size={16} className="text-muted-foreground mt-0.5" />
                       <div>
                         <p className="text-xs text-muted-foreground">Портов</p>
-                        <p className="text-lg font-bold">{vlan.portCount}</p>
+                        <p className="text-lg font-bold text-center">{vlan.portCount}</p>
                       </div>
                     </div>
 
-                    <Badge 
-                      variant={vlan.internetAccess === 'open' ? 'default' : 'secondary'}
-                      className={vlan.internetAccess === 'open' 
-                        ? 'bg-green-100 text-green-700 hover:bg-green-100' 
-                        : 'bg-red-100 text-red-700 hover:bg-red-100'}
-                    >
-                      <Icon 
-                        name={vlan.internetAccess === 'open' ? 'Unlock' : 'Lock'} 
-                        size={12} 
-                        className="mr-1" 
-                      />
-                      {vlan.internetAccess === 'open' ? 'Открыт' : 'Закрыт'}
-                    </Badge>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Доступ в интернет</p>
+                      <Badge 
+                        variant={vlan.internetAccess === 'open' ? 'default' : 'secondary'}
+                        className={vlan.internetAccess === 'open' 
+                          ? 'bg-green-100 text-green-700 hover:bg-green-100' 
+                          : 'bg-red-100 text-red-700 hover:bg-red-100'}
+                      >
+                        <Icon 
+                          name={vlan.internetAccess === 'open' ? 'Unlock' : 'Lock'} 
+                          size={12} 
+                          className="mr-1" 
+                        />
+                        {vlan.internetAccess === 'open' ? 'Открыт' : 'Закрыт'}
+                      </Badge>
+                    </div>
 
                     <Button variant="outline" size="sm">
                       <Icon name="Eye" size={16} className="mr-2" />
