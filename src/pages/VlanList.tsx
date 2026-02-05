@@ -162,7 +162,7 @@ const VlanList = () => {
                     </div>
 
                     <div className="flex gap-2">
-                      <Icon name="Cable" size={16} className="text-muted-foreground mt-0.5" />
+                      <Icon name="Router" size={16} className="text-muted-foreground mt-0.5" />
                       <div>
                         <p className="text-xs text-muted-foreground">Портов</p>
                         <p className="text-lg font-bold text-center">{vlan.portCount}</p>
