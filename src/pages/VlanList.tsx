@@ -77,7 +77,7 @@ const VlanList = () => {
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+              <Button style={{ backgroundColor: '#b60209' }} className="hover:opacity-90">
                 <Icon name="Plus" size={20} className="mr-2" />
                 Добавить VLAN
               </Button>
@@ -121,7 +121,7 @@ const VlanList = () => {
                   <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                     Отмена
                   </Button>
-                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  <Button style={{ backgroundColor: '#b60209' }} className="hover:opacity-90">
                     Создать
                   </Button>
                 </div>
@@ -136,7 +136,7 @@ const VlanList = () => {
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+                    <div className="p-2.5 rounded-lg" style={{ backgroundColor: '#b60209' }}>
                       <Icon name="Network" size={20} className="text-white" />
                     </div>
                     <div>
