@@ -68,7 +68,7 @@ const VlanList = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50 to-rose-50">
       <div className="w-full max-w-[1400px] mx-auto p-4 md:p-6 space-y-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div>
@@ -77,7 +77,7 @@ const VlanList = () => {
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+              <Button className="bg-gradient-to-r from-[#b60209] to-[#8b0107] hover:from-[#a00208] hover:to-[#6f0105]">
                 <Icon name="Plus" size={20} className="mr-2" />
                 Добавить VLAN
               </Button>
@@ -121,7 +121,7 @@ const VlanList = () => {
                   <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                     Отмена
                   </Button>
-                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  <Button className="bg-gradient-to-r from-[#b60209] to-[#8b0107] hover:from-[#a00208] hover:to-[#6f0105]">
                     Создать
                   </Button>
                 </div>
@@ -136,12 +136,12 @@ const VlanList = () => {
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex-shrink-0">
+                    <div className="p-3 rounded-lg bg-gradient-to-br from-[#b60209] to-[#8b0107] flex-shrink-0">
                       <Icon name="GitBranch" size={24} className="text-white" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Подключение</p>
-                      <p className="text-2xl font-bold text-primary">{vlan.number}</p>
+                      <p className="text-2xl font-bold" style={{ color: '#b60209' }}>{vlan.number}</p>
                     </div>
                   </div>
 
