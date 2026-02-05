@@ -137,7 +137,7 @@ const VlanList = () => {
                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                   <div className="flex items-center gap-4">
                     <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex-shrink-0">
-                      <Icon name="Network" size={24} className="text-white" />
+                      <Icon name="GitBranch" size={24} className="text-white" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Подключение</p>
