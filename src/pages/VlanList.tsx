@@ -186,6 +186,20 @@ const VlanList = () => {
                       </Badge>
                     </div>
 
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Статус</p>
+                      <Badge 
+                        className="bg-[#b60209] text-white hover:bg-[#b60209]"
+                      >
+                        <Icon 
+                          name="Check" 
+                          size={12} 
+                          className="mr-1" 
+                        />
+                        Ок
+                      </Badge>
+                    </div>
+
                     <Button variant="outline" size="sm">
                       <Icon name="Eye" size={16} className="mr-2" />
                       Подробнее
