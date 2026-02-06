@@ -176,14 +176,6 @@ const PhoneNumbers = () => {
                   )}
 
                   <div className="flex items-center gap-4 md:ml-auto">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Статус</p>
-                      <Badge className="bg-[#b60209] text-white hover:bg-[#b60209]">
-                        <Icon name="Check" size={12} className="mr-1" />
-                        Ок
-                      </Badge>
-                    </div>
-
                     <Button 
                       variant="outline" 
                       size="sm"
