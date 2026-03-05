@@ -229,22 +229,20 @@ const VlanList = () => {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                         {vlan.switches.map((sw) => (
-                          <div key={sw.name} className="flex items-start gap-3 bg-slate-50 rounded-lg px-3 py-2">
-                            <div className="flex-shrink-0 mt-0.5">
+                          <div key={sw.name} className="bg-slate-50 rounded-lg px-3 py-2">
+                            <div className="flex items-center gap-2 mb-1.5">
                               <span className="text-xs font-mono font-bold text-[#b60209]">{sw.name}</span>
+                              <span className="text-xs text-muted-foreground">{sw.location}</span>
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="text-xs text-muted-foreground truncate mb-1">{sw.location}</p>
-                              <div className="flex flex-wrap gap-1">
-                                {sw.ports.map((port) => (
-                                  <span
-                                    key={port}
-                                    className="inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-medium bg-white border border-border text-foreground"
-                                  >
-                                    {port}
-                                  </span>
-                                ))}
-                              </div>
+                            <div className="flex flex-wrap gap-1">
+                              {sw.ports.map((port) => (
+                                <span
+                                  key={port}
+                                  className="inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-medium bg-white border border-border text-foreground"
+                                >
+                                  {port}
+                                </span>
+                              ))}
                             </div>
                           </div>
                         ))}
