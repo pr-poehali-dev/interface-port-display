@@ -227,13 +227,11 @@ const VlanList = () => {
                         <Icon name="Server" size={14} className="text-muted-foreground" />
                         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Коммутаторы</p>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      <div className="flex flex-col gap-1">
                         {vlan.switches.map((sw) => (
-                          <div key={sw.name} className="bg-slate-50 rounded-lg px-3 py-2">
-                            <div className="flex items-center gap-2 mb-1.5">
-                              <span className="text-xs font-mono font-bold text-[#b60209]">{sw.name}</span>
-                              <span className="text-xs text-muted-foreground">{sw.location}</span>
-                            </div>
+                          <div key={sw.name} className="flex items-center gap-3 bg-slate-50 rounded-lg px-3 py-2">
+                            <span className="text-xs font-mono font-bold text-[#b60209] w-20 flex-shrink-0">{sw.name}</span>
+                            <span className="text-xs text-muted-foreground w-40 flex-shrink-0 truncate">{sw.location}</span>
                             <div className="flex flex-wrap gap-1">
                               {sw.ports.map((port) => (
                                 <span
