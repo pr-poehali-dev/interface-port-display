@@ -20,6 +20,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+interface Switch {
+  name: string;
+  location: string;
+  ports: number[];
+}
+
 interface Vlan {
   id: number;
   number: string;
@@ -27,6 +33,7 @@ interface Vlan {
   internetAccess: 'open' | 'closed';
   ipCount: number;
   portCount: number;
+  switches?: Switch[];
 }
 
 const mockVlans: Vlan[] = [
@@ -37,6 +44,17 @@ const mockVlans: Vlan[] = [
     internetAccess: 'open',
     ipCount: 24,
     portCount: 12,
+    switches: [
+      { name: 'sw-0028', location: 'Autoban_19-1', ports: [3, 4, 7, 8, 9, 10, 11, 12] },
+      { name: 'sw-0045', location: 'Automoll_28_5', ports: [11, 17] },
+      { name: 'sw-0111', location: 'Automoll_28_6', ports: [1] },
+      { name: 'sw-0125', location: 'Automoll_37_10', ports: [2, 4, 7] },
+      { name: 'sw-0367', location: 'Autoban_autokit', ports: [4, 6] },
+      { name: 'sw-0375', location: 'Automoll_28_20', ports: [4] },
+      { name: 'sw-0533', location: 'Automoll_28_20', ports: [6, 10, 18] },
+      { name: 'sw-2114', location: 'Gorb_vl14_yug', ports: [21] },
+      { name: 'sw-3141', location: 'Gorb_vl63_sever', ports: [16, 19] },
+    ],
   },
   {
     id: 2,
@@ -45,6 +63,10 @@ const mockVlans: Vlan[] = [
     internetAccess: 'open',
     ipCount: 48,
     portCount: 24,
+    switches: [
+      { name: 'sw-0012', location: 'Office_floor3_A', ports: [1, 2, 3, 5] },
+      { name: 'sw-0034', location: 'Office_floor3_B', ports: [7, 8] },
+    ],
   },
   {
     id: 3,
@@ -60,6 +82,9 @@ const mockVlans: Vlan[] = [
     internetAccess: 'open',
     ipCount: 16,
     portCount: 8,
+    switches: [
+      { name: 'sw-0099', location: 'Conf_hall_main', ports: [2, 4] },
+    ],
   },
 ];
 
@@ -134,77 +159,98 @@ const VlanList = () => {
           {vlans.map((vlan) => (
             <Card key={vlan.id} className="hover:shadow-lg transition-shadow duration-200 border-border/50">
               <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row md:items-center gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-lg bg-gradient-to-br from-[#b60209] to-[#8b0107] flex-shrink-0">
-                      <Icon name="GitBranch" size={24} className="text-white" />
+                <div className="flex flex-col gap-4">
+                  {/* Основная строка */}
+                  <div className="flex flex-col md:flex-row md:items-center gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-lg bg-gradient-to-br from-[#b60209] to-[#8b0107] flex-shrink-0">
+                        <Icon name="GitBranch" size={24} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Подключение</p>
+                        <p className="text-2xl font-bold" style={{ color: '#b60209' }}>{vlan.number}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Подключение</p>
-                      <p className="text-2xl font-bold" style={{ color: '#b60209' }}>{vlan.number}</p>
+
+                    {vlan.description && (
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <Icon name="MapPin" size={16} className="text-muted-foreground flex-shrink-0" />
+                        <p className="text-sm text-muted-foreground truncate">{vlan.description}</p>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-6 md:ml-auto flex-wrap">
+                      <div className="flex gap-2">
+                        <Icon name="Globe" size={16} className="text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">IP адресов</p>
+                          <p className="text-lg font-bold text-center">{vlan.ipCount}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Icon name="Network" size={16} className="text-muted-foreground mt-0.5" />
+                        <div>
+                          <p className="text-xs text-muted-foreground">Портов</p>
+                          <p className="text-lg font-bold text-center">{vlan.portCount}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Доступ в интернет</p>
+                        <Badge 
+                          variant={vlan.internetAccess === 'open' ? 'default' : 'secondary'}
+                          className={vlan.internetAccess === 'open' 
+                            ? 'bg-green-100 text-green-700 hover:bg-green-100' 
+                            : 'bg-red-100 text-red-700 hover:bg-red-100'}
+                        >
+                          <Icon 
+                            name={vlan.internetAccess === 'open' ? 'Unlock' : 'Lock'} 
+                            size={12} 
+                            className="mr-1" 
+                          />
+                          {vlan.internetAccess === 'open' ? 'Открыт' : 'Закрыт'}
+                        </Badge>
+                      </div>
+
+                      <Button variant="outline" size="sm">
+                        <Icon name="Eye" size={16} className="mr-2" />
+                        Подробнее
+                      </Button>
                     </div>
                   </div>
 
-                  {vlan.description && (
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <Icon name="MapPin" size={16} className="text-muted-foreground flex-shrink-0" />
-                      <p className="text-sm text-muted-foreground truncate">{vlan.description}</p>
+                  {/* Коммутаторы */}
+                  {vlan.switches && vlan.switches.length > 0 && (
+                    <div className="border-t border-border/50 pt-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Icon name="Server" size={14} className="text-muted-foreground" />
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Коммутаторы</p>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {vlan.switches.map((sw) => (
+                          <div key={sw.name} className="flex items-start gap-3 bg-slate-50 rounded-lg px-3 py-2">
+                            <div className="flex-shrink-0 mt-0.5">
+                              <span className="text-xs font-mono font-bold text-[#b60209]">{sw.name}</span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs text-muted-foreground truncate mb-1">{sw.location}</p>
+                              <div className="flex flex-wrap gap-1">
+                                {sw.ports.map((port) => (
+                                  <span
+                                    key={port}
+                                    className="inline-flex items-center justify-center w-6 h-6 rounded text-xs font-medium bg-white border border-border text-foreground"
+                                  >
+                                    {port}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
-
-                  <div className="flex items-center gap-6 md:ml-auto flex-wrap">
-                    <div className="flex gap-2">
-                      <Icon name="Globe" size={16} className="text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">IP адресов</p>
-                        <p className="text-lg font-bold text-center">{vlan.ipCount}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Icon name="Network" size={16} className="text-muted-foreground mt-0.5" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">Портов</p>
-                        <p className="text-lg font-bold text-center">{vlan.portCount}</p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Доступ в интернет</p>
-                      <Badge 
-                        variant={vlan.internetAccess === 'open' ? 'default' : 'secondary'}
-                        className={vlan.internetAccess === 'open' 
-                          ? 'bg-green-100 text-green-700 hover:bg-green-100' 
-                          : 'bg-red-100 text-red-700 hover:bg-red-100'}
-                      >
-                        <Icon 
-                          name={vlan.internetAccess === 'open' ? 'Unlock' : 'Lock'} 
-                          size={12} 
-                          className="mr-1" 
-                        />
-                        {vlan.internetAccess === 'open' ? 'Открыт' : 'Закрыт'}
-                      </Badge>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Статус</p>
-                      <Badge 
-                        className="bg-[#b60209] text-white hover:bg-[#b60209]"
-                      >
-                        <Icon 
-                          name="Check" 
-                          size={12} 
-                          className="mr-1" 
-                        />
-                        Ок
-                      </Badge>
-                    </div>
-
-                    <Button variant="outline" size="sm">
-                      <Icon name="Eye" size={16} className="mr-2" />
-                      Подробнее
-                    </Button>
-                  </div>
                 </div>
               </CardContent>
             </Card>
