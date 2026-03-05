@@ -236,7 +236,7 @@ const VlanList = () => {
                               {sw.ports.map((port) => (
                                 <span
                                   key={port}
-                                  className="inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-medium bg-white border border-border text-foreground"
+                                  className="inline-flex items-center justify-center w-4 h-4 rounded text-[9px] font-medium bg-white border border-border text-foreground"
                                 >
                                   {port}
                                 </span>
