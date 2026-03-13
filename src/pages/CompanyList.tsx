@@ -126,18 +126,18 @@ const CompanyList = () => {
               <thead>
                 <tr className="border-b border-border/40 bg-slate-50/70">
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-12">#</th>
+                  <th className="w-8 px-2 py-3"></th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Название</th>
                   <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">Баланс</th>
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Комментарий</th>
-                  <th className="w-10 px-2 py-3"></th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="text-center py-12 text-muted-foreground">
+                    <td colSpan={6} className="text-center py-12 text-muted-foreground">
                       Нет компаний
                     </td>
                   </tr>
@@ -148,6 +148,33 @@ const CompanyList = () => {
                     className={`border-b border-border/30 hover:bg-slate-50/60 transition-colors ${idx % 2 === 0 ? '' : 'bg-slate-50/30'}`}
                   >
                     <td className="px-4 py-3 text-muted-foreground font-mono text-xs">{company.id}</td>
+                    <td className="px-2 py-3 text-center">
+                      {company.problems && company.problems.length > 0 && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors">
+                              <Icon name="TriangleAlert" size={13} className="text-amber-600" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="max-w-56 p-0 overflow-hidden">
+                            <div className="bg-amber-50 border-b border-amber-200 px-3 py-2">
+                              <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
+                                <Icon name="TriangleAlert" size={12} />
+                                Проблемы ({company.problems.length})
+                              </p>
+                            </div>
+                            <ul className="px-3 py-2 space-y-1">
+                              {company.problems.map((p, i) => (
+                                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                                  <span className="text-amber-500 mt-0.5 shrink-0">•</span>
+                                  {p}
+                                </li>
+                              ))}
+                            </ul>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+                    </td>
                     <td className="px-4 py-3">
                       <Link
                         to={`/companies/${company.id}`}
@@ -188,33 +215,6 @@ const CompanyList = () => {
                     <td className="px-4 py-3 font-mono text-muted-foreground text-xs">{company.contractNumber}</td>
                     <td className="px-4 py-3 text-muted-foreground text-xs max-w-xs truncate">
                       {company.comment || <span className="opacity-30">—</span>}
-                    </td>
-                    <td className="px-2 py-3 text-center">
-                      {company.problems && company.problems.length > 0 && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <button className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors">
-                              <Icon name="TriangleAlert" size={13} className="text-amber-600" />
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent side="left" className="max-w-56 p-0 overflow-hidden">
-                            <div className="bg-amber-50 border-b border-amber-200 px-3 py-2">
-                              <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
-                                <Icon name="TriangleAlert" size={12} />
-                                Проблемы ({company.problems.length})
-                              </p>
-                            </div>
-                            <ul className="px-3 py-2 space-y-1">
-                              {company.problems.map((p, i) => (
-                                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
-                                  <span className="text-amber-500 mt-0.5 shrink-0">•</span>
-                                  {p}
-                                </li>
-                              ))}
-                            </ul>
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
                     </td>
                   </tr>
                 ))}
