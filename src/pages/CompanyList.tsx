@@ -9,6 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import Icon from '@/components/ui/icon';
 
 interface Company {
@@ -18,18 +23,19 @@ interface Company {
   status: 'active' | 'archived';
   contractNumber: string;
   comment: string;
+  problems?: string[];
 }
 
 const mockCompanies: Company[] = [
   { id: 1, name: 'ООО "Система Сервис"', balance: 12500.0, status: 'active', contractNumber: '65727', comment: 'Основной клиент, приоритетная поддержка' },
-  { id: 2, name: 'ГСК №34 "Крылатский"', balance: -3200.5, status: 'active', contractNumber: '65963', comment: 'Задолженность за февраль' },
-  { id: 3, name: 'ИП Горбунов А.В.', balance: 0, status: 'active', contractNumber: '66104', comment: '' },
+  { id: 2, name: 'ГСК №34 "Крылатский"', balance: -3200.5, status: 'active', contractNumber: '65963', comment: 'Задолженность за февраль', problems: ['Неправильно заполнены реквизиты', 'У компании закрыт доступ в интернет'] },
+  { id: 3, name: 'ИП Горбунов А.В.', balance: 0, status: 'active', contractNumber: '66104', comment: '', problems: ['У компании нет ни одного подключения'] },
   { id: 4, name: 'ООО "Автобан"', balance: 45000.0, status: 'active', contractNumber: '64812', comment: 'VIP-клиент' },
-  { id: 5, name: 'ЖСК "Новые Черёмушки"', balance: -750.0, status: 'active', contractNumber: '66291', comment: 'Оплата в процессе' },
+  { id: 5, name: 'ЖСК "Новые Черёмушки"', balance: -750.0, status: 'active', contractNumber: '66291', comment: 'Оплата в процессе', problems: ['Неправильно заполнены реквизиты'] },
   { id: 6, name: 'ООО "Техносфера"', balance: 8900.0, status: 'archived', contractNumber: '63540', comment: 'Переезд в другой регион' },
   { id: 7, name: 'ЗАО "МедиаГрупп"', balance: 1200.0, status: 'active', contractNumber: '66415', comment: '' },
   { id: 8, name: 'ООО "РемСтрой"', balance: -18400.0, status: 'archived', contractNumber: '62987', comment: 'Расторгнут договор' },
-  { id: 9, name: 'ИП Сидорова Е.К.', balance: 300.0, status: 'active', contractNumber: '66589', comment: 'Новый клиент с мая' },
+  { id: 9, name: 'ИП Сидорова Е.К.', balance: 300.0, status: 'active', contractNumber: '66589', comment: 'Новый клиент с мая', problems: ['У компании нет ни одного подключения', 'У компании закрыт доступ в интернет'] },
   { id: 10, name: 'ГСК №12 "Восток"', balance: 5600.0, status: 'active', contractNumber: '65102', comment: '' },
   { id: 11, name: 'ООО "АльфаТрейд"', balance: -900.0, status: 'archived', contractNumber: '63211', comment: 'Ликвидирована' },
   { id: 12, name: 'ФГУП "Спецстрой"', balance: 22100.0, status: 'active', contractNumber: '64455', comment: 'Госконтракт' },
@@ -125,12 +131,13 @@ const CompanyList = () => {
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Комментарий</th>
+                  <th className="w-10 px-2 py-3"></th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-12 text-muted-foreground">
+                    <td colSpan={7} className="text-center py-12 text-muted-foreground">
                       Нет компаний
                     </td>
                   </tr>
@@ -181,6 +188,33 @@ const CompanyList = () => {
                     <td className="px-4 py-3 font-mono text-muted-foreground text-xs">{company.contractNumber}</td>
                     <td className="px-4 py-3 text-muted-foreground text-xs max-w-xs truncate">
                       {company.comment || <span className="opacity-30">—</span>}
+                    </td>
+                    <td className="px-2 py-3 text-center">
+                      {company.problems && company.problems.length > 0 && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors">
+                              <Icon name="TriangleAlert" size={13} className="text-amber-600" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent side="left" className="max-w-56 p-0 overflow-hidden">
+                            <div className="bg-amber-50 border-b border-amber-200 px-3 py-2">
+                              <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
+                                <Icon name="TriangleAlert" size={12} />
+                                Проблемы ({company.problems.length})
+                              </p>
+                            </div>
+                            <ul className="px-3 py-2 space-y-1">
+                              {company.problems.map((p, i) => (
+                                <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
+                                  <span className="text-amber-500 mt-0.5 shrink-0">•</span>
+                                  {p}
+                                </li>
+                              ))}
+                            </ul>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                     </td>
                   </tr>
                 ))}
