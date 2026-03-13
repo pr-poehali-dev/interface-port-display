@@ -109,7 +109,7 @@ const CompanyList = () => {
             title="Экспорт в CSV"
             onClick={() => exportCSV(filtered)}
           >
-            <Icon name="FileDown" size={16} />
+            <Icon name="FileSpreadsheet" size={16} />
           </Button>
         </div>
 
