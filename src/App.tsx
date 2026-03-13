@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import VlanList from "./pages/VlanList";
 import PhoneNumbers from "./pages/PhoneNumbers";
 import CompanyPhones from "./pages/CompanyPhones";
+import CompanyList from "./pages/CompanyList";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/vlans" element={<VlanList />} />
           <Route path="/phones" element={<PhoneNumbers />} />
           <Route path="/company-phones" element={<CompanyPhones />} />
+          <Route path="/companies" element={<CompanyList />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
