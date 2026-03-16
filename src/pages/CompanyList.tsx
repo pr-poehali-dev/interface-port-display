@@ -10,10 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
 
 interface Company {
@@ -150,13 +150,13 @@ const CompanyList = () => {
                     <td className="px-4 py-3 text-muted-foreground font-mono text-xs">{company.id}</td>
                     <td className="px-2 py-3 text-center">
                       {company.problems && company.problems.length > 0 && (
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                        <Popover>
+                          <PopoverTrigger asChild>
                             <button className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 hover:bg-amber-200 transition-colors">
                               <Icon name="TriangleAlert" size={13} className="text-amber-600" />
                             </button>
-                          </TooltipTrigger>
-                          <TooltipContent side="right" className="max-w-56 p-0 overflow-hidden">
+                          </PopoverTrigger>
+                          <PopoverContent side="right" className="max-w-56 p-0 overflow-hidden w-auto">
                             <div className="bg-amber-50 border-b border-amber-200 px-3 py-2">
                               <p className="text-xs font-semibold text-amber-800 flex items-center gap-1.5">
                                 <Icon name="TriangleAlert" size={12} />
@@ -171,8 +171,8 @@ const CompanyList = () => {
                                 </li>
                               ))}
                             </ul>
-                          </TooltipContent>
-                        </Tooltip>
+                          </PopoverContent>
+                        </Popover>
                       )}
                     </td>
                     <td className="px-4 py-3">
