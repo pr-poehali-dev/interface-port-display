@@ -213,8 +213,16 @@ const CompanyList = () => {
                       )}
                     </td>
                     <td className="px-4 py-3 font-mono text-muted-foreground text-xs">{company.contractNumber}</td>
-                    <td className="px-4 py-3 text-muted-foreground text-xs max-w-xs truncate">
-                      {company.comment || <span className="opacity-30">—</span>}
+                    <td className="px-4 py-3 text-muted-foreground text-xs max-w-xs">
+                      <div className="flex items-center gap-1.5 group">
+                        <span className="truncate">{company.comment || <span className="opacity-30">—</span>}</span>
+                        <button
+                          onClick={() => {}}
+                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center w-5 h-5 rounded hover:bg-slate-200 text-muted-foreground hover:text-foreground"
+                        >
+                          <Icon name="Pencil" size={11} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
