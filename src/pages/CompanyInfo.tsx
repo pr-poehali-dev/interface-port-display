@@ -25,6 +25,7 @@ interface NavTab {
   id: string;
   label: string;
   badge?: number;
+  warning?: string; // tooltip текст предупреждения
 }
 
 interface Company {
@@ -36,7 +37,7 @@ interface Company {
 }
 
 const NAV_TABS: NavTab[] = [
-  { id: 'requisites', label: 'Реквизиты' },
+  { id: 'requisites', label: 'Реквизиты', warning: 'Реквизиты не заполнены' },
   { id: 'sorm', label: 'СОРМ' },
   { id: 'agreement', label: '65446' },
   { id: 'archive', label: 'Архив' },
@@ -237,18 +238,33 @@ export default function CompanyInfo() {
                     : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
                 }`}
               >
-                {tab.label}
-                {tab.badge !== undefined && (
-                  <span
-                    className={`ml-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${
-                      activeTab === tab.id
-                        ? 'bg-[#b60209]/10 text-[#b60209]'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
-                  >
-                    {tab.badge}
-                  </span>
-                )}
+                <span className="relative inline-flex items-center gap-1">
+                  {tab.label}
+
+                  {/* Предупреждение: жёлтый треугольник с ! */}
+                  {tab.warning && (
+                    <span
+                      title={tab.warning}
+                      className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm bg-amber-400 text-white text-[9px] font-black leading-none cursor-help select-none"
+                      style={{ fontSize: 9 }}
+                    >
+                      !
+                    </span>
+                  )}
+
+                  {/* Счётчик: абсолютно в правом верхнем углу (супер-скрипт) */}
+                  {tab.badge !== undefined && (
+                    <span
+                      className={`absolute -top-2 -right-3 inline-flex items-center justify-center min-w-[16px] h-[16px] px-[3px] rounded-full text-[9px] font-bold leading-none ${
+                        activeTab === tab.id
+                          ? 'bg-[#b60209] text-white'
+                          : 'bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {tab.badge}
+                    </span>
+                  )}
+                </span>
               </button>
             ))}
           </nav>
