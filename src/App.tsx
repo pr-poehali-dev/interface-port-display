@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppLayout from "@/components/AppLayout";
 import Index from "./pages/Index";
 import VlanList from "./pages/VlanList";
 import PhoneNumbers from "./pages/PhoneNumbers";
@@ -20,16 +21,18 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/vlans" element={<VlanList />} />
-          <Route path="/phones" element={<PhoneNumbers />} />
-          <Route path="/company-phones" element={<CompanyPhones />} />
-          <Route path="/companies" element={<CompanyList />} />
-          <Route path="/companies/:id" element={<CompanyInfo />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/vlans" element={<VlanList />} />
+            <Route path="/phones" element={<PhoneNumbers />} />
+            <Route path="/company-phones" element={<CompanyPhones />} />
+            <Route path="/companies" element={<CompanyList />} />
+            <Route path="/companies/:id" element={<CompanyInfo />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
