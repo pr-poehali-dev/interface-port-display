@@ -22,33 +22,33 @@ export default function AppLayout({ children }: AppLayoutProps) {
       {/* Sidebar */}
       <aside
         className={`flex flex-col bg-white border-r border-border transition-all duration-300 shrink-0 ${
-          collapsed ? 'w-[68px]' : 'w-[220px]'
+          collapsed ? 'w-[72px]' : 'w-[280px]'
         }`}
       >
         {/* Logo header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-border min-h-[64px]">
+        <div className="flex items-center justify-between px-5 py-5 border-b border-border min-h-[72px]">
           {!collapsed && (
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#b60209] rounded-md flex items-center justify-center">
-                <Icon name="Zap" size={16} className="text-white" />
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className="flex-shrink-0 w-10 h-10 bg-[#b60209] rounded-lg flex items-center justify-center shadow-sm">
+                <Icon name="Zap" size={20} className="text-white" />
               </div>
               <div className="leading-tight overflow-hidden">
-                <div className="text-sm font-semibold text-foreground truncate">Биллинг</div>
-                <div className="text-[11px] text-muted-foreground truncate">ООО "Система Сервис"</div>
+                <div className="text-base font-bold text-foreground truncate">Биллинг</div>
+                <div className="text-xs text-muted-foreground truncate">ООО "Система Сервис"</div>
               </div>
             </div>
           )}
           {collapsed && (
-            <div className="mx-auto w-8 h-8 bg-[#b60209] rounded-md flex items-center justify-center">
-              <Icon name="Zap" size={16} className="text-white" />
+            <div className="mx-auto w-10 h-10 bg-[#b60209] rounded-lg flex items-center justify-center shadow-sm">
+              <Icon name="Zap" size={20} className="text-white" />
             </div>
           )}
           {!collapsed && (
             <button
               onClick={() => setCollapsed(true)}
-              className="ml-1 flex-shrink-0 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="ml-2 flex-shrink-0 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             >
-              <Icon name="PanelLeftClose" size={16} />
+              <Icon name="PanelLeftClose" size={18} />
             </button>
           )}
         </div>
@@ -57,14 +57,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
         {collapsed && (
           <button
             onClick={() => setCollapsed(false)}
-            className="mx-auto mt-3 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="mx-auto mt-4 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
-            <Icon name="PanelLeftOpen" size={16} />
+            <Icon name="PanelLeftOpen" size={18} />
           </button>
         )}
 
         {/* Nav items */}
-        <nav className="flex-1 px-2 py-4 space-y-0.5">
+        <nav className="flex-1 px-3 py-5 space-y-1">
           {NAV_ITEMS.map((item) => {
             const isActive = item.exact
               ? location.pathname === item.path
@@ -74,25 +74,22 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                className={`group flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-[#b60209]/10 text-[#b60209]'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    ? 'bg-[#b60209] text-white shadow-sm'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
                 }`}
                 title={collapsed ? item.label : undefined}
               >
                 <Icon
                   name={item.icon}
-                  size={18}
+                  size={20}
                   className={`flex-shrink-0 transition-colors ${
-                    isActive ? 'text-[#b60209]' : 'text-slate-400 group-hover:text-foreground'
+                    isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'
                   }`}
                 />
                 {!collapsed && (
                   <span className="truncate">{item.label}</span>
-                )}
-                {isActive && !collapsed && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#b60209]" />
                 )}
               </NavLink>
             );
@@ -101,8 +98,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
         {/* Footer version */}
         {!collapsed && (
-          <div className="px-4 py-3 border-t border-border">
-            <p className="text-[10px] text-muted-foreground/60 text-center">ver: 0.3.4.10</p>
+          <div className="px-5 py-4 border-t border-border">
+            <p className="text-[11px] text-muted-foreground/50 text-center">ver: 0.3.4.10</p>
           </div>
         )}
       </aside>
