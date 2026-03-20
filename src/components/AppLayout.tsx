@@ -3,10 +3,10 @@ import { NavLink, useLocation } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 
 const NAV_ITEMS = [
-  { path: '/companies', label: 'Компании', icon: 'Users' },
-  { path: '/export', label: 'Экспорт в 1с', icon: 'FileDown' },
-  { path: '/', label: 'Статистика', icon: 'BarChart2', exact: true },
-  { path: '/phones', label: 'Телефония', icon: 'Phone' },
+  { path: '/companies', label: 'Компании', icon: 'Users', desc: 'Список контрагентов' },
+  { path: '/export', label: 'Экспорт в 1С', icon: 'FileDown', desc: 'Выгрузка данных' },
+  { path: '/', label: 'Статистика', icon: 'BarChart2', desc: 'Аналитика и отчёты', exact: true },
+  { path: '/phones', label: 'Телефония', icon: 'Phone', desc: 'Номера и звонки' },
 ];
 
 interface AppLayoutProps {
@@ -18,53 +18,56 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-slate-50">
       {/* Sidebar */}
       <aside
-        className={`flex flex-col bg-white border-r border-border transition-all duration-300 shrink-0 ${
-          collapsed ? 'w-[72px]' : 'w-[280px]'
+        className={`relative flex flex-col bg-white border-r border-slate-200 transition-all duration-300 ease-in-out shrink-0 shadow-sm ${
+          collapsed ? 'w-[76px]' : 'w-[360px]'
         }`}
       >
         {/* Logo header */}
-        <div className="flex items-center justify-between px-5 py-5 border-b border-border min-h-[72px]">
-          {!collapsed && (
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="flex-shrink-0 w-10 h-10 bg-[#b60209] rounded-lg flex items-center justify-center shadow-sm">
+        <div className={`flex items-center border-b border-slate-100 min-h-[80px] ${collapsed ? 'justify-center px-3' : 'px-6'}`}>
+          {!collapsed ? (
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#b60209] to-[#8a0207] rounded-2xl flex items-center justify-center shadow-md">
+                  <Icon name="Zap" size={22} className="text-white" />
+                </div>
+                <div className="leading-snug">
+                  <div className="text-lg font-bold text-slate-800 tracking-tight">Биллинг</div>
+                  <div className="text-xs text-slate-400 font-medium">ООО "Система Сервис"</div>
+                </div>
+              </div>
+              <button
+                onClick={() => setCollapsed(true)}
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all"
+                title="Свернуть"
+              >
+                <Icon name="PanelLeftClose" size={18} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setCollapsed(false)}
+              className="flex flex-col items-center gap-1 group"
+              title="Развернуть"
+            >
+              <div className="w-11 h-11 bg-gradient-to-br from-[#b60209] to-[#8a0207] rounded-2xl flex items-center justify-center shadow-md">
                 <Icon name="Zap" size={20} className="text-white" />
               </div>
-              <div className="leading-tight overflow-hidden">
-                <div className="text-base font-bold text-foreground truncate">Биллинг</div>
-                <div className="text-xs text-muted-foreground truncate">ООО "Система Сервис"</div>
-              </div>
-            </div>
-          )}
-          {collapsed && (
-            <div className="mx-auto w-10 h-10 bg-[#b60209] rounded-lg flex items-center justify-center shadow-sm">
-              <Icon name="Zap" size={20} className="text-white" />
-            </div>
-          )}
-          {!collapsed && (
-            <button
-              onClick={() => setCollapsed(true)}
-              className="ml-2 flex-shrink-0 p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            >
-              <Icon name="PanelLeftClose" size={18} />
             </button>
           )}
         </div>
 
-        {/* Expand button when collapsed */}
-        {collapsed && (
-          <button
-            onClick={() => setCollapsed(false)}
-            className="mx-auto mt-4 p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-          >
-            <Icon name="PanelLeftOpen" size={18} />
-          </button>
+        {/* Nav section label */}
+        {!collapsed && (
+          <div className="px-6 pt-6 pb-2">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Навигация</span>
+          </div>
         )}
 
         {/* Nav items */}
-        <nav className="flex-1 px-3 py-5 space-y-1">
+        <nav className={`flex-1 space-y-1 ${collapsed ? 'px-2 py-4' : 'px-3 pb-4'}`}>
           {NAV_ITEMS.map((item) => {
             const isActive = item.exact
               ? location.pathname === item.path
@@ -74,34 +77,74 @@ export default function AppLayout({ children }: AppLayoutProps) {
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={`group flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150 ${
-                  isActive
-                    ? 'bg-[#b60209] text-white shadow-sm'
-                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
-                }`}
                 title={collapsed ? item.label : undefined}
+                className={`group flex items-center transition-all duration-150 ${
+                  collapsed
+                    ? 'justify-center w-full px-0 py-3 rounded-2xl'
+                    : 'gap-4 px-4 py-3.5 rounded-2xl mx-1'
+                } ${
+                  isActive
+                    ? 'bg-gradient-to-r from-[#b60209] to-[#d0020b] text-white shadow-md shadow-red-200'
+                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                }`}
               >
-                <Icon
-                  name={item.icon}
-                  size={20}
-                  className={`flex-shrink-0 transition-colors ${
-                    isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'
-                  }`}
-                />
+                {/* Icon container */}
+                <div className={`flex-shrink-0 flex items-center justify-center rounded-xl transition-all ${
+                  collapsed ? 'w-10 h-10' : 'w-9 h-9'
+                } ${
+                  isActive
+                    ? 'bg-white/20'
+                    : 'bg-slate-100 group-hover:bg-slate-200'
+                }`}>
+                  <Icon
+                    name={item.icon}
+                    size={18}
+                    className={isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'}
+                  />
+                </div>
+
                 {!collapsed && (
-                  <span className="truncate">{item.label}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-white' : 'text-slate-700'}`}>
+                      {item.label}
+                    </div>
+                    <div className={`text-xs mt-0.5 ${isActive ? 'text-white/70' : 'text-slate-400'}`}>
+                      {item.desc}
+                    </div>
+                  </div>
+                )}
+
+                {isActive && !collapsed && (
+                  <Icon name="ChevronRight" size={16} className="flex-shrink-0 text-white/60" />
                 )}
               </NavLink>
             );
           })}
         </nav>
 
-        {/* Footer version */}
-        {!collapsed && (
-          <div className="px-5 py-4 border-t border-border">
-            <p className="text-[11px] text-muted-foreground/50 text-center">ver: 0.3.4.10</p>
-          </div>
-        )}
+        {/* Footer */}
+        <div className={`border-t border-slate-100 ${collapsed ? 'px-2 py-4' : 'px-6 py-4'}`}>
+          {!collapsed ? (
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                <Icon name="User" size={16} className="text-slate-500" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-slate-700 truncate">Администратор</div>
+                <div className="text-xs text-slate-400 truncate">ver: 0.3.4.10</div>
+              </div>
+              <button className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
+                <Icon name="Settings" size={15} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+                <Icon name="User" size={16} className="text-slate-500" />
+              </div>
+            </div>
+          )}
+        </div>
       </aside>
 
       {/* Main content */}
