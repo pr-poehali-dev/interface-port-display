@@ -11,6 +11,7 @@ import PhoneNumbers from "./pages/PhoneNumbers";
 import CompanyPhones from "./pages/CompanyPhones";
 import CompanyList from "./pages/CompanyList";
 import CompanyInfo from "./pages/CompanyInfo";
+import Statistics from "./pages/Statistics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ const App = () => (
       <BrowserRouter>
         <AppLayout>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Statistics />} />
             <Route path="/vlans" element={<VlanList />} />
             <Route path="/phones" element={<PhoneNumbers />} />
             <Route path="/company-phones" element={<CompanyPhones />} />
