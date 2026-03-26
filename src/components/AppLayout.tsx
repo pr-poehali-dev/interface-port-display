@@ -78,44 +78,40 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 key={item.path}
                 to={item.path}
                 title={collapsed ? item.label : undefined}
-                className={`group flex items-center transition-all duration-150 ${
+                className={`group relative flex items-center transition-all duration-150 ${
                   collapsed
-                    ? 'justify-center w-full px-0 py-3 rounded-2xl'
-                    : 'gap-4 px-4 py-3.5 rounded-2xl mx-1'
+                    ? 'justify-center w-full px-0 py-3 rounded-xl'
+                    : 'gap-3 px-3 py-3 rounded-xl mx-1'
                 } ${
                   isActive
-                    ? 'bg-red-50 text-red-700 border border-red-100'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                    ? 'bg-[#b60209] text-white shadow-md shadow-red-200'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
                 }`}
               >
                 {/* Icon container */}
-                <div className={`flex-shrink-0 flex items-center justify-center rounded-xl transition-all ${
-                  collapsed ? 'w-10 h-10' : 'w-9 h-9'
+                <div className={`flex-shrink-0 flex items-center justify-center rounded-lg transition-all ${
+                  collapsed ? 'w-10 h-10' : 'w-8 h-8'
                 } ${
                   isActive
-                    ? 'bg-red-100'
+                    ? 'bg-white/20'
                     : 'bg-slate-100 group-hover:bg-slate-200'
                 }`}>
                   <Icon
                     name={item.icon}
-                    size={18}
-                    className={isActive ? 'text-red-600' : 'text-slate-500 group-hover:text-slate-700'}
+                    size={17}
+                    className={isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'}
                   />
                 </div>
 
                 {!collapsed && (
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-red-700' : 'text-slate-700'}`}>
+                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-white' : 'text-slate-700'}`}>
                       {item.label}
                     </div>
-                    <div className={`text-xs mt-0.5 ${isActive ? 'text-red-400' : 'text-slate-400'}`}>
+                    <div className={`text-xs mt-0.5 ${isActive ? 'text-white/60' : 'text-slate-400'}`}>
                       {item.desc}
                     </div>
                   </div>
-                )}
-
-                {isActive && !collapsed && (
-                  <Icon name="ChevronRight" size={16} className="flex-shrink-0 text-white/60" />
                 )}
               </NavLink>
             );
