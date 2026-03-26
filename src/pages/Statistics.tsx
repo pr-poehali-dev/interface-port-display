@@ -173,10 +173,27 @@ function YearSection({ data }: { data: YearData }) {
         </div>
         <div className="flex items-center gap-8">
           {open && (
-            <div className="hidden md:flex items-center gap-6 text-sm text-slate-500">
-              <span>УПД: <span className="font-semibold text-red-600">{fmtSigned(yearUpd)}</span></span>
-              <span>Зачислено: <span className="font-semibold text-emerald-600">+{fmt(yearCredited)}</span></span>
-              <span>Итого: <span className="font-semibold text-slate-700">{fmt(yearTotal)}</span></span>
+            <div className="hidden md:flex items-center gap-2">
+              <div className="flex flex-col items-center bg-red-50 border border-red-100 rounded-xl px-3 py-1.5 min-w-[100px]">
+                <span className="text-[10px] font-medium text-red-400 uppercase tracking-wide">УПД</span>
+                <span className="text-sm font-bold text-red-600">{fmtSigned(yearUpd)}</span>
+              </div>
+              <div className="flex flex-col items-center bg-emerald-50 border border-emerald-100 rounded-xl px-3 py-1.5 min-w-[100px]">
+                <span className="text-[10px] font-medium text-emerald-500 uppercase tracking-wide">Зачислено</span>
+                <span className="text-sm font-bold text-emerald-600">+{fmt(yearCredited)}</span>
+              </div>
+              <div className="flex flex-col items-center bg-blue-50 border border-blue-100 rounded-xl px-3 py-1.5 min-w-[90px]">
+                <span className="text-[10px] font-medium text-blue-400 uppercase tracking-wide">НДС</span>
+                <span className="text-sm font-bold text-blue-600">{fmt(yearNds)}</span>
+              </div>
+              <div className="flex flex-col items-center bg-amber-50 border border-amber-100 rounded-xl px-3 py-1.5 min-w-[100px]">
+                <span className="text-[10px] font-medium text-amber-500 uppercase tracking-wide">Отчисления</span>
+                <span className="text-sm font-bold text-amber-600">{fmt(yearDed)}</span>
+              </div>
+              <div className="flex flex-col items-center bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 min-w-[90px]">
+                <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">Итого</span>
+                <span className="text-sm font-bold text-slate-800">{fmt(yearTotal)}</span>
+              </div>
             </div>
           )}
           <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 group-hover:bg-slate-200 transition-all ${open ? 'rotate-180' : ''}`}>
