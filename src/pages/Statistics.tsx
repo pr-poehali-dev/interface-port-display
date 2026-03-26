@@ -179,26 +179,41 @@ function YearSection({ data }: { data: YearData }) {
         </div>
 
         {/* Year summary — always visible */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3">
-            <div className="text-[11px] font-medium text-red-400 uppercase tracking-wide mb-1">УПД</div>
-            <div className="text-base font-bold text-red-600 leading-tight">{fmtSigned(yearUpd)}</div>
+        <div className="flex flex-wrap items-center rounded-xl border border-slate-100 bg-slate-50 divide-x divide-slate-200 overflow-hidden">
+          <div className="flex items-center gap-3 px-5 py-3 flex-1 min-w-[160px]">
+            <div className="w-2 h-8 rounded-full bg-red-400 shrink-0" />
+            <div>
+              <div className="text-[11px] text-slate-400 font-medium">УПД</div>
+              <div className="text-sm font-bold text-red-600">{fmtSigned(yearUpd)}</div>
+            </div>
           </div>
-          <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3">
-            <div className="text-[11px] font-medium text-emerald-500 uppercase tracking-wide mb-1">Зачислено</div>
-            <div className="text-base font-bold text-emerald-600 leading-tight">+{fmt(yearCredited)}</div>
+          <div className="flex items-center gap-3 px-5 py-3 flex-1 min-w-[160px]">
+            <div className="w-2 h-8 rounded-full bg-emerald-400 shrink-0" />
+            <div>
+              <div className="text-[11px] text-slate-400 font-medium">Зачислено</div>
+              <div className="text-sm font-bold text-emerald-600">+{fmt(yearCredited)}</div>
+            </div>
           </div>
-          <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
-            <div className="text-[11px] font-medium text-blue-400 uppercase tracking-wide mb-1">НДС</div>
-            <div className="text-base font-bold text-blue-600 leading-tight">{fmt(yearNds)}</div>
+          <div className="flex items-center gap-3 px-5 py-3 flex-1 min-w-[140px]">
+            <div className="w-2 h-8 rounded-full bg-blue-400 shrink-0" />
+            <div>
+              <div className="text-[11px] text-slate-400 font-medium">НДС</div>
+              <div className="text-sm font-bold text-blue-600">{fmt(yearNds)}</div>
+            </div>
           </div>
-          <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-3">
-            <div className="text-[11px] font-medium text-amber-500 uppercase tracking-wide mb-1">Отчисления</div>
-            <div className="text-base font-bold text-amber-600 leading-tight">{fmt(yearDed)}</div>
+          <div className="flex items-center gap-3 px-5 py-3 flex-1 min-w-[160px]">
+            <div className="w-2 h-8 rounded-full bg-amber-400 shrink-0" />
+            <div>
+              <div className="text-[11px] text-slate-400 font-medium">Отчисления</div>
+              <div className="text-sm font-bold text-amber-600">{fmt(yearDed)}</div>
+            </div>
           </div>
-          <div className="rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 md:col-span-1 col-span-2">
-            <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1">Итого</div>
-            <div className="text-base font-bold text-slate-800 leading-tight">{fmt(yearTotal)}</div>
+          <div className="flex items-center gap-3 px-5 py-3 flex-1 min-w-[140px] bg-white">
+            <div className="w-2 h-8 rounded-full bg-slate-400 shrink-0" />
+            <div>
+              <div className="text-[11px] text-slate-400 font-medium">Итого</div>
+              <div className="text-sm font-bold text-slate-800">{fmt(yearTotal)}</div>
+            </div>
           </div>
         </div>
       </div>
