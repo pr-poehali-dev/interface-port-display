@@ -158,60 +158,50 @@ function YearSection({ data }: { data: YearData }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       {/* Year header */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-6 py-5 hover:bg-slate-50 transition-colors group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#b60209] to-[#8a0207] flex items-center justify-center shadow-sm">
-            <Icon name="CalendarDays" size={18} className="text-white" />
-          </div>
-          <div>
-            <div className="text-xl font-bold text-slate-800">{data.year} год</div>
-            <div className="text-xs text-slate-400 mt-0.5">{data.months.length} месяц(ев)</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-8">
-          {open && (
-            <div className="hidden md:flex items-center gap-2">
-              <div className="flex flex-col items-center bg-red-50 border border-red-100 rounded-xl px-3 py-1.5 min-w-[100px]">
-                <span className="text-[10px] font-medium text-red-400 uppercase tracking-wide">УПД</span>
-                <span className="text-sm font-bold text-red-600">{fmtSigned(yearUpd)}</span>
-              </div>
-              <div className="flex flex-col items-center bg-emerald-50 border border-emerald-100 rounded-xl px-3 py-1.5 min-w-[100px]">
-                <span className="text-[10px] font-medium text-emerald-500 uppercase tracking-wide">Зачислено</span>
-                <span className="text-sm font-bold text-emerald-600">+{fmt(yearCredited)}</span>
-              </div>
-              <div className="flex flex-col items-center bg-blue-50 border border-blue-100 rounded-xl px-3 py-1.5 min-w-[90px]">
-                <span className="text-[10px] font-medium text-blue-400 uppercase tracking-wide">НДС</span>
-                <span className="text-sm font-bold text-blue-600">{fmt(yearNds)}</span>
-              </div>
-              <div className="flex flex-col items-center bg-amber-50 border border-amber-100 rounded-xl px-3 py-1.5 min-w-[100px]">
-                <span className="text-[10px] font-medium text-amber-500 uppercase tracking-wide">Отчисления</span>
-                <span className="text-sm font-bold text-amber-600">{fmt(yearDed)}</span>
-              </div>
-              <div className="flex flex-col items-center bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 min-w-[90px]">
-                <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wide">Итого</span>
-                <span className="text-sm font-bold text-slate-800">{fmt(yearTotal)}</span>
-              </div>
+      <div className="px-6 pt-5 pb-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#b60209] to-[#8a0207] flex items-center justify-center shadow-sm">
+              <Icon name="CalendarDays" size={18} className="text-white" />
             </div>
-          )}
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 group-hover:bg-slate-200 transition-all ${open ? 'rotate-180' : ''}`}>
-            <Icon name="ChevronDown" size={16} className="text-slate-500 transition-transform duration-300" />
+            <div>
+              <div className="text-xl font-bold text-slate-800">{data.year} год</div>
+              <div className="text-xs text-slate-400 mt-0.5">{data.months.length} месяц(ев)</div>
+            </div>
+          </div>
+          <button
+            onClick={() => setOpen(o => !o)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${open ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-[#b60209]/10 text-[#b60209] hover:bg-[#b60209]/20'}`}
+          >
+            <Icon name="ChevronDown" size={14} className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+            {open ? 'Свернуть' : 'Развернуть'}
+          </button>
+        </div>
+
+        {/* Year summary — always visible */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3">
+            <div className="text-[11px] font-medium text-red-400 uppercase tracking-wide mb-1">УПД</div>
+            <div className="text-base font-bold text-red-600 leading-tight">{fmtSigned(yearUpd)}</div>
+          </div>
+          <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3">
+            <div className="text-[11px] font-medium text-emerald-500 uppercase tracking-wide mb-1">Зачислено</div>
+            <div className="text-base font-bold text-emerald-600 leading-tight">+{fmt(yearCredited)}</div>
+          </div>
+          <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3">
+            <div className="text-[11px] font-medium text-blue-400 uppercase tracking-wide mb-1">НДС</div>
+            <div className="text-base font-bold text-blue-600 leading-tight">{fmt(yearNds)}</div>
+          </div>
+          <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-3">
+            <div className="text-[11px] font-medium text-amber-500 uppercase tracking-wide mb-1">Отчисления</div>
+            <div className="text-base font-bold text-amber-600 leading-tight">{fmt(yearDed)}</div>
+          </div>
+          <div className="rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 md:col-span-1 col-span-2">
+            <div className="text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1">Итого</div>
+            <div className="text-base font-bold text-slate-800 leading-tight">{fmt(yearTotal)}</div>
           </div>
         </div>
-      </button>
-
-      {/* Year summary when collapsed */}
-      {!open && (
-        <div className="px-6 pb-4 flex flex-wrap gap-4">
-          <div className="text-sm text-slate-500">УПД: <span className="font-semibold text-red-600">{fmtSigned(yearUpd)}</span></div>
-          <div className="text-sm text-slate-500">Зачислено: <span className="font-semibold text-emerald-600">+{fmt(yearCredited)}</span></div>
-          <div className="text-sm text-slate-500">НДС: <span className="font-semibold text-slate-700">{fmt(yearNds)}</span></div>
-          <div className="text-sm text-slate-500">Отчисления: <span className="font-semibold text-slate-700">{fmt(yearDed)}</span></div>
-          <div className="text-sm text-slate-500">Итого: <span className="font-semibold text-slate-800">{fmt(yearTotal)}</span></div>
-        </div>
-      )}
+      </div>
 
       {/* Months */}
       {open && (
