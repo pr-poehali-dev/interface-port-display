@@ -109,14 +109,19 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 </div>
 
                 {!collapsed && (
-                  <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>
-                      {item.label}
+                  <>
+                    <div className="flex-1 min-w-0">
+                      <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>
+                        {item.label}
+                      </div>
+                      <div className={`text-xs mt-0.5 ${isActive ? 'text-slate-500' : 'text-slate-400'}`}>
+                        {item.desc}
+                      </div>
                     </div>
-                    <div className={`text-xs mt-0.5 ${isActive ? 'text-slate-500' : 'text-slate-400'}`}>
-                      {item.desc}
-                    </div>
-                  </div>
+                    {isActive && (
+                      <Icon name="ChevronRight" size={16} className="flex-shrink-0 text-slate-400" />
+                    )}
+                  </>
                 )}
               </NavLink>
             );
