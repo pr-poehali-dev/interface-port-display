@@ -84,7 +84,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     : 'gap-4 px-4 py-3.5 rounded-2xl mx-1'
                 } ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#b60209] to-[#d0020b] text-white shadow-md shadow-red-200'
+                    ? 'bg-red-50 text-red-700 border border-red-100'
                     : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                 }`}
               >
@@ -93,22 +93,22 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   collapsed ? 'w-10 h-10' : 'w-9 h-9'
                 } ${
                   isActive
-                    ? 'bg-white/20'
+                    ? 'bg-red-100'
                     : 'bg-slate-100 group-hover:bg-slate-200'
                 }`}>
                   <Icon
                     name={item.icon}
                     size={18}
-                    className={isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'}
+                    className={isActive ? 'text-red-600' : 'text-slate-500 group-hover:text-slate-700'}
                   />
                 </div>
 
                 {!collapsed && (
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-white' : 'text-slate-700'}`}>
+                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-red-700' : 'text-slate-700'}`}>
                       {item.label}
                     </div>
-                    <div className={`text-xs mt-0.5 ${isActive ? 'text-white/70' : 'text-slate-400'}`}>
+                    <div className={`text-xs mt-0.5 ${isActive ? 'text-red-400' : 'text-slate-400'}`}>
                       {item.desc}
                     </div>
                   </div>
