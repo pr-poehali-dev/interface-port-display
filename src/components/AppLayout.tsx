@@ -84,31 +84,36 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     : 'gap-3 px-3 py-3 rounded-xl mx-1'
                 } ${
                   isActive
-                    ? 'bg-[#b60209] text-white shadow-md shadow-red-200'
+                    ? 'bg-slate-100 text-slate-900'
                     : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
                 }`}
               >
+                {/* Active indicator */}
+                {isActive && !collapsed && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-[#b60209]" />
+                )}
+
                 {/* Icon container */}
                 <div className={`flex-shrink-0 flex items-center justify-center rounded-lg transition-all ${
                   collapsed ? 'w-10 h-10' : 'w-8 h-8'
                 } ${
                   isActive
-                    ? 'bg-white/20'
+                    ? 'bg-white'
                     : 'bg-slate-100 group-hover:bg-slate-200'
                 }`}>
                   <Icon
                     name={item.icon}
                     size={17}
-                    className={isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-700'}
+                    className={isActive ? 'text-[#b60209]' : 'text-slate-500 group-hover:text-slate-700'}
                   />
                 </div>
 
                 {!collapsed && (
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-white' : 'text-slate-700'}`}>
+                    <div className={`text-sm font-semibold leading-tight ${isActive ? 'text-slate-900' : 'text-slate-700'}`}>
                       {item.label}
                     </div>
-                    <div className={`text-xs mt-0.5 ${isActive ? 'text-white/60' : 'text-slate-400'}`}>
+                    <div className={`text-xs mt-0.5 ${isActive ? 'text-slate-500' : 'text-slate-400'}`}>
                       {item.desc}
                     </div>
                   </div>
