@@ -440,9 +440,9 @@ export default function AllFinance() {
                     >
                       {/* Operation */}
                       <td className="px-5 py-3.5">
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-3">
                           {/* Type dot */}
-                          <div className="mt-0.5 shrink-0">
+                          <div className="shrink-0">
                             {isCancelled ? (
                               <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center">
                                 <Icon name="Ban" size={15} className="text-rose-400" />
