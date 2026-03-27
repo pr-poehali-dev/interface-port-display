@@ -310,7 +310,7 @@ export default function AllFinance() {
               Баланс
             </div>
             <div
-              className={`text-2xl font-bold tabular-nums ${
+              className={`text-lg font-mono font-semibold tabular-nums whitespace-nowrap ${
                 balance < 0
                   ? 'text-red-600'
                   : balance > 0
@@ -319,7 +319,7 @@ export default function AllFinance() {
               }`}
             >
               {formatMoney(balance, false)}
-              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
+              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
 
@@ -327,14 +327,14 @@ export default function AllFinance() {
             <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
               Зачислено
             </div>
-            <div className="text-2xl font-bold tabular-nums text-emerald-600">
+            <div className="text-lg font-mono font-semibold tabular-nums text-emerald-600 whitespace-nowrap">
               {formatMoney(
                 filtered
                   .filter((op) => op.type === 'payment' && !op.isCancelled)
                   .reduce((s, op) => s + op.amount, 0),
                 false
               )}
-              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
+              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
 
@@ -342,7 +342,7 @@ export default function AllFinance() {
             <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
               Списано
             </div>
-            <div className="text-2xl font-bold tabular-nums text-red-600">
+            <div className="text-lg font-mono font-semibold tabular-nums text-red-600 whitespace-nowrap">
               {formatMoney(
                 Math.abs(
                   filtered
@@ -351,7 +351,7 @@ export default function AllFinance() {
                 ),
                 false
               )}
-              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
+              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
         </div>
@@ -374,7 +374,7 @@ export default function AllFinance() {
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded bg-rose-50 border border-rose-200 inline-block" />
-              Сторнировано
+              Отменено
             </span>
           </div>
 
@@ -478,7 +478,7 @@ export default function AllFinance() {
 
                               {isCancelled && (
                                 <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">
-                                  сторно
+                                  отменено
                                 </Badge>
                               )}
 
@@ -503,7 +503,7 @@ export default function AllFinance() {
                       {/* Amount */}
                       <td className="px-5 py-3.5 text-right">
                         <span
-                          className={`font-bold text-base tabular-nums ${
+                          className={`font-mono font-medium text-sm tabular-nums whitespace-nowrap ${
                             isCancelled
                               ? 'line-through text-muted-foreground/60'
                               : op.amount < 0
@@ -564,13 +564,13 @@ export default function AllFinance() {
 
                       {/* Actions */}
                       <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1 justify-end">
                           {/* Comment edit */}
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => openEditComment(op)}
-                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-slate-100"
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"
                             title="Комментарий"
                           >
                             <Icon name="MessageSquarePen" size={14} />
@@ -586,12 +586,12 @@ export default function AllFinance() {
                                   className="h-7 px-2 text-xs text-rose-500 hover:text-rose-700 hover:bg-rose-50 gap-1"
                                 >
                                   <Icon name="RotateCcw" size={13} />
-                                  Сторно
+                                  Отменить
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle>Сторнировать платёж?</AlertDialogTitle>
+                                  <AlertDialogTitle>Отменить платёж?</AlertDialogTitle>
                                   <AlertDialogDescription>
                                     Зачисление{' '}
                                     <strong>{formatMoney(op.amount)} ₽</strong> по договору
