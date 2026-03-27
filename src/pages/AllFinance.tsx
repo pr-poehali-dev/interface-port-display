@@ -470,11 +470,7 @@ export default function AllFinance() {
                                 {isCharge ? 'Списание' : 'Зачисление'}
                               </span>
 
-                              {isCharge && op.serviceName && !isCancelled && (
-                                <span className="text-xs text-muted-foreground bg-slate-100 px-2 py-0.5 rounded-full">
-                                  {op.serviceName}
-                                </span>
-                              )}
+
 
                               {isCancelled && (
                                 <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">
@@ -488,6 +484,14 @@ export default function AllFinance() {
                                 </Badge>
                               )}
                             </div>
+
+                            {/* Service name */}
+                            {isCharge && op.serviceName && (
+                              <div className="mt-0.5 text-xs text-muted-foreground">
+                                <span className="text-muted-foreground/50 mr-1">услуга:</span>
+                                {op.serviceName}
+                              </div>
+                            )}
 
                             {/* Comment */}
                             {op.comment && (
