@@ -373,13 +373,13 @@ export default function AllFinance() {
               Зачисление
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-md bg-amber-100 flex items-center justify-center">
                 <Icon name="Scale" size={12} className="text-amber-500" />
               </div>
               Сальдо
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-md bg-rose-100 flex items-center justify-center">
                 <Icon name="Ban" size={12} className="text-rose-400" />
               </div>
               Отменено
