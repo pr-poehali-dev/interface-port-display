@@ -361,19 +361,27 @@ export default function AllFinance() {
           {/* Legend */}
           <div className="px-5 py-3 border-b border-border/30 bg-slate-50/60 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded bg-orange-100 border border-orange-200 inline-block" />
+              <div className="w-5 h-5 rounded-md bg-orange-100 flex items-center justify-center">
+                <Icon name="ArrowUpRight" size={12} className="text-orange-500" />
+              </div>
               Списание
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded bg-emerald-50 border border-emerald-200 inline-block" />
+              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
+                <Icon name="ArrowDownLeft" size={12} className="text-emerald-600" />
+              </div>
               Зачисление
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded bg-amber-50 border border-amber-200 inline-block" />
+              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
+                <Icon name="Scale" size={12} className="text-amber-500" />
+              </div>
               Сальдо
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded bg-rose-50 border border-rose-200 inline-block" />
+              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
+                <Icon name="Ban" size={12} className="text-rose-400" />
+              </div>
               Отменено
             </span>
           </div>
