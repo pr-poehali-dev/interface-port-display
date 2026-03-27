@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -19,6 +20,7 @@ import Icon from '@/components/ui/icon';
 interface Company {
   id: number;
   name: string;
+  inn: string;
   balance: number;
   status: 'active' | 'archived';
   contractNumber: string;
@@ -27,18 +29,18 @@ interface Company {
 }
 
 const mockCompanies: Company[] = [
-  { id: 1, name: 'ООО "Система Сервис"', balance: 12500.0, status: 'active', contractNumber: '65727', comment: 'Основной клиент, приоритетная поддержка' },
-  { id: 2, name: 'ГСК №34 "Крылатский"', balance: -3200.5, status: 'active', contractNumber: '65963', comment: 'Задолженность за февраль', problems: ['Неправильно заполнены реквизиты', 'У компании закрыт доступ в интернет'] },
-  { id: 3, name: 'ИП Горбунов А.В.', balance: 0, status: 'active', contractNumber: '66104', comment: '', problems: ['У компании нет ни одного подключения'] },
-  { id: 4, name: 'ООО "Автобан"', balance: 45000.0, status: 'active', contractNumber: '64812', comment: 'VIP-клиент' },
-  { id: 5, name: 'ЖСК "Новые Черёмушки"', balance: -750.0, status: 'active', contractNumber: '66291', comment: 'Оплата в процессе', problems: ['Неправильно заполнены реквизиты'] },
-  { id: 6, name: 'ООО "Техносфера"', balance: 8900.0, status: 'archived', contractNumber: '63540', comment: 'Переезд в другой регион' },
-  { id: 7, name: 'ЗАО "МедиаГрупп"', balance: 1200.0, status: 'active', contractNumber: '66415', comment: '' },
-  { id: 8, name: 'ООО "РемСтрой"', balance: -18400.0, status: 'archived', contractNumber: '62987', comment: 'Расторгнут договор' },
-  { id: 9, name: 'ИП Сидорова Е.К.', balance: 300.0, status: 'active', contractNumber: '66589', comment: 'Новый клиент с мая', problems: ['У компании нет ни одного подключения', 'У компании закрыт доступ в интернет'] },
-  { id: 10, name: 'ГСК №12 "Восток"', balance: 5600.0, status: 'active', contractNumber: '65102', comment: '' },
-  { id: 11, name: 'ООО "АльфаТрейд"', balance: -900.0, status: 'archived', contractNumber: '63211', comment: 'Ликвидирована' },
-  { id: 12, name: 'ФГУП "Спецстрой"', balance: 22100.0, status: 'active', contractNumber: '64455', comment: 'Госконтракт' },
+  { id: 1, name: 'ООО "Система Сервис"', inn: '7701234567', balance: 12500.0, status: 'active', contractNumber: '65727', comment: 'Основной клиент, приоритетная поддержка' },
+  { id: 2, name: 'ГСК №34 "Крылатский"', inn: '7709876543', balance: -3200.5, status: 'active', contractNumber: '65963', comment: 'Задолженность за февраль', problems: ['Неправильно заполнены реквизиты', 'У компании закрыт доступ в интернет'] },
+  { id: 3, name: 'ИП Горбунов А.В.', inn: '772345678901', balance: 0, status: 'active', contractNumber: '66104', comment: '', problems: ['У компании нет ни одного подключения'] },
+  { id: 4, name: 'ООО "Автобан"', inn: '7703456789', balance: 45000.0, status: 'active', contractNumber: '64812', comment: 'VIP-клиент' },
+  { id: 5, name: 'ЖСК "Новые Черёмушки"', inn: '7705678901', balance: -750.0, status: 'active', contractNumber: '66291', comment: 'Оплата в процессе', problems: ['Неправильно заполнены реквизиты'] },
+  { id: 6, name: 'ООО "Техносфера"', inn: '7706789012', balance: 8900.0, status: 'archived', contractNumber: '63540', comment: 'Переезд в другой регион' },
+  { id: 7, name: 'ЗАО "МедиаГрупп"', inn: '7707890123', balance: 1200.0, status: 'active', contractNumber: '66415', comment: '' },
+  { id: 8, name: 'ООО "РемСтрой"', inn: '7708901234', balance: -18400.0, status: 'archived', contractNumber: '62987', comment: 'Расторгнут договор' },
+  { id: 9, name: 'ИП Сидорова Е.К.', inn: '773456789012', balance: 300.0, status: 'active', contractNumber: '66589', comment: 'Новый клиент с мая', problems: ['У компании нет ни одного подключения', 'У компании закрыт доступ в интернет'] },
+  { id: 10, name: 'ГСК №12 "Восток"', inn: '7710123456', balance: 5600.0, status: 'active', contractNumber: '65102', comment: '' },
+  { id: 11, name: 'ООО "АльфаТрейд"', inn: '7711234567', balance: -900.0, status: 'archived', contractNumber: '63211', comment: 'Ликвидирована' },
+  { id: 12, name: 'ФГУП "Спецстрой"', inn: '7712345678', balance: 22100.0, status: 'active', contractNumber: '64455', comment: 'Госконтракт' },
 ];
 
 type FilterStatus = 'all' | 'active' | 'archived';
@@ -51,10 +53,11 @@ const formatBalance = (value: number) => {
 };
 
 const exportCSV = (companies: Company[]) => {
-  const header = ['ID', 'Название', 'Баланс', 'Статус', 'Номер договора', 'Комментарий'];
+  const header = ['ID', 'Название', 'ИНН', 'Баланс', 'Статус', 'Номер договора', 'Комментарий'];
   const rows = companies.map((c) => [
     c.id,
     `"${c.name.replace(/"/g, '""')}"`,
+    c.inn,
     c.balance.toFixed(2),
     c.status === 'active' ? 'Активная' : 'В архиве',
     c.contractNumber,
@@ -70,13 +73,40 @@ const exportCSV = (companies: Company[]) => {
   URL.revokeObjectURL(url);
 };
 
+const Highlight = ({ text, query }: { text: string; query: string }) => {
+  if (!query.trim()) return <>{text}</>;
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark key={i} className="bg-amber-200 text-amber-900 rounded px-0.5 not-italic font-semibold">
+            {part}
+          </mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+};
+
 const CompanyList = () => {
   const [filter, setFilter] = useState<FilterStatus>('active');
+  const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
-    if (filter === 'all') return mockCompanies;
-    return mockCompanies.filter((c) => (filter === 'active' ? c.status === 'active' : c.status === 'archived'));
-  }, [filter]);
+    let list = mockCompanies;
+    if (filter !== 'all') {
+      list = list.filter((c) => (filter === 'active' ? c.status === 'active' : c.status === 'archived'));
+    }
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter((c) => c.name.toLowerCase().includes(q) || c.inn.includes(q));
+    }
+    return list;
+  }, [filter, search]);
 
   const activeCount = mockCompanies.filter((c) => c.status === 'active').length;
   const archivedCount = mockCompanies.filter((c) => c.status === 'archived').length;
@@ -96,7 +126,7 @@ const CompanyList = () => {
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <Select value={filter} onValueChange={(v) => setFilter(v as FilterStatus)}>
             <SelectTrigger className="w-44 bg-white border-border/60 shadow-sm">
               <SelectValue />
@@ -117,6 +147,35 @@ const CompanyList = () => {
           >
             <Icon name="FileSpreadsheet" size={16} />
           </Button>
+
+          {/* Search */}
+          <div className="relative flex-1 min-w-[220px] max-w-sm">
+            <Icon
+              name="Search"
+              size={15}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+            />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Поиск по названию или ИНН..."
+              className="pl-8 pr-8 bg-white border-border/60 shadow-sm h-9 text-sm"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Icon name="X" size={13} />
+              </button>
+            )}
+          </div>
+
+          {search && (
+            <span className="text-xs text-muted-foreground">
+              Найдено: {filtered.length}
+            </span>
+          )}
         </div>
 
         {/* Table */}
@@ -128,6 +187,7 @@ const CompanyList = () => {
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-12">#</th>
                   <th className="w-8 px-2 py-3"></th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Название</th>
+                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-36">ИНН</th>
                   <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">Баланс</th>
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
@@ -137,8 +197,15 @@ const CompanyList = () => {
               <tbody>
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-12 text-muted-foreground">
-                      Нет компаний
+                    <td colSpan={8} className="text-center py-12 text-muted-foreground">
+                      {search ? (
+                        <div className="flex flex-col items-center gap-2">
+                          <Icon name="SearchX" size={32} className="text-slate-300" />
+                          <span>Ничего не найдено по запросу «{search}»</span>
+                        </div>
+                      ) : (
+                        'Нет компаний'
+                      )}
                     </td>
                   </tr>
                 )}
@@ -180,13 +247,16 @@ const CompanyList = () => {
                         to={`/companies/${company.id}`}
                         className="font-medium text-foreground hover:text-[#b60209] transition-colors flex items-center gap-1.5 group"
                       >
-                        {company.name}
+                        <Highlight text={company.name} query={search} />
                         <Icon
                           name="ArrowUpRight"
                           size={13}
                           className="opacity-0 group-hover:opacity-100 text-[#b60209] transition-opacity shrink-0"
                         />
                       </Link>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-muted-foreground text-xs">
+                      <Highlight text={company.inn} query={search} />
                     </td>
                     <td className="px-4 py-3 text-right font-mono font-semibold tabular-nums">
                       <span
