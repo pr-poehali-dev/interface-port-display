@@ -421,7 +421,7 @@ export default function AllFinance() {
 
                   let rowCls = '';
                   if (isCancelled) rowCls = 'bg-emerald-50/50';
-                  else if (isSaldo) rowCls = 'bg-amber-100/60';
+                  else if (isSaldo) rowCls = 'bg-emerald-50/50';
                   else if (isCharge) rowCls = 'bg-orange-50/60';
                   else rowCls = 'bg-emerald-50/50';
 
