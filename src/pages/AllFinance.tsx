@@ -581,7 +581,7 @@ export default function AllFinance() {
                             className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"
                             title="Комментарий"
                           >
-                            <Icon name="MessageSquarePen" size={14} />
+                            <Icon name="MessageSquare" size={14} />
                           </Button>
 
                           {/* Storno */}
