@@ -469,7 +469,7 @@ export default function AllFinance() {
                             </div>
 
                             {/* Title row */}
-                            <div className="flex items-center gap-2 flex-wrap">
+                            <div className="flex items-center gap-2">
                               <span
                                 className={`font-semibold text-sm ${
                                   isCancelled ? 'line-through text-muted-foreground' : 'text-foreground'
