@@ -515,7 +515,7 @@ export default function AllFinance() {
                       {/* Amount */}
                       <td className="px-5 py-3.5 text-right">
                         <span
-                          className={`font-mono font-medium text-sm tabular-nums whitespace-nowrap ${
+                          className={`font-mono font-semibold text-sm tabular-nums whitespace-nowrap ${
                             isCancelled
                               ? 'line-through text-muted-foreground/60'
                               : op.amount < 0
