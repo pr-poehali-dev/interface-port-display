@@ -565,11 +565,9 @@ export default function AllFinance() {
                             <span className="text-xs text-muted-foreground">Система</span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0">
-                              <Icon name="User" size={12} className="text-slate-600" />
-                            </div>
-                            <span className="text-xs text-foreground font-mono">{op.initiator}</span>
+                          <div className="flex items-center gap-1 text-xs text-foreground">
+                            <Icon name="User" size={12} className="text-muted-foreground shrink-0" />
+                            <span className="font-mono">{op.initiator}</span>
                           </div>
                         )}
                       </td>
