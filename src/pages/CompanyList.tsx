@@ -187,7 +187,6 @@ const CompanyList = () => {
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-12">#</th>
                   <th className="w-8 px-2 py-3"></th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Название</th>
-                  <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-36">ИНН</th>
                   <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">Баланс</th>
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
@@ -197,7 +196,7 @@ const CompanyList = () => {
               <tbody>
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-muted-foreground">
+                    <td colSpan={7} className="text-center py-12 text-muted-foreground">
                       {search ? (
                         <div className="flex flex-col items-center gap-2">
                           <Icon name="SearchX" size={32} className="text-slate-300" />
@@ -254,9 +253,9 @@ const CompanyList = () => {
                           className="opacity-0 group-hover:opacity-100 text-[#b60209] transition-opacity shrink-0"
                         />
                       </Link>
-                    </td>
-                    <td className="px-4 py-3 font-mono text-muted-foreground text-xs">
-                      <Highlight text={company.inn} query={search} />
+                      <div className="font-mono text-xs text-muted-foreground mt-0.5">
+                        ИНН: <Highlight text={company.inn} query={search} />
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-right font-mono font-semibold tabular-nums">
                       <span
