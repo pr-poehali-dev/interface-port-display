@@ -53,13 +53,23 @@ interface FinanceOperation {
   isSaldo?: boolean;
 }
 
+interface MockCompany {
+  name: string;
+  status: 'active' | 'archived';
+}
+
+const MOCK_COMPANY: MockCompany = {
+  name: 'ООО "ПроАвто+"',
+  status: 'active',
+};
+
 const CONTRACTS: Contract[] = [
   { id: 1, number: '2000-25', status: 'active' },
   { id: 2, number: '1998-24', status: 'archived' },
   { id: 3, number: '2045-26', status: 'active' },
 ];
 
-const OPERATIONS: FinanceOperation[] = [
+const INITIAL_OPERATIONS: FinanceOperation[] = [
   {
     id: 1,
     contractId: 1,
@@ -156,28 +166,23 @@ const OPERATIONS: FinanceOperation[] = [
   },
 ];
 
-function formatAmount(amount: number): string {
-  const abs = Math.abs(amount);
-  const formatted = new Intl.NumberFormat('ru-RU', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(abs);
-  return (amount >= 0 ? '+' : '−') + formatted;
-}
-
-function formatBalance(amount: number): string {
-  const formatted = new Intl.NumberFormat('ru-RU', {
+function formatMoney(amount: number, showSign = true): string {
+  const abs = new Intl.NumberFormat('ru-RU', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(Math.abs(amount));
-  return (amount < 0 ? '−' : '+') + formatted;
+  if (!showSign) return abs;
+  return (amount >= 0 ? '+' : '−') + abs;
 }
 
 export default function AllFinance() {
+  const [company] = useState<MockCompany>(MOCK_COMPANY);
   const [selectedContract, setSelectedContract] = useState<string>('all');
+  const [operations, setOperations] = useState<FinanceOperation[]>(INITIAL_OPERATIONS);
   const [editCommentOp, setEditCommentOp] = useState<FinanceOperation | null>(null);
   const [commentDraft, setCommentDraft] = useState('');
-  const [operations, setOperations] = useState<FinanceOperation[]>(OPERATIONS);
+
+  const isArchived = company.status === 'archived';
 
   const filtered =
     selectedContract === 'all'
@@ -188,15 +193,10 @@ export default function AllFinance() {
     .filter((op) => !op.isCancelled)
     .reduce((sum, op) => sum + op.amount, 0);
 
-  const handleSaveComment = () => {
-    if (!editCommentOp) return;
-    setOperations((prev) =>
-      prev.map((op) =>
-        op.id === editCommentOp.id ? { ...op, comment: commentDraft } : op
-      )
-    );
-    setEditCommentOp(null);
-  };
+  const selectedContractObj =
+    selectedContract !== 'all'
+      ? CONTRACTS.find((c) => c.id === Number(selectedContract))
+      : null;
 
   const handleStorno = (opId: number) => {
     setOperations((prev) =>
@@ -209,210 +209,291 @@ export default function AllFinance() {
     setCommentDraft(op.comment ?? '');
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/30 to-rose-50/20">
-      <div className="max-w-[1400px] mx-auto px-6 py-6">
+  const handleSaveComment = () => {
+    if (!editCommentOp) return;
+    setOperations((prev) =>
+      prev.map((op) =>
+        op.id === editCommentOp.id ? { ...op, comment: commentDraft || undefined } : op
+      )
+    );
+    setEditCommentOp(null);
+  };
 
-        {/* Header */}
-        <div className="bg-white rounded-xl border border-border/50 shadow-sm mb-4">
-          <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-4">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/20 to-rose-50/10">
+      {/* Company header */}
+      <div className="bg-white border-b border-border/50 shadow-sm">
+        <div className="max-w-[1400px] mx-auto px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div
+                className={`shrink-0 w-1 h-9 rounded-full ${
+                  isArchived ? 'bg-slate-300' : 'bg-emerald-400'
+                }`}
+              />
               <div>
-                <h1 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <Icon name="CreditCard" size={20} className="text-[#b60209]" />
-                  Финансовые операции
+                <h1 className="text-xl font-bold text-foreground leading-tight">
+                  {company.name}
                 </h1>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="text-sm text-muted-foreground">Баланс:</span>
-                  <span
-                    className={`text-sm font-bold tabular-nums ${
-                      balance < 0
-                        ? 'text-red-600'
-                        : balance > 0
-                        ? 'text-emerald-600'
-                        : 'text-muted-foreground'
-                    }`}
-                  >
-                    {formatBalance(balance)}
-                  </span>
+                <div className="mt-1">
+                  {isArchived ? (
+                    <Badge
+                      variant="secondary"
+                      className="text-[11px] px-2 py-0 h-5 bg-slate-100 text-slate-500 border border-slate-200 font-medium"
+                    >
+                      <Icon name="Archive" size={10} className="mr-1" />
+                      В архиве
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant="secondary"
+                      className="text-[11px] px-2 py-0 h-5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium"
+                    >
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5" />
+                      Активна
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Contract filter */}
-            <div className="flex items-center gap-2">
-              <Icon name="Filter" size={15} className="text-muted-foreground shrink-0" />
-              <Select value={selectedContract} onValueChange={setSelectedContract}>
-                <SelectTrigger className="w-56 h-9 text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">
-                    <span className="flex items-center gap-2">
-                      <Icon name="Layers" size={14} className="text-muted-foreground" />
-                      Все договора
-                    </span>
-                  </SelectItem>
-                  {CONTRACTS.map((c) => (
-                    <SelectItem key={c.id} value={String(c.id)}>
-                      <span className="flex items-center gap-2">
-                        <Icon
-                          name={c.status === 'active' ? 'FileText' : 'Archive'}
-                          size={14}
-                          className={
-                            c.status === 'active' ? 'text-emerald-500' : 'text-slate-400'
-                          }
-                        />
-                        <span>№{c.number}</span>
-                        {c.status === 'archived' && (
-                          <span className="text-[11px] text-slate-400 ml-0.5">(архив)</span>
-                        )}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <div className="max-w-[1400px] mx-auto px-6 py-6 space-y-5">
+
+        {/* Page title + controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-foreground">Финансовые операции</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {selectedContractObj
+                ? `Договор №${selectedContractObj.number}`
+                : `Все договора · ${filtered.length} операций`}
+            </p>
+          </div>
+
+          <Select value={selectedContract} onValueChange={setSelectedContract}>
+            <SelectTrigger className="w-60 bg-white border-border/60 shadow-sm h-9 text-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                <span className="flex items-center gap-2">
+                  <Icon name="Layers" size={14} className="text-muted-foreground" />
+                  Все договора
+                </span>
+              </SelectItem>
+              {CONTRACTS.map((c) => (
+                <SelectItem key={c.id} value={String(c.id)}>
+                  <span className="flex items-center gap-2">
+                    {c.status === 'active' ? (
+                      <Icon name="FileText" size={14} className="text-emerald-500" />
+                    ) : (
+                      <Icon name="Archive" size={14} className="text-slate-400" />
+                    )}
+                    №{c.number}
+                    {c.status === 'archived' && (
+                      <span className="text-[11px] text-slate-400">архив</span>
+                    )}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Balance card */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Баланс
+            </div>
+            <div
+              className={`text-2xl font-bold tabular-nums ${
+                balance < 0
+                  ? 'text-red-600'
+                  : balance > 0
+                  ? 'text-emerald-600'
+                  : 'text-muted-foreground'
+              }`}
+            >
+              {formatMoney(balance, false)}
+              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Зачислено
+            </div>
+            <div className="text-2xl font-bold tabular-nums text-emerald-600">
+              {formatMoney(
+                filtered
+                  .filter((op) => op.type === 'payment' && !op.isCancelled)
+                  .reduce((s, op) => s + op.amount, 0),
+                false
+              )}
+              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
+              Списано
+            </div>
+            <div className="text-2xl font-bold tabular-nums text-red-600">
+              {formatMoney(
+                Math.abs(
+                  filtered
+                    .filter((op) => op.type === 'charge')
+                    .reduce((s, op) => s + op.amount, 0)
+                ),
+                false
+              )}
+              <span className="text-base font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
         </div>
 
-        {/* Table */}
+        {/* Operations table */}
         <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
+          {/* Legend */}
+          <div className="px-5 py-3 border-b border-border/30 bg-slate-50/60 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded bg-orange-100 border border-orange-200 inline-block" />
+              Списание
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded bg-emerald-50 border border-emerald-200 inline-block" />
+              Зачисление
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded bg-amber-50 border border-amber-200 inline-block" />
+              Сальдо
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded bg-rose-50 border border-rose-200 inline-block" />
+              Сторнировано
+            </span>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/40 bg-slate-50/70">
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground">
+                <tr className="border-b border-border/40">
+                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
                     Операция
                   </th>
-                  <th className="text-right px-5 py-3 font-semibold text-muted-foreground w-36">
-                    Сумма, с НДС
+                  <th className="text-right px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-36">
+                    Сумма
                   </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground w-44">
-                    Период
+                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-40">
+                    Период услуги
                   </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground w-44">
-                    Дата операции
+                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-44">
+                    Дата
                   </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground w-36">
-                    Пользователь
+                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-32">
+                    Инициатор
                   </th>
-                  <th className="w-28 px-5 py-3"></th>
+                  <th className="w-36 px-5 py-3" />
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-border/30">
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-16 text-muted-foreground">
-                      <div className="flex flex-col items-center gap-2">
-                        <Icon name="Inbox" size={36} className="text-slate-300" />
+                    <td colSpan={6} className="text-center py-20 text-muted-foreground">
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                          <Icon name="ReceiptText" size={22} className="text-slate-400" />
+                        </div>
                         <span className="text-sm">Операций не найдено</span>
                       </div>
                     </td>
                   </tr>
                 )}
 
-                {filtered.map((op, idx) => {
+                {filtered.map((op) => {
                   const isCharge = op.type === 'charge';
-                  const isPayment = op.type === 'payment';
                   const isCancelled = !!op.isCancelled;
                   const isSaldo = !!op.isSaldo;
 
-                  let rowBg = idx % 2 === 1 ? 'bg-slate-50/40' : 'bg-white';
-                  if (isCancelled) rowBg = 'bg-red-50/60';
-                  if (isSaldo) rowBg = 'bg-amber-50/60';
+                  let rowCls = '';
+                  if (isCancelled) rowCls = 'bg-rose-50/50';
+                  else if (isSaldo) rowCls = 'bg-amber-50/40';
+                  else if (isCharge) rowCls = 'bg-orange-50/30';
+                  else rowCls = 'bg-emerald-50/20';
 
                   return (
                     <tr
                       key={op.id}
-                      className={`border-b border-border/30 last:border-0 transition-colors hover:bg-slate-50/70 group ${rowBg} ${isCancelled ? 'opacity-70' : ''}`}
+                      className={`group transition-colors hover:brightness-95 ${rowCls} ${isCancelled ? 'opacity-60' : ''}`}
                     >
-                      {/* Operation cell */}
-                      <td className="px-5 py-3">
+                      {/* Operation */}
+                      <td className="px-5 py-3.5">
                         <div className="flex items-start gap-3">
-                          {/* Icon */}
-                          <div
-                            className={`mt-0.5 shrink-0 w-7 h-7 rounded-lg flex items-center justify-center ${
-                              isCancelled
-                                ? 'bg-red-100'
-                                : isCharge
-                                ? 'bg-orange-100'
-                                : isSaldo
-                                ? 'bg-amber-100'
-                                : 'bg-emerald-50'
-                            }`}
-                          >
-                            <Icon
-                              name={
-                                isCancelled
-                                  ? 'Ban'
-                                  : isCharge
-                                  ? 'Minus'
-                                  : isSaldo
-                                  ? 'ArrowLeftRight'
-                                  : 'Plus'
-                              }
-                              size={14}
-                              className={
-                                isCancelled
-                                  ? 'text-red-400'
-                                  : isCharge
-                                  ? 'text-orange-500'
-                                  : isSaldo
-                                  ? 'text-amber-500'
-                                  : 'text-emerald-600'
-                              }
-                            />
+                          {/* Type dot */}
+                          <div className="mt-0.5 shrink-0">
+                            {isCancelled ? (
+                              <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center">
+                                <Icon name="Ban" size={15} className="text-rose-400" />
+                              </div>
+                            ) : isSaldo ? (
+                              <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                                <Icon name="Scale" size={15} className="text-amber-500" />
+                              </div>
+                            ) : isCharge ? (
+                              <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                                <Icon name="ArrowUpRight" size={15} className="text-orange-500" />
+                              </div>
+                            ) : (
+                              <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                                <Icon name="ArrowDownLeft" size={15} className="text-emerald-600" />
+                              </div>
+                            )}
                           </div>
 
                           <div className="min-w-0">
-                            {/* Contract number */}
-                            <div className="text-xs text-muted-foreground mb-0.5">
+                            {/* Contract */}
+                            <div className="text-[11px] text-muted-foreground/70 mb-0.5 font-mono">
                               Договор №{op.contractNumber}
                             </div>
 
-                            {/* Type + badges */}
+                            {/* Title row */}
                             <div className="flex items-center gap-2 flex-wrap">
                               <span
-                                className={`font-medium ${
-                                  isCancelled
-                                    ? 'text-muted-foreground line-through'
-                                    : 'text-foreground'
+                                className={`font-semibold text-sm ${
+                                  isCancelled ? 'line-through text-muted-foreground' : 'text-foreground'
                                 }`}
                               >
-                                {isCharge ? 'Списание' : 'Зачисление средств'}
+                                {isCharge ? 'Списание' : 'Зачисление'}
                               </span>
 
+                              {isCharge && op.serviceName && !isCancelled && (
+                                <span className="text-xs text-muted-foreground bg-slate-100 px-2 py-0.5 rounded-full">
+                                  {op.serviceName}
+                                </span>
+                              )}
+
                               {isCancelled && (
-                                <Badge
-                                  variant="secondary"
-                                  className="text-[10px] px-1.5 py-0 h-4 bg-red-100 text-red-500 border border-red-200 font-medium"
-                                >
-                                  отменено
+                                <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">
+                                  сторно
                                 </Badge>
                               )}
 
                               {isSaldo && !isCancelled && (
-                                <Badge
-                                  variant="secondary"
-                                  className="text-[10px] px-1.5 py-0 h-4 bg-amber-100 text-amber-600 border border-amber-200 font-medium"
-                                >
-                                  Сальдо
+                                <Badge className="text-[10px] px-1.5 h-4 bg-amber-100 text-amber-700 border border-amber-200 font-medium hover:bg-amber-100">
+                                  сальдо
                                 </Badge>
                               )}
                             </div>
 
-                            {/* Service name (charges only) */}
-                            {isCharge && op.serviceName && (
-                              <div className="text-xs text-muted-foreground mt-0.5">
-                                услуга: {op.serviceName}
-                              </div>
-                            )}
-
                             {/* Comment */}
                             {op.comment && (
-                              <div className="text-xs text-slate-400 mt-0.5 italic">
-                                {op.comment}
+                              <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground/80">
+                                <Icon name="MessageSquare" size={11} />
+                                <span className="italic">{op.comment}</span>
                               </div>
                             )}
                           </div>
@@ -420,79 +501,91 @@ export default function AllFinance() {
                       </td>
 
                       {/* Amount */}
-                      <td className="px-5 py-3 text-right tabular-nums">
+                      <td className="px-5 py-3.5 text-right">
                         <span
-                          className={`font-semibold text-sm ${
+                          className={`font-bold text-base tabular-nums ${
                             isCancelled
-                              ? 'text-muted-foreground line-through'
+                              ? 'line-through text-muted-foreground/60'
                               : op.amount < 0
-                              ? 'text-red-500'
+                              ? 'text-red-600'
                               : 'text-emerald-600'
                           }`}
                         >
-                          {formatAmount(op.amount)}
+                          {formatMoney(op.amount)}
                         </span>
                       </td>
 
                       {/* Period */}
-                      <td className="px-5 py-3">
+                      <td className="px-5 py-3.5">
                         {op.periodFrom && op.periodTo ? (
-                          <div className="text-xs text-muted-foreground leading-relaxed">
-                            <div>с {op.periodFrom}</div>
-                            <div>по {op.periodTo}</div>
+                          <div className="text-xs text-muted-foreground space-y-0.5">
+                            <div className="flex items-center gap-1">
+                              <span className="text-muted-foreground/50">с</span>
+                              {op.periodFrom}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <span className="text-muted-foreground/50">по</span>
+                              {op.periodTo}
+                            </div>
                           </div>
                         ) : (
-                          <span className="text-muted-foreground/40 text-xs">—</span>
+                          <span className="text-muted-foreground/30 text-xs">—</span>
                         )}
                       </td>
 
                       {/* Date */}
-                      <td className="px-5 py-3">
-                        <span className="text-sm text-foreground tabular-nums">
-                          {op.date}
-                        </span>
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm text-foreground tabular-nums">
+                          {op.date.split(' ')[0]}
+                        </div>
+                        <div className="text-xs text-muted-foreground tabular-nums">
+                          {op.date.split(' ')[1]}
+                        </div>
                       </td>
 
                       {/* Initiator */}
-                      <td className="px-5 py-3">
+                      <td className="px-5 py-3.5">
                         {op.initiator === 'Система' ? (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
-                            <Icon name="Bot" size={13} className="text-slate-400" />
-                            Система
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                              <Icon name="Bot" size={12} className="text-slate-500" />
+                            </div>
+                            <span className="text-xs text-muted-foreground">Система</span>
+                          </div>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-600 font-mono">
-                            <Icon name="User" size={13} className="text-slate-400" />
-                            {op.initiator}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center shrink-0 text-[10px] font-bold text-slate-600">
+                              {op.initiator[0].toUpperCase()}
+                            </div>
+                            <span className="text-xs text-foreground font-mono">{op.initiator}</span>
+                          </div>
                         )}
                       </td>
 
                       {/* Actions */}
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-1.5 justify-end">
-                          {/* Edit comment */}
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                          {/* Comment edit */}
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => openEditComment(op)}
-                            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity"
-                            title="Изменить комментарий"
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-slate-100"
+                            title="Комментарий"
                           >
-                            <Icon name="MessageSquarePen" size={13} className="mr-1" />
-                            Комментарий
+                            <Icon name="MessageSquarePen" size={14} />
                           </Button>
 
-                          {/* Storno button — only for non-cancelled payments */}
-                          {isPayment && !isCancelled && (
+                          {/* Storno */}
+                          {op.type === 'payment' && !isCancelled && (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-7 px-2 text-xs text-rose-500 hover:text-rose-700 hover:bg-rose-50"
+                                  className="h-7 px-2 text-xs text-rose-500 hover:text-rose-700 hover:bg-rose-50 gap-1"
                                 >
-                                  <Icon name="RotateCcw" size={13} className="mr-1" />
+                                  <Icon name="RotateCcw" size={13} />
                                   Сторно
                                 </Button>
                               </AlertDialogTrigger>
@@ -500,10 +593,9 @@ export default function AllFinance() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Сторнировать платёж?</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Зачисление на сумму{' '}
-                                    <strong>{formatAmount(op.amount)}</strong> по договору
-                                    №{op.contractNumber} будет отменено. Это действие
-                                    нельзя отменить.
+                                    Зачисление{' '}
+                                    <strong>{formatMoney(op.amount)} ₽</strong> по договору
+                                    №{op.contractNumber} от {op.date} будет отменено.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
@@ -526,71 +618,45 @@ export default function AllFinance() {
               </tbody>
             </table>
           </div>
-
-          {/* Footer stats */}
-          {filtered.length > 0 && (
-            <div className="border-t border-border/30 px-5 py-3 bg-slate-50/50 flex items-center justify-between gap-4 text-xs text-muted-foreground">
-              <span>Операций: {filtered.length}</span>
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm bg-orange-200 inline-block"></span>
-                  Списания
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm bg-emerald-200 inline-block"></span>
-                  Зачисления
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm bg-red-200 inline-block"></span>
-                  Сторнированные
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm bg-amber-200 inline-block"></span>
-                  Сальдо
-                </span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Edit comment modal */}
+      {/* Edit comment dialog */}
       <Dialog open={!!editCommentOp} onOpenChange={(open) => !open && setEditCommentOp(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Icon name="MessageSquarePen" size={18} className="text-[#b60209]" />
-              Комментарий к операции
-            </DialogTitle>
+            <DialogTitle>Комментарий к операции</DialogTitle>
           </DialogHeader>
           {editCommentOp && (
             <div className="space-y-3">
-              <div className="text-sm text-muted-foreground bg-slate-50 rounded-lg px-3 py-2 border border-border/40">
-                <div className="text-xs mb-0.5">
+              <div className="rounded-lg border border-border/50 bg-slate-50 px-3 py-2.5 text-sm">
+                <div className="text-xs text-muted-foreground mb-0.5 font-mono">
                   Договор №{editCommentOp.contractNumber}
                 </div>
-                <div className="font-medium text-foreground">
-                  {editCommentOp.type === 'charge' ? 'Списание' : 'Зачисление средств'}
+                <div className="font-medium">
+                  {editCommentOp.type === 'charge' ? 'Списание' : 'Зачисление'}
                   {editCommentOp.type === 'charge' && editCommentOp.serviceName
-                    ? ` (${editCommentOp.serviceName})`
+                    ? ` · ${editCommentOp.serviceName}`
                     : ''}
                 </div>
-                <div className="text-xs mt-0.5">{editCommentOp.date}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{editCommentOp.date}</div>
               </div>
               <Textarea
                 value={commentDraft}
                 onChange={(e) => setCommentDraft(e.target.value)}
                 placeholder="Введите комментарий..."
-                className="resize-none"
                 rows={3}
+                className="resize-none"
+                autoFocus
               />
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditCommentOp(null)}>
+            <Button variant="outline" size="sm" onClick={() => setEditCommentOp(null)}>
               Отмена
             </Button>
             <Button
+              size="sm"
               onClick={handleSaveComment}
               className="bg-[#b60209] hover:bg-[#9a0208] text-white"
             >
