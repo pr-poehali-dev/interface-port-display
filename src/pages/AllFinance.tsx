@@ -559,7 +559,7 @@ export default function AllFinance() {
                       <td className="px-5 py-3.5">
                         {op.initiator === 'Система' ? (
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Icon name="Bot" size={12} className="shrink-0" />
+                            <Icon name="Cpu" size={12} className="shrink-0" />
                             <span>Система</span>
                           </div>
                         ) : (
