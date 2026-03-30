@@ -219,53 +219,87 @@ export default function AllFinance() {
     setEditCommentOp(null);
   };
 
+  const [activeTab, setActiveTab] = useState('finance');
+
+  const TABS = [
+    { id: 'main', label: 'Главная' },
+    { id: 'requisites', label: 'Реквизиты' },
+    { id: 'sorm', label: 'СОРМ' },
+    { id: 'archive', label: 'Архив' },
+    { id: 'vlan', label: 'Vlan', count: 2 },
+    { id: 'phones', label: 'Телефоны', count: 2 },
+    { id: 'finance', label: 'Финансы' },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/20 to-rose-50/10">
-      {/* Company header */}
+    <div className="min-h-screen bg-[#f4f5f7]">
+      {/* Company header card */}
       <div className="bg-white border-b border-border/50 shadow-sm">
-        <div className="max-w-[1400px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`shrink-0 w-1 h-9 rounded-full ${
-                  isArchived ? 'bg-slate-300' : 'bg-emerald-400'
-                }`}
-              />
-              <div>
+        <div className="max-w-[1400px] mx-auto px-6 pt-5 pb-0">
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
                 <h1 className="text-xl font-bold text-foreground leading-tight">
                   {company.name}
                 </h1>
-                <div className="mt-1">
-                  {isArchived ? (
-                    <Badge
-                      variant="secondary"
-                      className="text-[11px] px-2 py-0 h-5 bg-slate-100 text-slate-500 border border-slate-200 font-medium"
-                    >
-                      <Icon name="Archive" size={10} className="mr-1" />
-                      В архиве
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant="secondary"
-                      className="text-[11px] px-2 py-0 h-5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium"
-                    >
-                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5" />
-                      Активна
-                    </Badge>
-                  )}
-                </div>
+                <button className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Icon name="ExternalLink" size={14} />
+                </button>
+              </div>
+              <div className="flex items-center gap-3">
+                {isArchived ? (
+                  <Badge className="text-[11px] px-2 py-0.5 h-5 bg-slate-100 text-slate-500 border border-slate-200 font-medium hover:bg-slate-100">
+                    <Icon name="Archive" size={10} className="mr-1" />
+                    В архиве
+                  </Badge>
+                ) : (
+                  <Badge className="text-[11px] px-2 py-0.5 h-5 bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium hover:bg-emerald-50">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5" />
+                    Активна
+                  </Badge>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
+                <Icon name="UserRound" size={13} className="shrink-0" />
+                <span>Менеджеры не назначены</span>
               </div>
             </div>
+            <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 shrink-0 mt-1">
+              <Icon name="Archive" size={13} />
+              В архив
+            </Button>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex items-end gap-0">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative px-4 py-2.5 text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? 'border-[#b60209] text-[#b60209]'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+                }`}
+              >
+                {tab.label}
+                {tab.count !== undefined && (
+                  <span className={`ml-1 text-[10px] font-bold align-super ${activeTab === tab.id ? 'text-[#b60209]' : 'text-muted-foreground'}`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="max-w-[1400px] mx-auto px-6 py-6 space-y-5">
 
-        {/* Page title + controls */}
+        {/* Finance tab header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Финансовые операции</h2>
+            <h2 className="text-xl font-bold text-foreground">Финансовые операции</h2>
             <p className="text-sm text-muted-foreground mt-0.5">
               {selectedContractObj
                 ? `Договор №${selectedContractObj.number}`
