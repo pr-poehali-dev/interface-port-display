@@ -524,10 +524,10 @@ export default function AllFinance() {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-7 px-2 text-xs text-muted-foreground hover:text-rose-600 hover:bg-rose-50 gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="h-7 px-2 text-xs text-rose-500 hover:text-rose-700 hover:bg-rose-50 gap-1"
                                 >
                                   <Icon name="RotateCcw" size={12} />
-                                  сторно
+                                  Отменить
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
