@@ -296,21 +296,19 @@ export default function AllFinance() {
 
       {/* Finance block */}
       <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
-      <div className="px-6 py-5 space-y-5">
 
-        {/* Finance tab header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 border-b border-border/40">
           <div>
-            <h2 className="text-xl font-bold text-foreground">Финансовые операции</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
               {selectedContractObj
                 ? `Договор №${selectedContractObj.number}`
                 : `Все договора · ${filtered.length} операций`}
             </p>
           </div>
-
           <Select value={selectedContract} onValueChange={setSelectedContract}>
-            <SelectTrigger className="w-60 bg-white border-border/60 shadow-sm h-9 text-sm">
+            <SelectTrigger className="w-52 bg-[#f4f5f7] border-border/60 h-8 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -339,84 +337,56 @@ export default function AllFinance() {
           </Select>
         </div>
 
-        {/* Balance card */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Баланс
-            </div>
-            <div
-              className={`text-lg font-mono font-semibold tabular-nums whitespace-nowrap ${
-                balance < 0
-                  ? 'text-red-600'
-                  : balance > 0
-                  ? 'text-emerald-600'
-                  : 'text-muted-foreground'
-              }`}
-            >
+        {/* Stats strip */}
+        <div className="grid grid-cols-3 divide-x divide-border/40 border-b border-border/40 bg-[#f4f5f7]">
+          <div className="px-6 py-4">
+            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Баланс</div>
+            <div className={`text-lg font-mono font-semibold tabular-nums ${balance < 0 ? 'text-red-600' : balance > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
               {formatMoney(balance, false)}
               <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
-
-          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Зачислено
-            </div>
-            <div className="text-lg font-mono font-semibold tabular-nums text-emerald-600 whitespace-nowrap">
-              {formatMoney(
-                filtered
-                  .filter((op) => op.type === 'payment' && !op.isCancelled)
-                  .reduce((s, op) => s + op.amount, 0),
-                false
-              )}
+          <div className="px-6 py-4">
+            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Зачислено</div>
+            <div className="text-lg font-mono font-semibold tabular-nums text-emerald-600">
+              {formatMoney(filtered.filter((op) => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)}
               <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
-
-          <div className="bg-white rounded-xl border border-border/50 shadow-sm px-5 py-4">
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
-              Списано
-            </div>
-            <div className="text-lg font-mono font-semibold tabular-nums text-red-600 whitespace-nowrap">
-              {formatMoney(
-                Math.abs(
-                  filtered
-                    .filter((op) => op.type === 'charge')
-                    .reduce((s, op) => s + op.amount, 0)
-                ),
-                false
-              )}
+          <div className="px-6 py-4">
+            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Списано</div>
+            <div className="text-lg font-mono font-semibold tabular-nums text-red-600">
+              {formatMoney(Math.abs(filtered.filter((op) => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)}
               <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
             </div>
           </div>
         </div>
 
         {/* Operations table */}
-        <div className="border border-border/50 rounded-xl overflow-hidden">
+        <div>
           {/* Legend */}
-          <div className="px-5 py-3 border-b border-border/30 bg-slate-50/60 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
+          <div className="px-5 py-2.5 border-b border-border/30 bg-slate-50/80 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-orange-100 flex items-center justify-center">
-                <Icon name="ArrowUpRight" size={12} className="text-orange-500" />
+              <div className="w-4 h-4 rounded bg-orange-100 flex items-center justify-center">
+                <Icon name="ArrowUpRight" size={10} className="text-orange-500" />
               </div>
               Списание
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-emerald-100 flex items-center justify-center">
-                <Icon name="ArrowDownLeft" size={12} className="text-emerald-600" />
+              <div className="w-4 h-4 rounded bg-emerald-100 flex items-center justify-center">
+                <Icon name="ArrowDownLeft" size={10} className="text-emerald-600" />
               </div>
               Зачисление
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-amber-100 flex items-center justify-center">
-                <Icon name="Scale" size={12} className="text-amber-500" />
+              <div className="w-4 h-4 rounded bg-amber-100 flex items-center justify-center">
+                <Icon name="Scale" size={10} className="text-amber-500" />
               </div>
               Сальдо
             </span>
             <span className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-rose-100 flex items-center justify-center">
-                <Icon name="Ban" size={12} className="text-rose-400" />
+              <div className="w-4 h-4 rounded bg-rose-100 flex items-center justify-center">
+                <Icon name="Ban" size={10} className="text-rose-400" />
               </div>
               Отменено
             </span>
@@ -663,7 +633,6 @@ export default function AllFinance() {
             </table>
           </div>
         </div>
-      </div>
       </div>
 
       {/* Edit comment dialog */}
