@@ -297,17 +297,17 @@ export default function AllFinance() {
       {/* Finance block */}
       <div className="rounded-xl overflow-hidden shadow-sm border border-border/50">
 
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-5">
-          <div className="flex items-center justify-between gap-4 mb-5">
+        {/* Header */}
+        <div className="bg-white px-6 pt-5 pb-4 border-b border-border/50">
+          <div className="flex items-center justify-between gap-4 mb-4">
             <div>
-              <h2 className="text-white font-semibold text-base tracking-tight">Финансовые операции</h2>
-              <p className="text-slate-400 text-xs mt-0.5">
+              <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {selectedContractObj ? `Договор №${selectedContractObj.number}` : `${filtered.length} операций · все договора`}
               </p>
             </div>
             <Select value={selectedContract} onValueChange={setSelectedContract}>
-              <SelectTrigger className="w-48 h-8 text-xs bg-white/10 border-white/20 text-white hover:bg-white/20 transition-colors">
+              <SelectTrigger className="w-48 h-8 text-xs border-border/60 bg-slate-50">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -332,44 +332,47 @@ export default function AllFinance() {
             </Select>
           </div>
 
-          {/* Stats cards */}
+          {/* Stats */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/10">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-md bg-white/15 flex items-center justify-center">
-                  <Icon name="Wallet" size={13} className="text-white/80" />
+            {/* Balance */}
+            <div className="rounded-lg border border-border/60 bg-slate-50 px-4 py-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Баланс</span>
+                <div className="w-6 h-6 rounded-md bg-slate-200 flex items-center justify-center">
+                  <Icon name="Wallet" size={12} className="text-slate-500" />
                 </div>
-                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Баланс</span>
               </div>
-              <div className={`text-xl font-mono font-bold tabular-nums leading-none ${balance < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+              <div className={`text-xl font-mono font-bold tabular-nums leading-none ${balance < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                 {balance < 0 ? '−' : '+'}{formatMoney(Math.abs(balance), false)}
-                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+                <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
               </div>
             </div>
 
-            <div className="bg-emerald-500/20 backdrop-blur-sm rounded-lg px-4 py-3 border border-emerald-400/20">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-md bg-emerald-400/20 flex items-center justify-center">
-                  <Icon name="ArrowDownLeft" size={13} className="text-emerald-400" />
+            {/* Credited */}
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-medium text-emerald-700/70 uppercase tracking-wide">Зачислено</span>
+                <div className="w-6 h-6 rounded-md bg-emerald-100 flex items-center justify-center">
+                  <Icon name="ArrowDownLeft" size={12} className="text-emerald-600" />
                 </div>
-                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Зачислено</span>
               </div>
-              <div className="text-xl font-mono font-bold tabular-nums leading-none text-emerald-400">
+              <div className="text-xl font-mono font-bold tabular-nums leading-none text-emerald-700">
                 +{formatMoney(filtered.filter(op => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)}
-                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+                <span className="text-sm font-normal text-emerald-600/50 ml-1">₽</span>
               </div>
             </div>
 
-            <div className="bg-orange-500/20 backdrop-blur-sm rounded-lg px-4 py-3 border border-orange-400/20">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-md bg-orange-400/20 flex items-center justify-center">
-                  <Icon name="ArrowUpRight" size={13} className="text-orange-400" />
+            {/* Charged */}
+            <div className="rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-medium text-orange-700/70 uppercase tracking-wide">Списано</span>
+                <div className="w-6 h-6 rounded-md bg-orange-100 flex items-center justify-center">
+                  <Icon name="ArrowUpRight" size={12} className="text-orange-500" />
                 </div>
-                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Списано</span>
               </div>
-              <div className="text-xl font-mono font-bold tabular-nums leading-none text-orange-400">
+              <div className="text-xl font-mono font-bold tabular-nums leading-none text-orange-700">
                 −{formatMoney(Math.abs(filtered.filter(op => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)}
-                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+                <span className="text-sm font-normal text-orange-600/50 ml-1">₽</span>
               </div>
             </div>
           </div>
