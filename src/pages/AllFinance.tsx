@@ -232,10 +232,10 @@ export default function AllFinance() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f4f5f7]">
+    <div className="min-h-screen bg-[#f4f5f7] p-6 space-y-4">
       {/* Company header card */}
-      <div className="bg-white border-b border-border/50 shadow-sm">
-        <div className="max-w-[1400px] mx-auto px-6 pt-5 pb-0">
+      <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
+        <div className="px-6 pt-5 pb-0">
           <div className="flex items-start justify-between gap-4 mb-3">
             <div>
               <div className="flex items-center gap-2 mb-1.5">
@@ -294,7 +294,9 @@ export default function AllFinance() {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 py-6 space-y-5">
+      {/* Finance block */}
+      <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
+      <div className="px-6 py-5 space-y-5">
 
         {/* Finance tab header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -391,7 +393,7 @@ export default function AllFinance() {
         </div>
 
         {/* Operations table */}
-        <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
+        <div className="border border-border/50 rounded-xl overflow-hidden">
           {/* Legend */}
           <div className="px-5 py-3 border-b border-border/30 bg-slate-50/60 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
             <span className="flex items-center gap-1.5">
@@ -661,6 +663,7 @@ export default function AllFinance() {
             </table>
           </div>
         </div>
+      </div>
       </div>
 
       {/* Edit comment dialog */}
