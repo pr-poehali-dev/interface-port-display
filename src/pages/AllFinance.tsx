@@ -378,6 +378,23 @@ export default function AllFinance() {
           </div>
         </div>
 
+        {/* Legend */}
+        <div className="px-6 py-2.5 bg-slate-50 border-b border-border/40 flex items-center gap-4 flex-wrap">
+          {[
+            { icon: 'ArrowDownLeft', bg: 'bg-emerald-100', color: 'text-emerald-600', label: 'Зачисление' },
+            { icon: 'ArrowUpRight',  bg: 'bg-orange-100',  color: 'text-orange-500',  label: 'Списание' },
+            { icon: 'Scale',         bg: 'bg-amber-100',   color: 'text-amber-500',   label: 'Сальдо' },
+            { icon: 'Ban',           bg: 'bg-rose-100',    color: 'text-rose-400',    label: 'Отменено' },
+          ].map(({ icon, bg, color, label }) => (
+            <span key={label} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className={`w-5 h-5 rounded ${bg} flex items-center justify-center shrink-0`}>
+                <Icon name={icon as Parameters<typeof Icon>[0]['name']} size={11} className={color} />
+              </span>
+              {label}
+            </span>
+          ))}
+        </div>
+
         {/* Table */}
         <div className="bg-white">
           <div className="overflow-x-auto">
