@@ -340,9 +340,9 @@ export default function AllFinance() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 px-6 py-4 border-b border-border/40">
           {/* Balance */}
-          <div className={`rounded-lg px-4 py-3 flex items-center gap-3 border ${balance < 0 ? 'bg-red-50 border-red-100' : 'bg-emerald-50 border-emerald-100'}`}>
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${balance < 0 ? 'bg-red-100' : 'bg-emerald-100'}`}>
-              <Icon name="Wallet" size={15} className={balance < 0 ? 'text-red-500' : 'text-emerald-600'} />
+          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-slate-100 border border-slate-200">
+            <div className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center shrink-0">
+              <Icon name="Wallet" size={15} className="text-slate-500" />
             </div>
             <div>
               <div className="text-[11px] text-muted-foreground mb-0.5">Баланс</div>
