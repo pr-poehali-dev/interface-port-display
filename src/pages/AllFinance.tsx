@@ -337,27 +337,42 @@ export default function AllFinance() {
           </Select>
         </div>
 
-        {/* Stats strip */}
-        <div className="grid grid-cols-3 divide-x divide-border/40 border-b border-border/40 bg-[#f4f5f7]">
-          <div className="px-6 py-4">
-            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Баланс</div>
-            <div className={`text-lg font-mono font-semibold tabular-nums ${balance < 0 ? 'text-red-600' : balance > 0 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-              {formatMoney(balance, false)}
-              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3 px-6 py-4 border-b border-border/40">
+          {/* Balance */}
+          <div className={`rounded-lg px-4 py-3 flex items-center gap-3 border ${balance < 0 ? 'bg-red-50 border-red-100' : 'bg-emerald-50 border-emerald-100'}`}>
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${balance < 0 ? 'bg-red-100' : 'bg-emerald-100'}`}>
+              <Icon name="Wallet" size={15} className={balance < 0 ? 'text-red-500' : 'text-emerald-600'} />
+            </div>
+            <div>
+              <div className="text-[11px] text-muted-foreground mb-0.5">Баланс</div>
+              <div className={`text-base font-mono font-bold tabular-nums leading-none ${balance < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
+                {balance < 0 ? '−' : '+'}{formatMoney(Math.abs(balance), false)} ₽
+              </div>
             </div>
           </div>
-          <div className="px-6 py-4">
-            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Зачислено</div>
-            <div className="text-lg font-mono font-semibold tabular-nums text-emerald-600">
-              {formatMoney(filtered.filter((op) => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)}
-              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
+          {/* Credited */}
+          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-emerald-50 border border-emerald-100">
+            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+              <Icon name="ArrowDownLeft" size={15} className="text-emerald-600" />
+            </div>
+            <div>
+              <div className="text-[11px] text-muted-foreground mb-0.5">Зачислено</div>
+              <div className="text-base font-mono font-bold tabular-nums leading-none text-emerald-600">
+                +{formatMoney(filtered.filter((op) => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)} ₽
+              </div>
             </div>
           </div>
-          <div className="px-6 py-4">
-            <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Списано</div>
-            <div className="text-lg font-mono font-semibold tabular-nums text-red-600">
-              {formatMoney(Math.abs(filtered.filter((op) => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)}
-              <span className="text-sm font-normal text-muted-foreground ml-1">₽</span>
+          {/* Charged */}
+          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-orange-50 border border-orange-100">
+            <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
+              <Icon name="ArrowUpRight" size={15} className="text-orange-500" />
+            </div>
+            <div>
+              <div className="text-[11px] text-muted-foreground mb-0.5">Списано</div>
+              <div className="text-base font-mono font-bold tabular-nums leading-none text-orange-600">
+                −{formatMoney(Math.abs(filtered.filter((op) => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)} ₽
+              </div>
             </div>
           </div>
         </div>
