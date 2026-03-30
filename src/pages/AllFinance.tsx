@@ -301,8 +301,13 @@ export default function AllFinance() {
         <div className="bg-white px-6 pt-5 pb-4 border-b border-border/50">
           <div className="flex items-center justify-between gap-4 mb-4">
             <div>
-              <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
-              <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+              <div className="flex items-center gap-2 mb-0.5">
+                <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
+                <span className="text-xs text-muted-foreground">
+                  · {selectedContractObj ? `Договор №${selectedContractObj.number}` : 'Все договора'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
                 {[
                   { icon: 'ArrowDownLeft', bg: 'bg-emerald-100', color: 'text-emerald-600', label: 'Зачисление' },
                   { icon: 'ArrowUpRight',  bg: 'bg-orange-100',  color: 'text-orange-500',  label: 'Списание' },
