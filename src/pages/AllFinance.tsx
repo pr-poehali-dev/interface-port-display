@@ -295,141 +295,101 @@ export default function AllFinance() {
       </div>
 
       {/* Finance block */}
-      <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
+      <div className="rounded-xl overflow-hidden shadow-sm border border-border/50">
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 border-b border-border/40">
-          <div>
-            <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {selectedContractObj
-                ? `Договор №${selectedContractObj.number}`
-                : `Все договора · ${filtered.length} операций`}
-            </p>
-          </div>
-          <Select value={selectedContract} onValueChange={setSelectedContract}>
-            <SelectTrigger className="w-52 bg-[#f4f5f7] border-border/60 h-8 text-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">
-                <span className="flex items-center gap-2">
-                  <Icon name="Layers" size={14} className="text-muted-foreground" />
-                  Все договора
-                </span>
-              </SelectItem>
-              {CONTRACTS.map((c) => (
-                <SelectItem key={c.id} value={String(c.id)}>
+        {/* Header with gradient */}
+        <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-5">
+          <div className="flex items-center justify-between gap-4 mb-5">
+            <div>
+              <h2 className="text-white font-semibold text-base tracking-tight">Финансовые операции</h2>
+              <p className="text-slate-400 text-xs mt-0.5">
+                {selectedContractObj ? `Договор №${selectedContractObj.number}` : `${filtered.length} операций · все договора`}
+              </p>
+            </div>
+            <Select value={selectedContract} onValueChange={setSelectedContract}>
+              <SelectTrigger className="w-48 h-8 text-xs bg-white/10 border-white/20 text-white hover:bg-white/20 transition-colors">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
                   <span className="flex items-center gap-2">
-                    {c.status === 'active' ? (
-                      <Icon name="FileText" size={14} className="text-emerald-500" />
-                    ) : (
-                      <Icon name="Archive" size={14} className="text-slate-400" />
-                    )}
-                    №{c.number}
-                    {c.status === 'archived' && (
-                      <span className="text-[11px] text-slate-400">архив</span>
-                    )}
+                    <Icon name="Layers" size={13} className="text-muted-foreground" />
+                    Все договора
                   </span>
                 </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                {CONTRACTS.map((c) => (
+                  <SelectItem key={c.id} value={String(c.id)}>
+                    <span className="flex items-center gap-2">
+                      {c.status === 'active'
+                        ? <Icon name="FileText" size={13} className="text-emerald-500" />
+                        : <Icon name="Archive" size={13} className="text-slate-400" />}
+                      №{c.number}
+                      {c.status === 'archived' && <span className="text-[11px] text-slate-400">архив</span>}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Stats cards */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/10">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-md bg-white/15 flex items-center justify-center">
+                  <Icon name="Wallet" size={13} className="text-white/80" />
+                </div>
+                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Баланс</span>
+              </div>
+              <div className={`text-xl font-mono font-bold tabular-nums leading-none ${balance < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                {balance < 0 ? '−' : '+'}{formatMoney(Math.abs(balance), false)}
+                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+              </div>
+            </div>
+
+            <div className="bg-emerald-500/20 backdrop-blur-sm rounded-lg px-4 py-3 border border-emerald-400/20">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-md bg-emerald-400/20 flex items-center justify-center">
+                  <Icon name="ArrowDownLeft" size={13} className="text-emerald-400" />
+                </div>
+                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Зачислено</span>
+              </div>
+              <div className="text-xl font-mono font-bold tabular-nums leading-none text-emerald-400">
+                +{formatMoney(filtered.filter(op => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)}
+                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+              </div>
+            </div>
+
+            <div className="bg-orange-500/20 backdrop-blur-sm rounded-lg px-4 py-3 border border-orange-400/20">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-md bg-orange-400/20 flex items-center justify-center">
+                  <Icon name="ArrowUpRight" size={13} className="text-orange-400" />
+                </div>
+                <span className="text-white/60 text-[11px] font-medium uppercase tracking-wide">Списано</span>
+              </div>
+              <div className="text-xl font-mono font-bold tabular-nums leading-none text-orange-400">
+                −{formatMoney(Math.abs(filtered.filter(op => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)}
+                <span className="text-sm font-normal text-white/40 ml-1">₽</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 px-6 py-4 border-b border-border/40">
-          {/* Balance */}
-          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-slate-100 border border-slate-200">
-            <div className="w-8 h-8 rounded-lg bg-slate-200 flex items-center justify-center shrink-0">
-              <Icon name="Wallet" size={15} className="text-slate-500" />
-            </div>
-            <div>
-              <div className="text-[11px] text-muted-foreground mb-0.5">Баланс</div>
-              <div className={`text-base font-mono font-bold tabular-nums leading-none ${balance < 0 ? 'text-red-600' : 'text-emerald-600'}`}>
-                {balance < 0 ? '−' : '+'}{formatMoney(Math.abs(balance), false)} ₽
-              </div>
-            </div>
-          </div>
-          {/* Credited */}
-          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-emerald-50 border border-emerald-100">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
-              <Icon name="ArrowDownLeft" size={15} className="text-emerald-600" />
-            </div>
-            <div>
-              <div className="text-[11px] text-muted-foreground mb-0.5">Зачислено</div>
-              <div className="text-base font-mono font-bold tabular-nums leading-none text-emerald-600">
-                +{formatMoney(filtered.filter((op) => op.type === 'payment' && !op.isCancelled).reduce((s, op) => s + op.amount, 0), false)} ₽
-              </div>
-            </div>
-          </div>
-          {/* Charged */}
-          <div className="rounded-lg px-4 py-3 flex items-center gap-3 bg-orange-50 border border-orange-100">
-            <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
-              <Icon name="ArrowUpRight" size={15} className="text-orange-500" />
-            </div>
-            <div>
-              <div className="text-[11px] text-muted-foreground mb-0.5">Списано</div>
-              <div className="text-base font-mono font-bold tabular-nums leading-none text-orange-600">
-                −{formatMoney(Math.abs(filtered.filter((op) => op.type === 'charge').reduce((s, op) => s + op.amount, 0)), false)} ₽
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Operations table */}
-        <div>
-          {/* Legend */}
-          <div className="px-5 py-2.5 border-b border-border/30 bg-slate-50/80 flex items-center gap-5 text-xs text-muted-foreground flex-wrap">
-            <span className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded bg-orange-100 flex items-center justify-center">
-                <Icon name="ArrowUpRight" size={10} className="text-orange-500" />
-              </div>
-              Списание
-            </span>
-            <span className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded bg-emerald-100 flex items-center justify-center">
-                <Icon name="ArrowDownLeft" size={10} className="text-emerald-600" />
-              </div>
-              Зачисление
-            </span>
-            <span className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded bg-amber-100 flex items-center justify-center">
-                <Icon name="Scale" size={10} className="text-amber-500" />
-              </div>
-              Сальдо
-            </span>
-            <span className="flex items-center gap-1.5">
-              <div className="w-4 h-4 rounded bg-rose-100 flex items-center justify-center">
-                <Icon name="Ban" size={10} className="text-rose-400" />
-              </div>
-              Отменено
-            </span>
-          </div>
-
+        {/* Table */}
+        <div className="bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-border/40">
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                    Операция
-                  </th>
-                  <th className="text-right px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-36">
-                    Сумма
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-40">
-                    Период услуги
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-44">
-                    Дата
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide w-32">
-                    Инициатор
-                  </th>
-                  <th className="w-36 px-5 py-3" />
+                <tr className="border-b border-border/50 bg-slate-50">
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground text-xs uppercase tracking-wider">Операция</th>
+                  <th className="text-right px-5 py-3 font-medium text-muted-foreground text-xs uppercase tracking-wider w-40">Сумма, с НДС</th>
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground text-xs uppercase tracking-wider w-36">Период</th>
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground text-xs uppercase tracking-wider w-44">Дата операции</th>
+                  <th className="text-left px-5 py-3 font-medium text-muted-foreground text-xs uppercase tracking-wider w-32">Пользователь</th>
+                  <th className="w-32 px-5 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/30">
+              <tbody>
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={6} className="text-center py-20 text-muted-foreground">
@@ -448,85 +408,55 @@ export default function AllFinance() {
                   const isCancelled = !!op.isCancelled;
                   const isSaldo = !!op.isSaldo;
 
-                  let rowCls = '';
-                  if (isCancelled) rowCls = 'bg-slate-100/60';
-                  else if (isSaldo) rowCls = 'bg-emerald-50/50';
-                  else if (isCharge) rowCls = 'bg-orange-50/60';
-                  else rowCls = 'bg-emerald-50/50';
-
                   return (
                     <tr
                       key={op.id}
-                      className={`group transition-colors hover:brightness-95 ${rowCls} ${isCancelled ? 'opacity-60' : ''}`}
+                      className={`group border-b border-border/40 last:border-0 transition-colors hover:bg-slate-50/70 ${isCancelled ? 'bg-rose-50/40' : ''}`}
                     >
                       {/* Operation */}
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
-                          {/* Type dot */}
                           <div className="shrink-0">
                             {isCancelled ? (
                               <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center">
-                                <Icon name="Ban" size={15} className="text-rose-400" />
+                                <Icon name="Ban" size={14} className="text-rose-400" />
                               </div>
                             ) : isSaldo ? (
                               <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-                                <Icon name="Scale" size={15} className="text-amber-500" />
+                                <Icon name="Scale" size={14} className="text-amber-500" />
                               </div>
                             ) : isCharge ? (
                               <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
-                                <Icon name="ArrowUpRight" size={15} className="text-orange-500" />
+                                <Icon name="ArrowUpRight" size={14} className="text-orange-500" />
                               </div>
                             ) : (
                               <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                                <Icon name="ArrowDownLeft" size={15} className="text-emerald-600" />
+                                <Icon name="ArrowDownLeft" size={14} className="text-emerald-600" />
                               </div>
                             )}
                           </div>
-
                           <div className="min-w-0">
-                            {/* Contract */}
-                            <div className="text-[11px] text-muted-foreground/70 mb-0.5 font-mono">
+                            <div className="text-[11px] text-muted-foreground/60 font-mono mb-0.5">
                               Договор №{op.contractNumber}
                             </div>
-
-                            {/* Title row */}
-                            <div className="flex items-center gap-2">
-                              <span
-                                className={`font-semibold text-sm ${
-                                  isCancelled ? 'line-through text-muted-foreground' : 'text-foreground'
-                                }`}
-                              >
-                                {isCharge ? 'Списание' : 'Зачисление'}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className={`font-semibold text-sm leading-none ${isCancelled ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                                {isCharge ? 'Списание' : 'Зачисление средств'}
                               </span>
-
-
-
                               {isCancelled && (
-                                <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">
-                                  отменено
-                                </Badge>
+                                <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">отменено</Badge>
                               )}
-
                               {isSaldo && !isCancelled && (
-                                <Badge className="text-[10px] px-1.5 h-4 bg-amber-100 text-amber-700 border border-amber-200 font-medium hover:bg-amber-100">
-                                  сальдо
-                                </Badge>
+                                <Badge className="text-[10px] px-1.5 h-4 bg-amber-100 text-amber-700 border border-amber-200 font-medium hover:bg-amber-100">сальдо</Badge>
                               )}
                             </div>
-
-                            {/* Service name */}
                             {isCharge && op.serviceName && (
-                              <div className="mt-0.5 text-xs text-muted-foreground">
-                                <span className="text-muted-foreground/50 mr-1">услуга:</span>
-                                {op.serviceName}
-                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5">{op.serviceName}</div>
                             )}
-
-                            {/* Comment */}
                             {op.comment && (
-                              <div className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground/80">
-                                <Icon name="MessageSquare" size={11} />
-                                <span className="italic">{op.comment}</span>
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground/70 mt-0.5 italic">
+                                <Icon name="MessageSquare" size={10} />
+                                {op.comment}
                               </div>
                             )}
                           </div>
@@ -535,15 +465,10 @@ export default function AllFinance() {
 
                       {/* Amount */}
                       <td className="px-5 py-3.5 text-right">
-                        <span
-                          className={`font-mono font-semibold text-sm tabular-nums whitespace-nowrap ${
-                            isCancelled
-                              ? 'line-through text-muted-foreground/60'
-                              : op.amount < 0
-                              ? 'text-red-600'
-                              : 'text-emerald-600'
-                          }`}
-                        >
+                        <span className={`font-mono font-bold text-sm tabular-nums whitespace-nowrap ${
+                          isCancelled ? 'line-through text-muted-foreground/50'
+                          : op.amount < 0 ? 'text-red-600' : 'text-emerald-600'
+                        }`}>
                           {formatMoney(op.amount)}
                         </span>
                       </td>
@@ -551,15 +476,9 @@ export default function AllFinance() {
                       {/* Period */}
                       <td className="px-5 py-3.5">
                         {op.periodFrom && op.periodTo ? (
-                          <div className="text-xs text-muted-foreground space-y-0.5">
-                            <div className="flex items-center gap-1">
-                              <span className="text-muted-foreground/50">с</span>
-                              {op.periodFrom}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="text-muted-foreground/50">по</span>
-                              {op.periodTo}
-                            </div>
+                          <div className="text-xs text-muted-foreground leading-relaxed">
+                            <div>с {op.periodFrom}</div>
+                            <div>по {op.periodTo}</div>
                           </div>
                         ) : (
                           <span className="text-muted-foreground/30 text-xs">—</span>
@@ -568,33 +487,24 @@ export default function AllFinance() {
 
                       {/* Date */}
                       <td className="px-5 py-3.5">
-                        <div className="text-sm text-foreground tabular-nums">
-                          {op.date.split(' ')[0]}
-                        </div>
-                        <div className="text-xs text-muted-foreground tabular-nums">
-                          {op.date.split(' ')[1]}
-                        </div>
+                        <div className="text-sm text-foreground tabular-nums font-medium">{op.date.split(' ')[0]}</div>
+                        <div className="text-xs text-muted-foreground tabular-nums">{op.date.split(' ')[1]}</div>
                       </td>
 
                       {/* Initiator */}
                       <td className="px-5 py-3.5">
-                        {op.initiator === 'Система' ? (
-                          <div className="flex items-center gap-1 text-xs text-foreground">
-                            <Icon name="Monitor" size={12} className="text-muted-foreground shrink-0" />
-                            <span className="font-mono">система</span>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1 text-xs text-foreground">
-                            <Icon name="User" size={12} className="text-muted-foreground shrink-0" />
-                            <span className="font-mono">{op.initiator}</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1.5 text-xs text-foreground">
+                          {op.initiator === 'Система'
+                            ? <Icon name="Monitor" size={12} className="text-muted-foreground shrink-0" />
+                            : <Icon name="User" size={12} className="text-muted-foreground shrink-0" />
+                          }
+                          <span className="font-mono">{op.initiator === 'Система' ? 'система' : op.initiator}</span>
+                        </div>
                       </td>
 
                       {/* Actions */}
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-1 justify-end">
-                          {/* Comment edit */}
                           <Button
                             variant="ghost"
                             size="sm"
@@ -602,20 +512,19 @@ export default function AllFinance() {
                             className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"
                             title="Комментарий"
                           >
-                            <Icon name="PencilLine" size={14} />
+                            <Icon name="PencilLine" size={13} />
                           </Button>
 
-                          {/* Storno */}
                           {op.type === 'payment' && !isCancelled && (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="h-7 px-2 text-xs text-rose-500 hover:text-rose-700 hover:bg-rose-50 gap-1"
+                                  className="h-7 px-2 text-xs text-muted-foreground hover:text-rose-600 hover:bg-rose-50 gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
-                                  <Icon name="RotateCcw" size={13} />
-                                  Отменить
+                                  <Icon name="RotateCcw" size={12} />
+                                  сторно
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
