@@ -438,7 +438,12 @@ export default function AllFinance() {
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
                           <div className="shrink-0">
-                            {isCancelled ? (
+                            {isCancelled && isSaldo ? (
+                              <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center relative">
+                                <Icon name="Scale" size={14} className="text-amber-400 opacity-40" />
+                                <Icon name="Ban" size={10} className="text-rose-400 absolute bottom-0.5 right-0.5" />
+                              </div>
+                            ) : isCancelled ? (
                               <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center">
                                 <Icon name="Ban" size={14} className="text-rose-400" />
                               </div>
@@ -467,7 +472,7 @@ export default function AllFinance() {
                               {isCancelled && (
                                 <Badge className="text-[10px] px-1.5 h-4 bg-rose-100 text-rose-600 border border-rose-200 font-medium hover:bg-rose-100">отменено</Badge>
                               )}
-                              {isSaldo && !isCancelled && (
+                              {isSaldo && (
                                 <Badge className="text-[10px] px-1.5 h-4 bg-amber-100 text-amber-700 border border-amber-200 font-medium hover:bg-amber-100">сальдо</Badge>
                               )}
                             </div>
