@@ -310,8 +310,8 @@ export default function AllFinance() {
                       Договор №{selectedContractObj.number} · активен
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                      <Icon name="Archive" size={11} />
+                    <span className="inline-flex items-center gap-1 text-[11px] text-rose-400 font-medium">
+                      <Icon name="Archive" size={11} className="text-rose-400" />
                       Договор №{selectedContractObj.number} · архив
                     </span>
                   )
