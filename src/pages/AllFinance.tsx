@@ -311,7 +311,7 @@ export default function AllFinance() {
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 text-[11px] text-rose-400 font-medium">
-                      <Icon name="Archive" size={11} className="text-rose-400" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
                       Договор №{selectedContractObj.number} · архив
                     </span>
                   )
