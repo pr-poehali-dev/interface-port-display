@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+
 import {
   Dialog,
   DialogContent,
@@ -335,30 +329,23 @@ export default function AllFinance() {
                 ))}
               </div>
             </div>
-            <Select value={selectedContract} onValueChange={setSelectedContract}>
-              <SelectTrigger className="w-48 h-8 text-xs border-border/60 bg-slate-50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">
-                  <span className="flex items-center gap-2">
-                    <Icon name="Layers" size={13} className="text-muted-foreground" />
-                    Все договора
-                  </span>
-                </SelectItem>
-                {CONTRACTS.map((c) => (
-                  <SelectItem key={c.id} value={String(c.id)}>
-                    <span className="flex items-center gap-2">
-                      {c.status === 'active'
-                        ? <Icon name="FileText" size={13} className="text-emerald-500" />
-                        : <Icon name="Archive" size={13} className="text-slate-400" />}
-                      №{c.number}
-                      {c.status === 'archived' && <span className="text-[11px] text-slate-400">архив</span>}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <select
+              value={selectedContract}
+              onChange={(e) => setSelectedContract(e.target.value)}
+              className="h-8 w-48 rounded-md border border-border/60 bg-slate-50 px-2.5 text-xs text-foreground outline-none focus:ring-1 focus:ring-ring focus:border-ring cursor-pointer appearance-none"
+              style={{backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', paddingRight: '28px'}}
+            >
+              <option value="all" style={{color: '#64748b'}}>Все договора</option>
+              {CONTRACTS.map((c) => (
+                <option
+                  key={c.id}
+                  value={String(c.id)}
+                  style={{color: c.status === 'active' ? '#16a34a' : '#b60209'}}
+                >
+                  №{c.number}{c.status === 'archived' ? ' · архив' : ' · активен'}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Stats */}
