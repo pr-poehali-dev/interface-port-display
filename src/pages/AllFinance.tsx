@@ -310,8 +310,8 @@ export default function AllFinance() {
                       Договор №{selectedContractObj.number} · активен
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[11px] text-rose-400 font-medium">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium" style={{color: '#b60209'}}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{backgroundColor: '#b60209'}} />
                       Договор №{selectedContractObj.number} · архив
                     </span>
                   )
