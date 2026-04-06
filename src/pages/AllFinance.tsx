@@ -303,9 +303,6 @@ export default function AllFinance() {
             <div>
               <div className="flex items-center gap-2 mb-0.5">
                 <h2 className="text-base font-semibold text-foreground">Финансовые операции</h2>
-                <span className="text-xs text-muted-foreground">
-                  · {selectedContractObj ? `Договор №${selectedContractObj.number}` : 'Все договора'}
-                </span>
               </div>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 {[
@@ -347,6 +344,35 @@ export default function AllFinance() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Contract context */}
+          <div className="mb-3">
+            {selectedContractObj ? (
+              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium ${
+                selectedContractObj.status === 'active'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-slate-100 border-slate-200 text-slate-500'
+              }`}>
+                {selectedContractObj.status === 'active' ? (
+                  <>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    <Icon name="FileText" size={12} className="text-emerald-500" />
+                    Договор №{selectedContractObj.number} · Активен
+                  </>
+                ) : (
+                  <>
+                    <Icon name="Archive" size={12} className="text-slate-400" />
+                    Договор №{selectedContractObj.number} · В архиве
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-slate-50 border-slate-200 text-xs text-muted-foreground">
+                <Icon name="Layers" size={12} className="text-slate-400" />
+                Данные по всем договорам
+              </div>
+            )}
           </div>
 
           {/* Stats */}
