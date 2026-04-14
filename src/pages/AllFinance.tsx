@@ -48,11 +48,13 @@ interface FinanceOperation {
 }
 
 interface MockCompany {
+  id: number;
   name: string;
   status: 'active' | 'archived';
 }
 
 const MOCK_COMPANY: MockCompany = {
+  id: 10482,
   name: 'ООО "ПроАвто+"',
   status: 'active',
 };
@@ -236,6 +238,9 @@ export default function AllFinance() {
                 <h1 className="text-xl font-bold text-foreground leading-tight">
                   {company.name}
                 </h1>
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-mono text-slate-400 border border-slate-200 select-all">
+                  #{company.id}
+                </span>
                 <button className="text-muted-foreground hover:text-foreground transition-colors">
                   <Icon name="ExternalLink" size={14} />
                 </button>
