@@ -241,11 +241,8 @@ export default function AllFinance() {
                 <button className="text-muted-foreground hover:text-foreground transition-colors">
                   <Icon name="ExternalLink" size={14} />
                 </button>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-mono text-slate-400 border border-slate-200 select-all">
-                  #{company.id}
-                </span>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {isArchived ? (
                   <Badge className="text-[11px] px-2 py-0.5 h-5 bg-slate-100 text-slate-500 border border-slate-200 font-medium hover:bg-slate-100">
                     <Icon name="Archive" size={10} className="mr-1" />
@@ -257,6 +254,7 @@ export default function AllFinance() {
                     Активна
                   </Badge>
                 )}
+                <span className="text-[11px] text-muted-foreground/60 font-mono">ID: {company.id}</span>
               </div>
               <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
                 <Icon name="UserRound" size={13} className="shrink-0" />
