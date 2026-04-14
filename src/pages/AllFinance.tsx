@@ -233,17 +233,17 @@ export default function AllFinance() {
       <div className="bg-white rounded-xl border border-border/50 shadow-sm overflow-hidden">
         <div className="px-6 pt-5 pb-0">
           <div className="flex items-start justify-between gap-4 mb-3">
-            <div>
+            <div className={`pl-3 border-l-2 ${isArchived ? 'border-red-400' : 'border-emerald-500'}`}>
               <div className="flex items-center gap-2 mb-1.5">
-                <h1 className="text-xl font-bold text-foreground leading-tight">
+                <a href="#" className="text-xl font-bold text-foreground leading-tight hover:text-primary hover:underline underline-offset-2 transition-colors">
                   {company.name}
-                </h1>
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-mono text-slate-400 border border-slate-200 select-all">
-                  #{company.id}
-                </span>
+                </a>
                 <button className="text-muted-foreground hover:text-foreground transition-colors">
                   <Icon name="ExternalLink" size={14} />
                 </button>
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-slate-100 text-[10px] font-mono text-slate-400 border border-slate-200 select-all">
+                  #{company.id}
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 {isArchived ? (
