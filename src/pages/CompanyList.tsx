@@ -128,18 +128,6 @@ const CompanyList = () => {
             <Icon name="FileSpreadsheet" size={16} />
           </Button>
 
-          <Button
-            variant="outline"
-            onClick={() => setBalanceSort(balanceSort === 'desc' ? 'asc' : balanceSort === 'asc' ? null : 'desc')}
-            className={`bg-white border-border/60 shadow-sm gap-1.5 text-sm transition-colors ${balanceSort === 'desc' ? 'border-emerald-300 text-emerald-700 bg-emerald-50' : balanceSort === 'asc' ? 'border-red-300 text-red-700 bg-red-50' : ''}`}
-          >
-            <Icon
-              name={balanceSort === 'desc' ? 'ArrowDownWideNarrow' : balanceSort === 'asc' ? 'ArrowUpWideNarrow' : 'ArrowUpDown'}
-              size={15}
-            />
-            {balanceSort === 'desc' ? 'Баланс: + → −' : balanceSort === 'asc' ? 'Баланс: − → +' : 'Баланс'}
-          </Button>
-
 
         </div>
 
@@ -152,7 +140,19 @@ const CompanyList = () => {
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-12">#</th>
                   <th className="w-8 px-2 py-3"></th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Название</th>
-                  <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">Баланс</th>
+                  <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">
+                    <button
+                      onClick={() => setBalanceSort(balanceSort === 'desc' ? 'asc' : balanceSort === 'asc' ? null : 'desc')}
+                      className="inline-flex items-center gap-1 hover:text-foreground transition-colors select-none"
+                    >
+                      Баланс
+                      <Icon
+                        name={balanceSort === 'desc' ? 'ArrowDown' : balanceSort === 'asc' ? 'ArrowUp' : 'ChevronsUpDown'}
+                        size={13}
+                        className={balanceSort ? 'text-foreground' : 'text-muted-foreground/40'}
+                      />
+                    </button>
+                  </th>
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Комментарий</th>
