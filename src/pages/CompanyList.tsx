@@ -128,26 +128,7 @@ const CompanyList = () => {
             <Icon name="FileSpreadsheet" size={16} />
           </Button>
 
-          {/* Balance sort */}
-          <div className="flex items-center gap-1 bg-white border border-border/60 rounded-md shadow-sm px-1 py-0.5">
-            <span className="text-xs text-muted-foreground px-1.5">Баланс:</span>
-            <button
-              onClick={() => setBalanceSort(balanceSort === 'desc' ? null : 'desc')}
-              className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${balanceSort === 'desc' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'text-muted-foreground hover:text-foreground hover:bg-slate-100'}`}
-              title="Сначала максимальный баланс"
-            >
-              <Icon name="ArrowDown" size={12} />
-              + → −
-            </button>
-            <button
-              onClick={() => setBalanceSort(balanceSort === 'asc' ? null : 'asc')}
-              className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${balanceSort === 'asc' ? 'bg-red-100 text-red-700 font-medium' : 'text-muted-foreground hover:text-foreground hover:bg-slate-100'}`}
-              title="Сначала минимальный баланс"
-            >
-              <Icon name="ArrowUp" size={12} />
-              − → +
-            </button>
-          </div>
+
         </div>
 
         {/* Table */}
@@ -159,7 +140,19 @@ const CompanyList = () => {
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-12">#</th>
                   <th className="w-8 px-2 py-3"></th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Название</th>
-                  <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">Баланс</th>
+                  <th className="text-right px-4 py-3 font-semibold text-muted-foreground w-36">
+                    <button
+                      onClick={() => setBalanceSort(balanceSort === 'desc' ? 'asc' : balanceSort === 'asc' ? null : 'desc')}
+                      className="inline-flex items-center gap-1 hover:text-foreground transition-colors select-none"
+                    >
+                      Баланс
+                      <Icon
+                        name={balanceSort === 'desc' ? 'ArrowDown' : balanceSort === 'asc' ? 'ArrowUp' : 'ChevronsUpDown'}
+                        size={13}
+                        className={balanceSort ? 'text-foreground' : 'text-muted-foreground/40'}
+                      />
+                    </button>
+                  </th>
                   <th className="text-center px-4 py-3 font-semibold text-muted-foreground w-28">Статус</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground w-32">Договор №</th>
                   <th className="text-left px-4 py-3 font-semibold text-muted-foreground">Комментарий</th>
