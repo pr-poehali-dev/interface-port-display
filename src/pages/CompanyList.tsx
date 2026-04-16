@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -73,40 +72,21 @@ const exportCSV = (companies: Company[]) => {
   URL.revokeObjectURL(url);
 };
 
-const Highlight = ({ text, query }: { text: string; query: string }) => {
-  if (!query.trim()) return <>{text}</>;
-  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  const parts = text.split(regex);
-  return (
-    <>
-      {parts.map((part, i) =>
-        regex.test(part) ? (
-          <mark key={i} className="bg-amber-200 text-amber-900 rounded px-0.5 not-italic font-semibold">
-            {part}
-          </mark>
-        ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </>
-  );
-};
+type BalanceSort = null | 'asc' | 'desc';
 
 const CompanyList = () => {
   const [filter, setFilter] = useState<FilterStatus>('active');
-  const [search, setSearch] = useState('');
+  const [balanceSort, setBalanceSort] = useState<BalanceSort>(null);
 
   const filtered = useMemo(() => {
     let list = mockCompanies;
     if (filter !== 'all') {
       list = list.filter((c) => (filter === 'active' ? c.status === 'active' : c.status === 'archived'));
     }
-    if (search.trim()) {
-      const q = search.trim().toLowerCase();
-      list = list.filter((c) => c.name.toLowerCase().includes(q) || c.inn.includes(q));
-    }
+    if (balanceSort === 'desc') list = [...list].sort((a, b) => b.balance - a.balance);
+    if (balanceSort === 'asc') list = [...list].sort((a, b) => a.balance - b.balance);
     return list;
-  }, [filter, search]);
+  }, [filter, balanceSort]);
 
   const activeCount = mockCompanies.filter((c) => c.status === 'active').length;
   const archivedCount = mockCompanies.filter((c) => c.status === 'archived').length;
@@ -148,34 +128,26 @@ const CompanyList = () => {
             <Icon name="FileSpreadsheet" size={16} />
           </Button>
 
-          {/* Search */}
-          <div className="relative flex-1 min-w-[220px] max-w-sm">
-            <Icon
-              name="Search"
-              size={15}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-            />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Поиск по названию или ИНН..."
-              className="pl-8 pr-8 bg-white border-border/60 shadow-sm h-9 text-sm"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Icon name="X" size={13} />
-              </button>
-            )}
+          {/* Balance sort */}
+          <div className="flex items-center gap-1 bg-white border border-border/60 rounded-md shadow-sm px-1 py-0.5">
+            <span className="text-xs text-muted-foreground px-1.5">Баланс:</span>
+            <button
+              onClick={() => setBalanceSort(balanceSort === 'desc' ? null : 'desc')}
+              className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${balanceSort === 'desc' ? 'bg-emerald-100 text-emerald-700 font-medium' : 'text-muted-foreground hover:text-foreground hover:bg-slate-100'}`}
+              title="Сначала максимальный баланс"
+            >
+              <Icon name="ArrowDown" size={12} />
+              + → −
+            </button>
+            <button
+              onClick={() => setBalanceSort(balanceSort === 'asc' ? null : 'asc')}
+              className={`flex items-center gap-1 text-xs px-2 py-1 rounded transition-colors ${balanceSort === 'asc' ? 'bg-red-100 text-red-700 font-medium' : 'text-muted-foreground hover:text-foreground hover:bg-slate-100'}`}
+              title="Сначала минимальный баланс"
+            >
+              <Icon name="ArrowUp" size={12} />
+              − → +
+            </button>
           </div>
-
-          {search && (
-            <span className="text-xs text-muted-foreground">
-              Найдено: {filtered.length}
-            </span>
-          )}
         </div>
 
         {/* Table */}
@@ -197,14 +169,7 @@ const CompanyList = () => {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={7} className="text-center py-12 text-muted-foreground">
-                      {search ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <Icon name="SearchX" size={32} className="text-slate-300" />
-                          <span>Ничего не найдено по запросу «{search}»</span>
-                        </div>
-                      ) : (
-                        'Нет компаний'
-                      )}
+                      Нет компаний
                     </td>
                   </tr>
                 )}
@@ -246,7 +211,7 @@ const CompanyList = () => {
                         to={`/companies/${company.id}`}
                         className="font-medium text-foreground hover:text-[#b60209] transition-colors flex items-center gap-1.5 group"
                       >
-                        <Highlight text={company.name} query={search} />
+                        {company.name}
                         <Icon
                           name="ArrowUpRight"
                           size={13}
@@ -254,7 +219,7 @@ const CompanyList = () => {
                         />
                       </Link>
                       <div className="font-mono text-xs text-muted-foreground mt-0.5">
-                        ИНН: <Highlight text={company.inn} query={search} />
+                        ИНН: {company.inn}
                       </div>
                     </td>
                     <td className="px-4 py-3 text-right font-mono font-semibold tabular-nums">
