@@ -15,31 +15,30 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-type SbisStatus =
-  | null
-  | 'waiting_sign'
-  | 'sent_to_counterparty'
-  | 'signed'
-  | 'rejected'
-  | 'cancelled';
+// Статус отправки в СБИС
+type InvoiceSbis = 'not_sent' | 'sent';
+type UpdSbis = 'not_sent' | 'sent' | 'completed';
 
-type SignedBy = null | 'director' | 'accountant' | 'attorney';
+// Подписант УПД
+type SignedBy = 'not_signed' | 'edo_sbis' | 'paper' | 'edo_kaluga' | 'edo_portal';
 
-const sbisStatusConfig: Record<
-  Exclude<SbisStatus, null>,
-  { label: string; color: string; icon: string }
-> = {
-  waiting_sign: { label: 'Ожидает подписания', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: 'Clock' },
-  sent_to_counterparty: { label: 'Отправлен контрагенту', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: 'Send' },
-  signed: { label: 'Подписан', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: 'CheckCircle2' },
-  rejected: { label: 'Отклонён', color: 'bg-red-50 text-red-700 border-red-200', icon: 'XCircle' },
-  cancelled: { label: 'Аннулирован', color: 'bg-slate-100 text-slate-500 border-slate-200', icon: 'Ban' },
+const invoiceSbisLabel: Record<InvoiceSbis, { label: string; color: string }> = {
+  not_sent: { label: 'Не отправлялся', color: 'text-slate-400' },
+  sent:     { label: 'Отправлен', color: 'text-blue-600' },
 };
 
-const signedByOptions: { value: Exclude<SignedBy, null>; label: string; icon: string }[] = [
-  { value: 'director', label: 'Директор', icon: 'UserCheck' },
-  { value: 'accountant', label: 'Бухгалтер', icon: 'Calculator' },
-  { value: 'attorney', label: 'По доверенности', icon: 'ScrollText' },
+const updSbisLabel: Record<UpdSbis, { label: string; color: string }> = {
+  not_sent:  { label: 'Не отправлялся', color: 'text-slate-400' },
+  sent:      { label: 'Отправлен', color: 'text-blue-600' },
+  completed: { label: 'Завершён', color: 'text-emerald-600' },
+};
+
+const signedByOptions: { value: SignedBy; label: string }[] = [
+  { value: 'not_signed',  label: 'Не подписан' },
+  { value: 'edo_sbis',    label: 'ЭДО Сбис' },
+  { value: 'paper',       label: 'На бумаге' },
+  { value: 'edo_kaluga',  label: 'ЭДО Калуга Астрал' },
+  { value: 'edo_portal',  label: 'ЭДО Портал Поставщиков' },
 ];
 
 interface ServiceRow {
@@ -60,14 +59,14 @@ interface Invoice {
   id: number;
   number: string;
   date: string;
-  sbisStatus: SbisStatus;
+  sbisStatus: InvoiceSbis;
 }
 
 interface Upd {
   id: number;
   number: string;
   period: string;
-  sbisStatus: SbisStatus;
+  sbisStatus: UpdSbis;
   signedBy: SignedBy;
 }
 
@@ -116,10 +115,12 @@ const mockContracts: Contract[] = [
       },
     ],
     invoices: [
-      { id: 1, number: '1453-И', date: '3 Июня 2026 г.', sbisStatus: null },
+      { id: 1, number: '1453-И', date: '3 Июня 2026 г.', sbisStatus: 'not_sent' },
+      { id: 2, number: '1410-И', date: '2 Мая 2026 г.', sbisStatus: 'sent' },
     ],
     upds: [
-      { id: 1, number: 'И1389', period: 'за Май 2026 г.', sbisStatus: 'sent_to_counterparty', signedBy: 'director' },
+      { id: 1, number: 'И1389', period: 'за Май 2026 г.', sbisStatus: 'completed', signedBy: 'edo_sbis' },
+      { id: 2, number: 'И1350', period: 'за Апр 2026 г.', sbisStatus: 'sent', signedBy: 'paper' },
     ],
   },
   {
@@ -142,28 +143,15 @@ const mockContracts: Contract[] = [
         onecStatus: null,
       },
     ],
-    invoices: [
-      { id: 2, number: '1454-И', date: '3 Июня 2026 г.', sbisStatus: 'waiting_sign' },
-    ],
+    invoices: [],
     upds: [
-      { id: 2, number: 'И1390', period: 'за Май 2026 г.', sbisStatus: null, signedBy: null },
+      { id: 3, number: 'И1390', period: 'за Май 2026 г.', sbisStatus: 'not_sent', signedBy: 'not_signed' },
     ],
   },
 ];
 
 const fmt = (v: number) =>
   v.toLocaleString('ru-RU', { minimumFractionDigits: 2 }) + ' руб.';
-
-function SbisStatusBadge({ status }: { status: SbisStatus }) {
-  if (!status) return null;
-  const cfg = sbisStatusConfig[status];
-  return (
-    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium ${cfg.color}`}>
-      <Icon name={cfg.icon as never} size={11} />
-      {cfg.label}
-    </span>
-  );
-}
 
 export default function ArchiveDoc() {
   const [contracts, setContracts] = useState<Contract[]>(mockContracts);
@@ -187,15 +175,25 @@ export default function ArchiveDoc() {
     });
   };
 
-  const sendToSbis = (contractId: number, type: 'invoice' | 'upd', docId: number) => {
+  const sendToSbisInvoice = (contractId: number, invoiceId: number) => {
     setContracts((prev) =>
-      prev.map((c) => {
-        if (c.id !== contractId) return c;
-        if (type === 'invoice') {
-          return { ...c, invoices: c.invoices.map((inv) => inv.id === docId ? { ...inv, sbisStatus: 'waiting_sign' as SbisStatus } : inv) };
+      prev.map((c) =>
+        c.id !== contractId ? c : {
+          ...c,
+          invoices: c.invoices.map((inv) => inv.id === invoiceId ? { ...inv, sbisStatus: 'sent' as InvoiceSbis } : inv),
         }
-        return { ...c, upds: c.upds.map((u) => u.id === docId ? { ...u, sbisStatus: 'waiting_sign' as SbisStatus } : u) };
-      })
+      )
+    );
+  };
+
+  const sendToSbisUpd = (contractId: number, updId: number) => {
+    setContracts((prev) =>
+      prev.map((c) =>
+        c.id !== contractId ? c : {
+          ...c,
+          upds: c.upds.map((u) => u.id === updId ? { ...u, sbisStatus: 'sent' as UpdSbis } : u),
+        }
+      )
     );
   };
 
@@ -219,8 +217,8 @@ export default function ArchiveDoc() {
   };
 
   const currentSignedBy = signDialog
-    ? contracts.find((c) => c.id === signDialog.contractId)?.upds.find((u) => u.id === signDialog.updId)?.signedBy ?? null
-    : null;
+    ? contracts.find((c) => c.id === signDialog.contractId)?.upds.find((u) => u.id === signDialog.updId)?.signedBy ?? 'not_signed'
+    : 'not_signed';
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
@@ -320,127 +318,129 @@ export default function ArchiveDoc() {
                 </table>
               </div>
 
-              {/* Documents footer */}
-              <div className="border-t border-border/40 bg-slate-50/40 px-5 py-3">
-                <div className="flex flex-wrap items-center gap-6">
+              {/* Documents footer — две колонки: счета | УПД */}
+              <div className="border-t border-border/40 bg-slate-50/40">
+                <div className="grid grid-cols-2 divide-x divide-border/40">
 
-                  {/* Invoices */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    {contract.invoices.map((inv) => (
-                      <div key={inv.id} className="flex items-center gap-2">
-                        {/* Icon + label */}
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Icon name="FileText" size={13} className="text-slate-400" />
-                          <span>А1 АВТО счёт №{inv.number} от {inv.date}</span>
-                        </div>
-
-                        {/* Status or send button */}
-                        {inv.sbisStatus ? (
-                          <SbisStatusBadge status={inv.sbisStatus} />
-                        ) : (
-                          <button
-                            onClick={() => sendToSbis(contract.id, 'invoice', inv.id)}
-                            className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-violet-200 text-violet-600 bg-violet-50 hover:bg-violet-100 transition-colors font-medium"
-                          >
-                            <Icon name="Send" size={11} />
-                            СБИС
-                          </button>
-                        )}
-
-                        {/* Actions */}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button className="w-5 h-5 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-slate-200 transition-colors">
-                              <Icon name="MoreHorizontal" size={13} />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start" className="w-44">
-                            <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
-                              <Icon name="Eye" size={13} />
-                              Просмотреть
-                            </DropdownMenuItem>
-                            {!inv.sbisStatus && (
-                              <DropdownMenuItem onClick={() => sendToSbis(contract.id, 'invoice', inv.id)} className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50">
-                                <Icon name="Send" size={13} />
-                                Отправить в СБИС
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => deleteInvoice(contract.id, inv.id)} className="gap-2 cursor-pointer text-xs text-destructive focus:text-destructive focus:bg-red-50">
-                              <Icon name="Trash2" size={13} />
-                              Удалить
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Divider */}
-                  {contract.invoices.length > 0 && contract.upds.length > 0 && (
-                    <div className="w-px h-5 bg-border/60" />
-                  )}
-
-                  {/* UPDs */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    {contract.upds.map((upd) => (
-                      <div key={upd.id} className="flex items-center gap-2">
-                        {/* Icon + label */}
-                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Icon name="FileCheck" size={13} className="text-slate-400" />
-                          <span>А1 АВТО упд №{upd.number} {upd.period}</span>
-                        </div>
-
-                        {/* Signed by tag */}
-                        {upd.signedBy && (
-                          <span className="text-xs text-muted-foreground/70 bg-slate-100 px-1.5 py-0.5 rounded">
-                            {signedByOptions.find((o) => o.value === upd.signedBy)?.label}
-                          </span>
-                        )}
-
-                        {/* Status or send button */}
-                        {upd.sbisStatus ? (
-                          <SbisStatusBadge status={upd.sbisStatus} />
-                        ) : (
-                          <button
-                            onClick={() => sendToSbis(contract.id, 'upd', upd.id)}
-                            className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded border border-violet-200 text-violet-600 bg-violet-50 hover:bg-violet-100 transition-colors font-medium"
-                          >
-                            <Icon name="Send" size={11} />
-                            СБИС
-                          </button>
-                        )}
-
-                        {/* Actions */}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button className="w-5 h-5 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-slate-200 transition-colors">
-                              <Icon name="MoreHorizontal" size={13} />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start" className="w-48">
-                            <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
-                              <Icon name="Eye" size={13} />
-                              Просмотреть
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setSignDialog({ contractId: contract.id, updId: upd.id })} className="gap-2 cursor-pointer text-xs">
-                              <Icon name="UserCheck" size={13} />
-                              Кем подписан
-                            </DropdownMenuItem>
-                            {!upd.sbisStatus && (
-                              <>
+                  {/* ── Счета (левая колонка) ── */}
+                  <div className="px-4 py-3 space-y-2">
+                    {contract.invoices.length === 0 ? (
+                      <p className="text-xs text-muted-foreground/60 italic py-1">Не выставлено ни одного счёта!</p>
+                    ) : (
+                      contract.invoices.map((inv) => {
+                        const sbis = invoiceSbisLabel[inv.sbisStatus];
+                        return (
+                          <div key={inv.id} className="flex items-start gap-2">
+                            {/* Меню */}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <button className="mt-0.5 w-5 h-5 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-slate-200 transition-colors shrink-0">
+                                  <Icon name="MoreHorizontal" size={13} />
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="start" className="w-44">
+                                <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
+                                  <Icon name="Eye" size={13} />
+                                  Просмотр
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={() => sendToSbis(contract.id, 'upd', upd.id)} className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50">
+                                <DropdownMenuItem
+                                  onClick={() => sendToSbisInvoice(contract.id, inv.id)}
+                                  className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50"
+                                >
                                   <Icon name="Send" size={13} />
                                   Отправить в СБИС
                                 </DropdownMenuItem>
-                              </>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    ))}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => deleteInvoice(contract.id, inv.id)}
+                                  className="gap-2 cursor-pointer text-xs text-destructive focus:text-destructive focus:bg-red-50"
+                                >
+                                  <Icon name="Trash2" size={13} />
+                                  Удалить
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {/* PDF иконка */}
+                            <div className="mt-0.5 w-5 h-5 flex items-center justify-center rounded bg-red-50 shrink-0">
+                              <span className="text-[9px] font-bold text-red-600 leading-none">PDF</span>
+                            </div>
+
+                            {/* Название + статус */}
+                            <div className="min-w-0">
+                              <p className="text-xs text-foreground leading-snug">
+                                А1 АВТО счёт №{inv.number} от {inv.date}
+                              </p>
+                              <p className={`text-[11px] leading-snug ${sbis.color}`}>{sbis.label}</p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
+
+                  {/* ── УПД (правая колонка) ── */}
+                  <div className="px-4 py-3 space-y-2">
+                    {contract.upds.length === 0 ? (
+                      <p className="text-xs text-muted-foreground/60 italic py-1">УПД за этот период ещё не выставлялись!</p>
+                    ) : (
+                      contract.upds.map((upd) => {
+                        const sbis = updSbisLabel[upd.sbisStatus];
+                        const signer = signedByOptions.find((o) => o.value === upd.signedBy);
+                        return (
+                          <div key={upd.id} className="flex items-start gap-2">
+                            {/* Меню */}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <button className="mt-0.5 w-5 h-5 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-slate-200 transition-colors shrink-0">
+                                  <Icon name="MoreHorizontal" size={13} />
+                                </button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="start" className="w-48">
+                                <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
+                                  <Icon name="Eye" size={13} />
+                                  Просмотр
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => setSignDialog({ contractId: contract.id, updId: upd.id })}
+                                  className="gap-2 cursor-pointer text-xs"
+                                >
+                                  <Icon name="PenLine" size={13} />
+                                  Подписание
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => sendToSbisUpd(contract.id, upd.id)}
+                                  className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50"
+                                >
+                                  <Icon name="Send" size={13} />
+                                  Отправить в СБИС
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {/* PDF иконка */}
+                            <div className="mt-0.5 w-5 h-5 flex items-center justify-center rounded bg-red-50 shrink-0">
+                              <span className="text-[9px] font-bold text-red-600 leading-none">PDF</span>
+                            </div>
+
+                            {/* Название + статус СБИС + подписант */}
+                            <div className="min-w-0">
+                              <p className="text-xs text-foreground leading-snug">
+                                А1 АВТО упд №{upd.number} {upd.period}
+                              </p>
+                              <p className={`text-[11px] leading-snug ${sbis.color}`}>{sbis.label}</p>
+                              <p className="text-[11px] text-muted-foreground leading-snug">
+                                {signer?.label ?? 'Не подписан'}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+
                 </div>
               </div>
 
@@ -453,31 +453,22 @@ export default function ArchiveDoc() {
       <Dialog open={!!signDialog} onOpenChange={(open) => !open && setSignDialog(null)}>
         <DialogContent className="max-w-xs">
           <DialogHeader>
-            <DialogTitle>Кем подписан УПД?</DialogTitle>
+            <DialogTitle>Подписание УПД</DialogTitle>
           </DialogHeader>
-          <div className="space-y-2 pt-1">
+          <div className="space-y-1.5 pt-1">
             {signedByOptions.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setSignedBy(opt.value)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border text-sm font-medium transition-colors text-left
+                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors text-left
                   ${currentSignedBy === opt.value
                     ? 'border-primary bg-primary/5 text-primary'
                     : 'border-border hover:bg-slate-50 text-foreground'}`}
               >
-                <Icon name={opt.icon as never} size={16} />
                 {opt.label}
-                {currentSignedBy === opt.value && <Icon name="Check" size={14} className="ml-auto text-primary" />}
+                {currentSignedBy === opt.value && <Icon name="Check" size={14} className="text-primary" />}
               </button>
             ))}
-            {currentSignedBy && (
-              <button
-                onClick={() => setSignedBy(null)}
-                className="w-full text-xs text-muted-foreground hover:text-foreground py-1 transition-colors"
-              >
-                Сбросить выбор
-              </button>
-            )}
           </div>
         </DialogContent>
       </Dialog>
