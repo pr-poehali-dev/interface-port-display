@@ -13,6 +13,7 @@ import CompanyList from "./pages/CompanyList";
 import CompanyInfo from "./pages/CompanyInfo";
 import Statistics from "./pages/Statistics";
 import AllFinance from "./pages/AllFinance";
+import ArchiveDoc from "./pages/ArchiveDoc";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/companies" element={<CompanyList />} />
             <Route path="/companies/:id" element={<CompanyInfo />} />
             <Route path="/finance" element={<AllFinance />} />
+            <Route path="/archive-doc" element={<ArchiveDoc />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

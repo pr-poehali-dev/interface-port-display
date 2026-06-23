@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { path: '/export', label: 'Экспорт в 1С', icon: 'FileDown', desc: 'Выгрузка данных' },
   { path: '/', label: 'Статистика', icon: 'BarChart2', desc: 'Аналитика и отчёты', exact: true },
   { path: '/phones', label: 'Телефония', icon: 'Phone', desc: 'Номера и звонки' },
+  { path: '/archive-doc', label: 'Документы', icon: 'FolderOpen', desc: 'Счета и УПД' },
 ];
 
 interface AppLayoutProps {
