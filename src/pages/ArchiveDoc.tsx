@@ -372,7 +372,9 @@ export default function ArchiveDoc() {
                               <p className="text-xs text-foreground leading-snug">
                                 А1 АВТО счёт №{inv.number} от {inv.date}
                               </p>
-                              <p className={`text-[11px] leading-snug ${sbis.color}`}>{sbis.label}</p>
+                              <p className={`text-[11px] leading-snug ${sbis.color}`}>
+                                <span className="text-muted-foreground">СБИС:</span> {sbis.label}
+                              </p>
                             </div>
                           </div>
                         );
@@ -430,9 +432,12 @@ export default function ArchiveDoc() {
                               <p className="text-xs text-foreground leading-snug">
                                 А1 АВТО упд №{upd.number} {upd.period}
                               </p>
-                              <p className={`text-[11px] leading-snug ${sbis.color}`}>{sbis.label}</p>
-                              <p className="text-[11px] text-muted-foreground leading-snug">
-                                {signer?.label ?? 'Не подписан'}
+                              <p className="text-[11px] leading-snug text-muted-foreground">
+                                <span className={sbis.color}>
+                                  <span className="text-muted-foreground">СБИС:</span> {sbis.label}
+                                </span>
+                                <span className="mx-1.5 text-border">·</span>
+                                <span>Подписан: {signer?.label ?? 'Не подписан'}</span>
                               </p>
                             </div>
                           </div>
