@@ -338,19 +338,24 @@ export default function ArchiveDoc() {
                                   <Icon name="MoreHorizontal" size={13} />
                                 </button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="start" className="w-44">
+                              <DropdownMenuContent align="start" className="w-48">
                                 <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
                                   <Icon name="Eye" size={13} />
                                   Просмотр
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => sendToSbisInvoice(contract.id, inv.id)}
-                                  className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50"
+                                  className="gap-2 cursor-pointer text-xs"
                                 >
                                   <Icon name="Send" size={13} />
                                   Отправить в СБИС
                                 </DropdownMenuItem>
+                                {inv.sbisStatus === 'sent' && (
+                                  <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
+                                    <Icon name="ExternalLink" size={13} />
+                                    Открыть в СБИС
+                                  </DropdownMenuItem>
+                                )}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => deleteInvoice(contract.id, inv.id)}
@@ -411,14 +416,19 @@ export default function ArchiveDoc() {
                                   <Icon name="PenLine" size={13} />
                                   Подписание
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => sendToSbisUpd(contract.id, upd.id)}
-                                  className="gap-2 cursor-pointer text-xs text-violet-700 focus:text-violet-700 focus:bg-violet-50"
+                                  className="gap-2 cursor-pointer text-xs"
                                 >
                                   <Icon name="Send" size={13} />
                                   Отправить в СБИС
                                 </DropdownMenuItem>
+                                {upd.sbisStatus !== 'not_sent' && (
+                                  <DropdownMenuItem onClick={() => window.open('#', '_blank')} className="gap-2 cursor-pointer text-xs">
+                                    <Icon name="ExternalLink" size={13} />
+                                    Открыть в СБИС
+                                  </DropdownMenuItem>
+                                )}
                               </DropdownMenuContent>
                             </DropdownMenu>
 
