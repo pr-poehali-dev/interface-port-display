@@ -319,11 +319,12 @@ export default function ArchiveDoc() {
               </div>
 
               {/* Documents footer — две колонки: счета | УПД */}
-              <div className="border-t border-border/40 bg-slate-50/40">
+              <div className="border-t-2 border-border/30 bg-slate-50/50">
                 <div className="grid grid-cols-2 divide-x divide-border/40">
 
                   {/* ── Счета (левая колонка) ── */}
-                  <div className="px-4 py-3 space-y-2">
+                  <div className="px-4 pt-2.5 pb-3 space-y-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50 mb-1">Счета</p>
                     {contract.invoices.length === 0 ? (
                       <p className="text-xs text-muted-foreground/60 italic py-1">Не выставлено ни одного счёта!</p>
                     ) : (
@@ -388,7 +389,8 @@ export default function ArchiveDoc() {
                   </div>
 
                   {/* ── УПД (правая колонка) ── */}
-                  <div className="px-4 py-3 space-y-2">
+                  <div className="px-4 pt-2.5 pb-3 space-y-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50 mb-1">УПД</p>
                     {contract.upds.length === 0 ? (
                       <p className="text-xs text-muted-foreground/60 italic py-1">УПД за этот период ещё не выставлялись!</p>
                     ) : (
