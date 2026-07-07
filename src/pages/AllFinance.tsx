@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 import {
   Dialog,
@@ -51,12 +53,14 @@ interface MockCompany {
   id: number;
   name: string;
   status: 'active' | 'archived';
+  edoId?: string;
 }
 
 const MOCK_COMPANY: MockCompany = {
   id: 10482,
   name: 'ООО "ПроАвто+"',
   status: 'active',
+  edoId: '2BM-7731137765-773101001-201412260803118132761',
 };
 
 const CONTRACTS: Contract[] = [
@@ -172,11 +176,13 @@ function formatMoney(amount: number, showSign = true): string {
 }
 
 export default function AllFinance() {
-  const [company] = useState<MockCompany>(MOCK_COMPANY);
+  const [company, setCompany] = useState<MockCompany>(MOCK_COMPANY);
   const [selectedContract, setSelectedContract] = useState<string>('all');
   const [operations, setOperations] = useState<FinanceOperation[]>(INITIAL_OPERATIONS);
   const [editCommentOp, setEditCommentOp] = useState<FinanceOperation | null>(null);
   const [commentDraft, setCommentDraft] = useState('');
+  const [edoDialogOpen, setEdoDialogOpen] = useState(false);
+  const [edoIdDraft, setEdoIdDraft] = useState(company?.edoId ?? '');
 
   const isArchived = company.status === 'archived';
 
@@ -256,9 +262,29 @@ export default function AllFinance() {
                 )}
                 <span className="text-[11px] text-muted-foreground/60 font-mono">ID: {company.id}</span>
               </div>
-              <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
-                <Icon name="UserRound" size={13} className="shrink-0" />
-                <span>Менеджеры не назначены</span>
+              <div className="flex items-center gap-3 mt-2">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Icon name="UserRound" size={13} className="shrink-0" />
+                  <span>Менеджеры не назначены</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setEdoIdDraft(company.edoId ?? '');
+                    setEdoDialogOpen(true);
+                  }}
+                  className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-0.5 -my-0.5 border transition-colors ${
+                    company.edoId
+                      ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
+                      : 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300'
+                  }`}
+                >
+                  <Icon name={company.edoId ? 'FileCheck2' : 'FileWarning'} size={13} className="shrink-0" />
+                  {company.edoId ? (
+                    <span className="font-mono">{company.edoId}</span>
+                  ) : (
+                    <span>ЭДО не подключено</span>
+                  )}
+                </button>
               </div>
             </div>
             <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 shrink-0 mt-1">
@@ -634,6 +660,46 @@ export default function AllFinance() {
             <Button
               size="sm"
               onClick={handleSaveComment}
+              className="bg-[#b60209] hover:bg-[#9a0208] text-white"
+            >
+              Сохранить
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* EDO ID dialog */}
+      <Dialog open={edoDialogOpen} onOpenChange={setEdoDialogOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Уникальный ID получателя (ЭДО)</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Идентификатор используется для обмена электронными документами с контрагентом.
+            </p>
+            <div className="space-y-1.5">
+              <Label htmlFor="edo-id" className="text-xs">ID получателя</Label>
+              <Input
+                id="edo-id"
+                value={edoIdDraft}
+                onChange={(e) => setEdoIdDraft(e.target.value)}
+                placeholder="Например: 2BM-7731137765-773101001-..."
+                className="font-mono text-xs"
+                autoFocus
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setEdoDialogOpen(false)}>
+              Отмена
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => {
+                setCompany((prev) => ({ ...prev, edoId: edoIdDraft.trim() || undefined }));
+                setEdoDialogOpen(false);
+              }}
               className="bg-[#b60209] hover:bg-[#9a0208] text-white"
             >
               Сохранить
