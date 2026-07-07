@@ -274,7 +274,8 @@ export default function AllFinance() {
           </div>
 
           {/* ЭДО */}
-          <div className="mb-3">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs text-muted-foreground shrink-0">ID ЭДО:</span>
             <button
               onClick={() => {
                 setEdoIdDraft(company.edoId ?? '');
@@ -282,17 +283,12 @@ export default function AllFinance() {
               }}
               className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-1 border transition-colors ${
                 company.edoId
-                  ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
-                  : 'text-muted-foreground border-dashed border-border hover:border-border/80 hover:bg-slate-50'
+                  ? 'font-mono text-foreground border-border/60 bg-slate-100 hover:bg-slate-200 hover:border-border'
+                  : 'italic text-muted-foreground border-dashed border-border hover:border-border/80 hover:bg-slate-50'
               }`}
             >
               <Icon name={company.edoId ? 'FileCheck2' : 'FilePlus2'} size={13} className="shrink-0" />
-              <span className="font-medium">ID ЭДО:</span>
-              {company.edoId ? (
-                <span className="font-mono">{company.edoId}</span>
-              ) : (
-                <span className="italic">не указан, нажмите чтобы добавить</span>
-              )}
+              {company.edoId ? company.edoId : 'не указан, нажмите чтобы добавить'}
             </button>
           </div>
 
