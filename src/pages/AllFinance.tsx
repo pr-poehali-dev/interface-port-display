@@ -262,30 +262,29 @@ export default function AllFinance() {
                 )}
                 <span className="text-[11px] text-muted-foreground/60 font-mono">ID: {company.id}</span>
               </div>
-              <div className="flex items-center gap-3 mt-2">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Icon name="UserRound" size={13} className="shrink-0" />
-                  <span>Менеджеры не назначены</span>
-                </div>
-                <button
-                  onClick={() => {
-                    setEdoIdDraft(company.edoId ?? '');
-                    setEdoDialogOpen(true);
-                  }}
-                  className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-0.5 -my-0.5 border transition-colors ${
-                    company.edoId
-                      ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
-                      : 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300'
-                  }`}
-                >
-                  <Icon name={company.edoId ? 'FileCheck2' : 'FileWarning'} size={13} className="shrink-0" />
-                  {company.edoId ? (
-                    <span className="font-mono">{company.edoId}</span>
-                  ) : (
-                    <span>ЭДО не подключено</span>
-                  )}
-                </button>
+              <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
+                <Icon name="UserRound" size={13} className="shrink-0" />
+                <span>Менеджеры не назначены</span>
               </div>
+              <button
+                onClick={() => {
+                  setEdoIdDraft(company.edoId ?? '');
+                  setEdoDialogOpen(true);
+                }}
+                className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-0.5 mt-1.5 -ml-2 border transition-colors ${
+                  company.edoId
+                    ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
+                    : 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300'
+                }`}
+              >
+                <Icon name={company.edoId ? 'FileCheck2' : 'FileWarning'} size={13} className="shrink-0" />
+                <span className="text-muted-foreground/70 font-normal">ЭДО:</span>
+                {company.edoId ? (
+                  <span className="font-mono">{company.edoId}</span>
+                ) : (
+                  <span>не подключено</span>
+                )}
+              </button>
             </div>
             <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 shrink-0 mt-1">
               <Icon name="Archive" size={13} />
