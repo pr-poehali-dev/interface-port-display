@@ -266,30 +266,34 @@ export default function AllFinance() {
                 <Icon name="UserRound" size={13} className="shrink-0" />
                 <span>Менеджеры не назначены</span>
               </div>
-              <button
-                onClick={() => {
-                  setEdoIdDraft(company.edoId ?? '');
-                  setEdoDialogOpen(true);
-                }}
-                className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-0.5 mt-1.5 -ml-2 border transition-colors ${
-                  company.edoId
-                    ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
-                    : 'text-amber-700 border-amber-200 bg-amber-50 hover:bg-amber-100 hover:border-amber-300'
-                }`}
-              >
-                <Icon name={company.edoId ? 'FileCheck2' : 'FileWarning'} size={13} className="shrink-0" />
-                <span className="text-muted-foreground/70 font-normal">ЭДО:</span>
-                {company.edoId ? (
-                  <span className="font-mono">{company.edoId}</span>
-                ) : (
-                  <span>не подключено</span>
-                )}
-              </button>
             </div>
             <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 shrink-0 mt-1">
               <Icon name="Archive" size={13} />
               В архив
             </Button>
+          </div>
+
+          {/* ЭДО */}
+          <div className="mb-3">
+            <button
+              onClick={() => {
+                setEdoIdDraft(company.edoId ?? '');
+                setEdoDialogOpen(true);
+              }}
+              className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-1 border transition-colors ${
+                company.edoId
+                  ? 'text-violet-700 border-violet-200 bg-violet-50 hover:bg-violet-100 hover:border-violet-300'
+                  : 'text-muted-foreground border-dashed border-border hover:border-border/80 hover:bg-slate-50'
+              }`}
+            >
+              <Icon name={company.edoId ? 'FileCheck2' : 'FilePlus2'} size={13} className="shrink-0" />
+              <span className="font-medium">ID ЭДО:</span>
+              {company.edoId ? (
+                <span className="font-mono">{company.edoId}</span>
+              ) : (
+                <span className="italic">не указан, нажмите чтобы добавить</span>
+              )}
+            </button>
           </div>
 
           {/* Tabs */}
