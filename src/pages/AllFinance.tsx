@@ -262,46 +262,48 @@ export default function AllFinance() {
                 )}
                 <span className="text-[11px] text-muted-foreground/60 font-mono">ID: {company.id}</span>
               </div>
-              <div className="flex items-center gap-1.5 mt-2 text-xs text-muted-foreground">
-                <Icon name="UserRound" size={13} className="shrink-0" />
-                <span>Менеджеры не назначены</span>
+              <div className="flex items-center gap-3 mt-2">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Icon name="UserRound" size={13} className="shrink-0" />
+                  <span>Менеджеры не назначены</span>
+                </div>
+
+                {/* ЭДО */}
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground group/edo">
+                  <Icon name="FileText" size={13} className="text-muted-foreground/70 shrink-0" />
+                  <span className="shrink-0">ID ЭДО:</span>
+                  <button
+                    onClick={() => {
+                      setEdoIdDraft(company.edoId ?? '');
+                      setEdoDialogOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 min-w-0"
+                  >
+                    {company.edoId ? (
+                      <>
+                        <span className="font-mono text-foreground/80 truncate group-hover/edo:text-primary transition-colors">
+                          {company.edoId}
+                        </span>
+                        <Icon
+                          name="Pencil"
+                          size={11}
+                          className="text-muted-foreground/0 group-hover/edo:text-muted-foreground transition-colors shrink-0"
+                        />
+                      </>
+                    ) : (
+                      <span className="flex items-center gap-1 text-primary/80 hover:text-primary transition-colors">
+                        <Icon name="Plus" size={12} />
+                        указать ID
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
             <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 shrink-0 mt-1">
               <Icon name="Archive" size={13} />
               В архив
             </Button>
-          </div>
-
-          {/* ЭДО */}
-          <div className="flex items-center gap-1.5 mb-3 group/edo">
-            <Icon name="FileText" size={13} className="text-muted-foreground/70 shrink-0" />
-            <span className="text-xs text-muted-foreground shrink-0">ID ЭДО:</span>
-            <button
-              onClick={() => {
-                setEdoIdDraft(company.edoId ?? '');
-                setEdoDialogOpen(true);
-              }}
-              className="flex items-center gap-1.5 text-xs min-w-0"
-            >
-              {company.edoId ? (
-                <>
-                  <span className="font-mono text-foreground/80 truncate group-hover/edo:text-primary transition-colors">
-                    {company.edoId}
-                  </span>
-                  <Icon
-                    name="Pencil"
-                    size={11}
-                    className="text-muted-foreground/0 group-hover/edo:text-muted-foreground transition-colors shrink-0"
-                  />
-                </>
-              ) : (
-                <span className="flex items-center gap-1 text-primary/80 hover:text-primary transition-colors">
-                  <Icon name="Plus" size={12} />
-                  указать ID
-                </span>
-              )}
-            </button>
           </div>
 
           {/* Tabs */}
