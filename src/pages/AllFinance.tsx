@@ -283,7 +283,7 @@ export default function AllFinance() {
               }}
               className={`flex items-center gap-1.5 text-xs rounded-md px-2 py-1 border transition-colors ${
                 company.edoId
-                  ? 'font-mono text-foreground border-border/60 bg-slate-100 hover:bg-slate-200 hover:border-border'
+                  ? 'font-mono text-sky-700 border-sky-200 bg-sky-50 hover:bg-sky-100 hover:border-sky-300'
                   : 'italic text-muted-foreground border-dashed border-border hover:border-border/80 hover:bg-slate-50'
               }`}
             >
