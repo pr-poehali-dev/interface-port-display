@@ -262,7 +262,7 @@ export default function AllFinance() {
                 )}
                 <span className="text-[11px] text-muted-foreground/60 font-mono">ID: {company.id}</span>
               </div>
-              <div className="flex items-center gap-3 mt-2">
+              <div className="flex flex-col gap-1.5 mt-2">
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Icon name="UserRound" size={13} className="shrink-0" />
                   <span>Менеджеры не назначены</span>
