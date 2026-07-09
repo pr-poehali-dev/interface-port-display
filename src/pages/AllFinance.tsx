@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 import {
   Dialog,
@@ -23,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import Icon from '@/components/ui/icon';
 
 interface Contract {
@@ -62,6 +61,27 @@ const MOCK_COMPANY: MockCompany = {
   status: 'active',
   edoId: '2BM-7731137765-773101001-201412260803118132761',
 };
+
+interface EdoOption {
+  id: string;
+  name: string;
+  edoId: string;
+  isPrimary?: boolean;
+}
+
+const EDO_OPTIONS: EdoOption[] = [
+  {
+    id: 'tenzor',
+    name: 'ООО "Компания "Тензор"',
+    edoId: '2BEd0901130d0b311e1be2a5cf3fc3369f0',
+    isPrimary: true,
+  },
+  {
+    id: 'korus',
+    name: 'ООО "КОРУС Консалтинг СНГ"',
+    edoId: '2BK-7812014560-771402001-1027809169585',
+  },
+];
 
 const CONTRACTS: Contract[] = [
   { id: 1, number: '2000-25', status: 'active' },
@@ -182,7 +202,7 @@ export default function AllFinance() {
   const [editCommentOp, setEditCommentOp] = useState<FinanceOperation | null>(null);
   const [commentDraft, setCommentDraft] = useState('');
   const [edoDialogOpen, setEdoDialogOpen] = useState(false);
-  const [edoIdDraft, setEdoIdDraft] = useState(company?.edoId ?? '');
+  const [edoSelection, setEdoSelection] = useState<string>('remove');
 
   const isArchived = company.status === 'archived';
 
@@ -274,7 +294,8 @@ export default function AllFinance() {
                   <span className="shrink-0">ID ЭДО:</span>
                   <button
                     onClick={() => {
-                      setEdoIdDraft(company.edoId ?? '');
+                      const matched = EDO_OPTIONS.find((opt) => opt.edoId === company.edoId);
+                      setEdoSelection(matched ? matched.id : 'remove');
                       setEdoDialogOpen(true);
                     }}
                     className="flex items-center gap-1.5 min-w-0"
@@ -683,39 +704,82 @@ export default function AllFinance() {
 
       {/* EDO ID dialog */}
       <Dialog open={edoDialogOpen} onOpenChange={setEdoDialogOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Уникальный ID получателя (ЭДО)</DialogTitle>
+            <DialogTitle>Выберите ID ЭДО</DialogTitle>
           </DialogHeader>
-          <div className="space-y-3">
-            <p className="text-xs text-muted-foreground">
-              Идентификатор используется для обмена электронными документами с контрагентом.
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Варианты
             </p>
-            <div className="space-y-1.5">
-              <Label htmlFor="edo-id" className="text-xs">ID получателя</Label>
-              <Input
-                id="edo-id"
-                value={edoIdDraft}
-                onChange={(e) => setEdoIdDraft(e.target.value)}
-                placeholder="Например: 2BM-7731137765-773101001-..."
-                className="font-mono text-xs"
-                autoFocus
-              />
-            </div>
+            <RadioGroup
+              value={edoSelection}
+              onValueChange={setEdoSelection}
+              className="gap-0 rounded-lg border border-border/70 overflow-hidden"
+            >
+              <label
+                htmlFor="edo-remove"
+                className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                  edoSelection === 'remove' ? 'bg-red-50' : 'hover:bg-muted/50'
+                }`}
+              >
+                <RadioGroupItem
+                  value="remove"
+                  id="edo-remove"
+                  className="border-[#b60209] text-[#b60209]"
+                />
+                <span className="flex items-center gap-1.5 text-sm text-foreground">
+                  <Icon name="Trash2" size={14} className="text-muted-foreground" />
+                  Удалить ID ЭДО у компании
+                </span>
+              </label>
+
+              {EDO_OPTIONS.map((option) => (
+                <label
+                  key={option.id}
+                  htmlFor={`edo-${option.id}`}
+                  className={`flex items-start gap-3 px-4 py-3 border-t border-border/70 cursor-pointer transition-colors ${
+                    edoSelection === option.id ? 'bg-primary/5' : 'hover:bg-muted/50'
+                  }`}
+                >
+                  <RadioGroupItem value={option.id} id={`edo-${option.id}`} className="mt-0.5" />
+                  <div className="flex-1 min-w-0 space-y-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-medium text-foreground truncate">
+                        {option.name}
+                      </span>
+                      {option.isPrimary && (
+                        <span
+                          title="Основной ID"
+                          className="inline-flex items-center gap-0.5 text-[10px] font-medium text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-1.5 py-0.5 shrink-0"
+                        >
+                          <Icon name="Star" size={10} className="fill-amber-500 text-amber-500" />
+                          Основной
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs font-mono text-muted-foreground break-all">
+                      {option.edoId}
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </RadioGroup>
           </div>
           <DialogFooter>
-            <Button variant="outline" size="sm" onClick={() => setEdoDialogOpen(false)}>
-              Отмена
-            </Button>
             <Button
-              size="sm"
               onClick={() => {
-                setCompany((prev) => ({ ...prev, edoId: edoIdDraft.trim() || undefined }));
+                if (edoSelection === 'remove') {
+                  setCompany((prev) => ({ ...prev, edoId: undefined }));
+                } else {
+                  const option = EDO_OPTIONS.find((opt) => opt.id === edoSelection);
+                  setCompany((prev) => ({ ...prev, edoId: option?.edoId }));
+                }
                 setEdoDialogOpen(false);
               }}
-              className="bg-[#b60209] hover:bg-[#9a0208] text-white"
+              className="w-full bg-[#b60209] hover:bg-[#9a0208] text-white"
             >
-              Сохранить
+              Подтвердить
             </Button>
           </DialogFooter>
         </DialogContent>
