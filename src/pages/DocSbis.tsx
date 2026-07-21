@@ -95,14 +95,16 @@ const STATS = {
   kalugaAstral: 31,
   portalPostavshikov: 18,
   paper: 15,
+  unsigned: 42,
 };
 
 const STAT_CARDS = [
   { key: 'total', label: 'Всего документов', value: STATS.total, icon: 'FileStack', accent: 'text-foreground', bg: 'bg-slate-100' },
-  { key: 'sbis', label: 'Подписано в Сбис', value: STATS.sbis, icon: 'Signature', accent: 'text-blue-600', bg: 'bg-blue-50' },
-  { key: 'kaluga', label: 'Подписано в Калуга Астрал', value: STATS.kalugaAstral, icon: 'ShieldCheck', accent: 'text-violet-600', bg: 'bg-violet-50' },
-  { key: 'portal', label: 'Подписано в Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-amber-600', bg: 'bg-amber-50' },
-  { key: 'paper', label: 'Подписано на бумаге', value: STATS.paper, icon: 'FileSignature', accent: 'text-slate-500', bg: 'bg-slate-100' },
+  { key: 'sbis', label: 'Сбис', value: STATS.sbis, icon: 'Signature', accent: 'text-blue-600', bg: 'bg-blue-50' },
+  { key: 'kaluga', label: 'Калуга Астрал', value: STATS.kalugaAstral, icon: 'ShieldCheck', accent: 'text-violet-600', bg: 'bg-violet-50' },
+  { key: 'portal', label: 'Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-amber-600', bg: 'bg-amber-50' },
+  { key: 'paper', label: 'На бумаге', value: STATS.paper, icon: 'FileSignature', accent: 'text-slate-500', bg: 'bg-slate-100' },
+  { key: 'unsigned', label: 'Не подписано', value: STATS.unsigned, icon: 'FileX', accent: 'text-red-600', bg: 'bg-red-50' },
 ];
 
 function StatusBadge({ status }: { status: SbisStatus }) {
@@ -135,21 +137,24 @@ export default function DocSbis() {
         </div>
 
         {/* Stat cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {STAT_CARDS.map((card) => (
-            <div
-              key={card.key}
-              className="bg-white rounded-xl border border-border/50 shadow-sm p-4 flex flex-col gap-3"
-            >
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${card.bg}`}>
-                <Icon name={card.icon} size={17} className={card.accent} />
+        <div>
+          <h2 className="text-sm font-semibold text-muted-foreground mb-2.5">Подписано документов</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {STAT_CARDS.map((card) => (
+              <div
+                key={card.key}
+                className="bg-white rounded-lg border border-border/50 shadow-sm px-3.5 py-2.5 flex items-center gap-3"
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${card.bg}`}>
+                  <Icon name={card.icon} size={15} className={card.accent} />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-lg font-bold text-foreground leading-tight">{card.value}</div>
+                  <div className="text-[11px] text-muted-foreground leading-snug truncate">{card.label}</div>
+                </div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground leading-tight">{card.value}</div>
-                <div className="text-xs text-muted-foreground mt-0.5 leading-snug">{card.label}</div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Problematic documents list */}
