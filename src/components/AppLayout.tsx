@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { path: '/', label: 'Статистика', icon: 'BarChart2', desc: 'Аналитика и отчёты', exact: true },
   { path: '/phones', label: 'Телефония', icon: 'Phone', desc: 'Номера и звонки' },
   { path: '/archive-doc', label: 'Документы', icon: 'FolderOpen', desc: 'Счета и УПД' },
+  { path: '/doc-sbis', label: 'ЭДО Сбис', icon: 'FileWarning', desc: 'Незавершённые документы' },
 ];
 
 interface AppLayoutProps {
