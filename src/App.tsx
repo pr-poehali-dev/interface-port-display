@@ -15,6 +15,7 @@ import Statistics from "./pages/Statistics";
 import AllFinance from "./pages/AllFinance";
 import ArchiveDoc from "./pages/ArchiveDoc";
 import DocSbis from "./pages/DocSbis";
+import DocSbis2 from "./pages/DocSbis2";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/finance" element={<AllFinance />} />
             <Route path="/archive-doc" element={<ArchiveDoc />} />
             <Route path="/doc-sbis" element={<DocSbis />} />
+            <Route path="/doc-sbis2" element={<DocSbis2 />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
