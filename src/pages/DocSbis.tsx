@@ -139,7 +139,7 @@ export default function DocSbis() {
         {/* Stat cards */}
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground mb-2.5">Подписано документов</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {STAT_CARDS.map((card) => (
               <div
                 key={card.key}
@@ -150,7 +150,7 @@ export default function DocSbis() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-lg font-bold text-foreground leading-tight">{card.value}</div>
-                  <div className="text-[11px] text-muted-foreground leading-snug break-words">{card.label}</div>
+                  <div className="text-[11px] text-muted-foreground leading-snug whitespace-nowrap">{card.label}</div>
                 </div>
               </div>
             ))}
