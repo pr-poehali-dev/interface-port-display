@@ -98,8 +98,11 @@ const STATS = {
   unsigned: 42,
 };
 
+const TOTAL_CARD = {
+  key: 'total', label: 'Всего документов', value: STATS.total, icon: 'FileStack', accent: 'text-foreground', bg: 'bg-slate-100',
+};
+
 const STAT_CARDS = [
-  { key: 'total', label: 'Всего документов', value: STATS.total, icon: 'FileStack', accent: 'text-foreground', bg: 'bg-slate-100' },
   { key: 'sbis', label: 'Сбис', value: STATS.sbis, icon: 'Signature', accent: 'text-blue-600', bg: 'bg-blue-50' },
   { key: 'kaluga', label: 'Калуга Астрал', value: STATS.kalugaAstral, icon: 'ShieldCheck', accent: 'text-violet-600', bg: 'bg-violet-50' },
   { key: 'portal', label: 'Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-amber-600', bg: 'bg-amber-50' },
@@ -136,10 +139,21 @@ export default function DocSbis() {
           </p>
         </div>
 
+        {/* Total card */}
+        <div className="bg-white rounded-lg border border-border/50 shadow-sm px-4 py-3 flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${TOTAL_CARD.bg}`}>
+            <Icon name={TOTAL_CARD.icon} size={17} className={TOTAL_CARD.accent} />
+          </div>
+          <div>
+            <div className="text-xl font-bold text-foreground leading-tight">{TOTAL_CARD.value}</div>
+            <div className="text-xs text-muted-foreground leading-snug">{TOTAL_CARD.label}</div>
+          </div>
+        </div>
+
         {/* Stat cards */}
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground mb-2.5">Подписано документов</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             {STAT_CARDS.map((card) => (
               <div
                 key={card.key}
