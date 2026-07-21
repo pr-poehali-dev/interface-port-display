@@ -109,7 +109,7 @@ function StatusBadge({ status }: { status: SbisStatus }) {
   const meta = STATUS_META[status];
   return (
     <span
-      className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border shrink-0 ${meta.className}`}
+      className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border shrink-0 ${meta.className}`}
     >
       {meta.label}
     </span>
@@ -200,8 +200,8 @@ export default function DocSbis() {
                               className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-white px-3.5 py-2.5 hover:bg-slate-50 hover:border-border/70 transition-colors"
                             >
                               <div className="flex items-center gap-2 min-w-0">
-                                <Icon name="FileText" size={14} className="text-muted-foreground/70 shrink-0" />
-                                <span className="text-sm text-foreground truncate">{doc.name}</span>
+                                <Icon name="FileText" size={13} className="text-muted-foreground/70 shrink-0" />
+                                <span className="text-xs text-foreground truncate">{doc.name}</span>
                               </div>
                               <StatusBadge status={doc.status} />
                             </div>
