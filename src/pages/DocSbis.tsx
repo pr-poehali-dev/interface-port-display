@@ -150,7 +150,7 @@ export default function DocSbis() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-lg font-bold text-foreground leading-tight">{card.value}</div>
-                  <div className="text-[11px] text-muted-foreground leading-snug truncate">{card.label}</div>
+                  <div className="text-[11px] text-muted-foreground leading-snug break-words">{card.label}</div>
                 </div>
               </div>
             ))}
