@@ -159,41 +159,45 @@ export default function DocSbis() {
             <span className="text-xs text-muted-foreground">{problematicCount} документов</span>
           </div>
 
-          <Accordion type="multiple" defaultValue={COMPANIES.map((c) => String(c.id))}>
+          <Accordion type="multiple" defaultValue={COMPANIES.map((c) => String(c.id))} className="divide-y-4 divide-slate-100">
             {COMPANIES.map((company) => (
               <AccordionItem
                 key={company.id}
                 value={String(company.id)}
-                className="border-b border-border/40 last:border-b-0"
+                className="border-b-0"
               >
-                <AccordionTrigger className="px-5 py-3 hover:no-underline hover:bg-slate-50/70 transition-colors [&[data-state=open]>svg]:rotate-180">
-                  <div className="flex items-center gap-2 text-left">
-                    <span className="text-[11px] text-muted-foreground/60 font-mono">
+                <AccordionTrigger className="px-5 py-3.5 bg-slate-50/80 hover:no-underline hover:bg-slate-100/80 transition-colors [&[data-state=open]>svg]:rotate-180">
+                  <div className="flex items-center gap-2.5 text-left">
+                    <div className="w-8 h-8 rounded-lg bg-white border border-border/60 flex items-center justify-center shrink-0">
+                      <Icon name="Building2" size={15} className="text-muted-foreground" />
+                    </div>
+                    <span className="text-[11px] text-muted-foreground/60 font-mono shrink-0">
                       ID: {company.id}
                     </span>
                     <Link
                       to={`/companies/${company.id}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="font-semibold text-foreground hover:text-primary hover:underline underline-offset-2 transition-colors"
+                      className="text-base font-bold text-foreground hover:text-primary hover:underline underline-offset-2 transition-colors"
                     >
                       {company.name}
                     </Link>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-5 pb-0">
-                  <div className="space-y-4 pb-3">
+                <AccordionContent className="px-5 pb-0 pt-3">
+                  <div className="space-y-5 pb-4">
                     {company.years.map((yearGroup) => (
                       <div key={yearGroup.year} className="space-y-2">
-                        <div className="flex items-center gap-2 pl-3 border-l-2 border-slate-200">
-                          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                        <div className="inline-flex items-center gap-1.5 rounded-md bg-[#b60209]/10 px-2.5 py-1">
+                          <Icon name="Calendar" size={12} className="text-[#b60209]" />
+                          <span className="text-xs font-bold text-[#b60209] tracking-wide">
                             {yearGroup.year}
                           </span>
                         </div>
-                        <div className="space-y-1.5 pl-3">
+                        <div className="space-y-1.5 pl-3 border-l-2 border-slate-200">
                           {yearGroup.documents.map((doc) => (
                             <div
                               key={doc.id}
-                              className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-slate-50/50 px-3.5 py-2.5 hover:bg-slate-50 transition-colors"
+                              className="flex items-center justify-between gap-3 rounded-lg border border-border/40 bg-white px-3.5 py-2.5 hover:bg-slate-50 hover:border-border/70 transition-colors"
                             >
                               <div className="flex items-center gap-2 min-w-0">
                                 <Icon name="FileText" size={14} className="text-muted-foreground/70 shrink-0" />
