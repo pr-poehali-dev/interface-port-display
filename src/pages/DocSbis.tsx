@@ -102,7 +102,7 @@ const STAT_CARDS = [
   { key: 'total', label: 'Всего документов', value: STATS.total, icon: 'FileStack', accent: 'text-foreground', bg: 'bg-slate-100' },
   { key: 'sbis', label: 'Сбис', value: STATS.sbis, icon: 'Signature', accent: 'text-blue-600', bg: 'bg-blue-50' },
   { key: 'kaluga', label: 'Калуга Астрал', value: STATS.kalugaAstral, icon: 'ShieldCheck', accent: 'text-violet-600', bg: 'bg-violet-50' },
-  { key: 'portal', label: 'Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-amber-600', bg: 'bg-amber-50' },
+  { key: 'portal', label: 'Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-red-600', bg: 'bg-red-50' },
   { key: 'paper', label: 'На бумаге', value: STATS.paper, icon: 'FileSignature', accent: 'text-slate-500', bg: 'bg-slate-100' },
   { key: 'unsigned', label: 'Не подписано', value: STATS.unsigned, icon: 'FileX', accent: 'text-red-600', bg: 'bg-red-50' },
 ];
