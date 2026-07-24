@@ -104,7 +104,7 @@ const STAT_CARDS = [
   { key: 'kaluga', label: 'Калуга Астрал', value: STATS.kalugaAstral, icon: 'ShieldCheck', accent: 'text-violet-600', bg: 'bg-violet-50' },
   { key: 'portal', label: 'Портал поставщиков', value: STATS.portalPostavshikov, icon: 'Building2', accent: 'text-red-600', bg: 'bg-red-50' },
   { key: 'paper', label: 'На бумаге', value: STATS.paper, icon: 'FileSignature', accent: 'text-slate-500', bg: 'bg-slate-100' },
-  { key: 'unsigned', label: 'Не подписано', value: STATS.unsigned, icon: 'FileX', accent: 'text-red-600', bg: 'bg-red-50' },
+  { key: 'unsigned', label: 'Не подписано', value: STATS.unsigned, icon: 'FileWarning', accent: 'text-orange-600', bg: 'bg-orange-50' },
 ];
 
 function StatusBadge({ status }: { status: SbisStatus }) {
